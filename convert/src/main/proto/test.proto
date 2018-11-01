@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "io.anemos.examples";
+option java_multiple_files = true;
+
+package io.anemos.examples;
+
+message Test2 {
+    bytes payload = 1;
+}
+
+
