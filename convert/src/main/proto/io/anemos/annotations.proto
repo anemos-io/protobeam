@@ -3,6 +3,7 @@ syntax = "proto3";
 package io.anemos;
 
 import "io/anemos/rewrite.proto";
+import "io/anemos/meta.proto";
 import "google/protobuf/descriptor.proto";
 
 //option go_package = "google.golang.org/genproto/googleapis/api/annotations;annotations";
@@ -13,9 +14,10 @@ import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.MessageOptions {
     MessageRewriteRule message_rewrite = 66666666;
+    MessageMeta message_meta = 66666667;
 }
 
 extend google.protobuf.FieldOptions {
-    // See `HttpRule`.
     FieldRewriteRule field_rewrite = 66666666;
+    FieldMeta field_meta = 66666667;
 }

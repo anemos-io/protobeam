@@ -1,5 +1,8 @@
 # Proto-Beam
 
+Warning this is an evolving product, even **Pre-Alpha** quality. Don't use
+this in production just yet.
+
 ## Description
 
 Utilities for handling and converting ProtocolBuffers. Focused but not
@@ -18,6 +21,19 @@ limited to Apache Beam.
 - Apache Beam Formatter for
     - BigQueryIO.TypedRead
     - BigQueryIO.Write
+- Annotation support for
+    - Field description
+    - Field deprecation
+    
+### Why ProtoBuf
+
+- ProtoBuf has a good DSL, with contract first in mind.
+- ProtoBuf has a binary versioning strategy: A message can even be decoded
+  without a schema.
+- ProtoBuf has a collection of Well Known Types: Native timestamps.
+- ProtoBuf Java implementation has a powerfull schema API.
+- ProtoBuf has options so we can change the behaviour of the pipeline.
+- ProtoBuf has good tooling for generating cross language code.
 
 ### Known Issues
 
@@ -58,4 +74,4 @@ Read the created tables, convert to protobuf and output to stderr
     - Description
     - Deprecation
     - Flattening
-
+- Register standard Options

@@ -2,7 +2,7 @@ package io.anemos.protobeam.convert;
 
 
 import com.google.protobuf.Timestamp;
-import io.anemos.examples.MessageWkt;
+import io.anemos.protobeam.examples.ProtoBeamWktMessage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class WktTest extends AbstractProtoBigQueryTest {
 
     @Before
     public void setup() {
-        MessageWkt x = MessageWkt.newBuilder()
+        ProtoBeamWktMessage x = ProtoBeamWktMessage.newBuilder()
                 .build();
         plan = new ProtoBigQueryExecutionPlan(x);
 
@@ -23,7 +23,7 @@ public class WktTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void timestampFieldTest() {
-        MessageWkt protoIn = MessageWkt.newBuilder()
+        ProtoBeamWktMessage protoIn = ProtoBeamWktMessage.newBuilder()
                 .setTimestamp(Timestamp.newBuilder().build())
                 .build();
         testPingPong(plan, protoIn);

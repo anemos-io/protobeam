@@ -2,8 +2,8 @@ package io.anemos.protobeam.convert;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.cloud.bigquery.Field;
-import com.google.protobuf.Descriptors;
 import com.google.cloud.bigquery.Schema;
+import com.google.protobuf.Descriptors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,9 @@ public class SchemaProtoToBigQueryApi {
         Field.Builder fieldBuilder = Field.newBuilder(tableFieldSchema.getName(), extractFieldType(tableFieldSchema));
         if (tableFieldSchema.getMode() != null)
             fieldBuilder.setMode(extractFieldMode(tableFieldSchema));
+        if ((tableFieldSchema.getDescription() != null) && (tableFieldSchema.getDescription().length() > 0)) {
+            fieldBuilder.setDescription(tableFieldSchema.getDescription());
+        }
         return fieldBuilder.build();
     }
 

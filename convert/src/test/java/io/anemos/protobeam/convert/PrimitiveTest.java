@@ -4,7 +4,7 @@ package io.anemos.protobeam.convert;/*
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
-import io.anemos.examples.MessagePrimitive;
+import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,32 +17,31 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
     @Before
     public void setup() {
-        MessagePrimitive x = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive x = ProtoBeamBasicPrimitive.newBuilder()
                 .build();
         plan = new ProtoBigQueryExecutionPlan(x);
 
         byte[] so = SerializeTest.serializeToByteArray(plan);
         plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
-
     }
 
     @Test
     public void testSchema() {
-        MessagePrimitive x = MessagePrimitive.newBuilder().build();
+        ProtoBeamBasicPrimitive x = ProtoBeamBasicPrimitive.newBuilder().build();
         Descriptors.Descriptor descriptor = x.getDescriptorForType();
 
-        String modelRef = "{fields=[{name=primitive_double, type=FLOAT64}, {name=primitive_float, type=FLOAT64}, {name=primitive_int32, type=INT64}, {name=primitive_int64, type=INT64}, {name=primitive_uint32, type=INT64}, {name=primitive_uint64, type=INT64}, {name=primitive_sint32, type=INT64}, {name=primitive_sint64, type=INT64}, {name=primitive_fixed32, type=INT64}, {name=primitive_fixed64, type=INT64}, {name=primitive_sfixed32, type=INT64}, {name=primitive_sfixed64, type=INT64}, {name=primitive_bool, type=BOOL}, {name=primitive_string, type=STRING}, {name=primitive_bytes, type=BYTES}]}";
+        String modelRef = "{fields=[{name=test_name, type=STRING}, {name=test_index, type=INT64}, {name=primitive_double, type=FLOAT64}, {name=primitive_float, type=FLOAT64}, {name=primitive_int32, type=INT64}, {name=primitive_int64, type=INT64}, {name=primitive_uint32, type=INT64}, {name=primitive_uint64, type=INT64}, {name=primitive_sint32, type=INT64}, {name=primitive_sint64, type=INT64}, {name=primitive_fixed32, type=INT64}, {name=primitive_fixed64, type=INT64}, {name=primitive_sfixed32, type=INT64}, {name=primitive_sfixed64, type=INT64}, {name=primitive_bool, type=BOOL}, {name=primitive_string, type=STRING}, {name=primitive_bytes, type=BYTES}]}";
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         assertEquals(modelRef, model.getSchema(descriptor).toString());
 
-        String apiRef = "Schema{fields=[Field{name=primitive_double, value=Type{value=FLOAT, fields=null}, mode=null, description=null}, Field{name=primitive_float, value=Type{value=FLOAT, fields=null}, mode=null, description=null}, Field{name=primitive_int32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_int64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_uint32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_uint64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sint32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sint64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_fixed32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_fixed64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sfixed32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sfixed64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_bool, value=Type{value=BOOLEAN, fields=null}, mode=null, description=null}, Field{name=primitive_string, value=Type{value=STRING, fields=null}, mode=null, description=null}, Field{name=primitive_bytes, value=Type{value=BYTES, fields=null}, mode=null, description=null}]}";
+        String apiRef = "Schema{fields=[Field{name=test_name, value=Type{value=STRING, fields=null}, mode=null, description=null}, Field{name=test_index, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_double, value=Type{value=FLOAT, fields=null}, mode=null, description=null}, Field{name=primitive_float, value=Type{value=FLOAT, fields=null}, mode=null, description=null}, Field{name=primitive_int32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_int64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_uint32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_uint64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sint32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sint64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_fixed32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_fixed64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sfixed32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sfixed64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_bool, value=Type{value=BOOLEAN, fields=null}, mode=null, description=null}, Field{name=primitive_string, value=Type{value=STRING, fields=null}, mode=null, description=null}, Field{name=primitive_bytes, value=Type{value=BYTES, fields=null}, mode=null, description=null}]}";
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
     }
 
     @Test
     public void booleanFieldTest() {
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveBool(true)
                 .build();
         testPingPong(plan, protoIn);
@@ -50,7 +49,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void floatFieldTest() {
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveFloat(45.56f)
                 .build();
         testPingPong(plan, protoIn);
@@ -58,7 +57,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void doubleFieldTest() {
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveDouble(12.45)
                 .build();
         testPingPong(plan, protoIn);
@@ -66,7 +65,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void intFieldTest() {
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveInt32(42)
                 .build();
         testPingPong(plan, protoIn);
@@ -74,7 +73,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void longFieldTest() {
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveInt64(42)
                 .build();
         testPingPong(plan, protoIn);
@@ -82,7 +81,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void stringFieldTest() {
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveString("fooBar")
                 .build();
         testPingPong(plan, protoIn);
@@ -92,7 +91,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
     public void bytesFieldTest() {
         byte[] buffer  = new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE };
 
-        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+        ProtoBeamBasicPrimitive protoIn = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveBytes(ByteString.copyFrom(buffer))
                 .build();
         testPingPong(plan, protoIn);

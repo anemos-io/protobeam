@@ -1,8 +1,8 @@
 package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
-import io.anemos.examples.Message;
-import io.anemos.examples.MessagePrimitive;
+import io.anemos.protobeam.examples.ProtoBeamBasicMessage;
+import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +15,7 @@ public class MessageTest extends AbstractProtoBigQueryTest {
 
     @Before
     public void setup() {
-        Message x = Message.newBuilder().build().newBuilder()
-                .build();
+        ProtoBeamBasicMessage x = ProtoBeamBasicMessage.newBuilder().build();
         plan = new ProtoBigQueryExecutionPlan(x);
 
         byte[] so = SerializeTest.serializeToByteArray(plan);
@@ -26,7 +25,7 @@ public class MessageTest extends AbstractProtoBigQueryTest {
     //    @Test
 //    @Ignore
     public void testSchema() {
-        Message x = Message.newBuilder().build();
+        ProtoBeamBasicMessage x = ProtoBeamBasicMessage.newBuilder().build();
         Descriptors.Descriptor descriptor = x.getDescriptorForType();
 
         String modelRef = "{fields=[{name=payload, type=BYTES}, {fields=[{name=foo, type=STRING}], name=test_one, type=STRUCT}, {fields=[{name=bar, type=STRING}], mode=REPEATED, name=test_repeater, type=STRUCT}]}";
@@ -40,9 +39,9 @@ public class MessageTest extends AbstractProtoBigQueryTest {
 
 
     @Test
-    public void nestedMessageTest() throws Exception {
-        Message protoIn = Message.newBuilder().build().newBuilder()
-                .setMessage(MessagePrimitive.newBuilder()
+    public void nestedMessageTest() {
+        ProtoBeamBasicMessage protoIn = ProtoBeamBasicMessage.newBuilder()
+                .setMessage(ProtoBeamBasicPrimitive.newBuilder()
                         .setPrimitiveBool(true)
                         .build())
                 .build();
@@ -50,10 +49,10 @@ public class MessageTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void repeatedNestedMessageTest() throws Exception {
-        MessagePrimitive.Builder nested = MessagePrimitive.newBuilder()
+    public void repeatedNestedMessageTest() {
+        ProtoBeamBasicPrimitive.Builder nested = ProtoBeamBasicPrimitive.newBuilder()
                 .setPrimitiveBool(true);
-        Message protoIn = Message.newBuilder().build().newBuilder()
+        ProtoBeamBasicMessage protoIn = ProtoBeamBasicMessage.newBuilder()
                 .addRepeatedMessage(nested.build())
                 .addRepeatedMessage(nested.build())
                 .build();

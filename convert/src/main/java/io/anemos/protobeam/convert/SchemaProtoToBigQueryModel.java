@@ -3,9 +3,11 @@ package io.anemos.protobeam.convert;
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.protobuf.Descriptors;
+import io.anemos.Meta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SchemaProtoToBigQueryModel {
 
@@ -35,6 +37,35 @@ public class SchemaProtoToBigQueryModel {
         if ("STRUCT".equals(bigQueryType)) {
             fieldSchema.setFields(convertSchema(fieldDescriptor.getMessageType()));
         }
+        // OK, this could be better...
+        Map<Descriptors.FieldDescriptor, Object> allFields = fieldDescriptor.getOptions().getAllFields();
+        if (allFields.size() > 0) {
+            allFields.forEach((f, opt) -> {
+                switch (f.getFullName()) {
+                    case "google.protobuf.FieldOptions.deprecated":
+                        Boolean deprecated = (Boolean) opt;
+                        if (deprecated) {
+                            String description = fieldSchema.getDescription();
+                            if ((description == null) || description.length() == 0) {
+                                description = "";
+                            }
+                            fieldSchema.setDescription("@deprecated\n" + description);
+                        }
+                        break;
+                    case "io.anemos.field_meta":
+                        Meta.FieldMeta meta = (Meta.FieldMeta) opt;
+                        String description = fieldSchema.getDescription();
+                        if ((description == null) || description.length() == 0) {
+                            description = "";
+                        }
+                        fieldSchema.setDescription(description + meta.getDescription());
+                        break;
+                }
+            });
+        }
+
+        //Meta.FieldMeta
+
         return fieldSchema;
     }
 

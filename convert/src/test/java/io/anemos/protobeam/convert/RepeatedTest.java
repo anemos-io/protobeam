@@ -1,7 +1,7 @@
 package io.anemos.protobeam.convert;
 
 
-import io.anemos.examples.MessageRepeatPrimitive;
+import io.anemos.protobeam.examples.ProtoBeamBasicRepeatPrimitive;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ public class RepeatedTest extends AbstractProtoBigQueryTest {
 
     @Before
     public void setup() {
-        MessageRepeatPrimitive x = MessageRepeatPrimitive.newBuilder()
+        ProtoBeamBasicRepeatPrimitive x = ProtoBeamBasicRepeatPrimitive.newBuilder()
                 .build();
         plan = new ProtoBigQueryExecutionPlan(x);
 
@@ -22,7 +22,7 @@ public class RepeatedTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void booleanFieldTest() {
-        MessageRepeatPrimitive protoIn = MessageRepeatPrimitive.newBuilder()
+        ProtoBeamBasicRepeatPrimitive protoIn = ProtoBeamBasicRepeatPrimitive.newBuilder()
                 .addRepeatedBool(false)
                 .addRepeatedBool(true)
                 .build();
@@ -32,7 +32,7 @@ public class RepeatedTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void stringFieldTest() {
-        MessageRepeatPrimitive protoIn = MessageRepeatPrimitive.newBuilder()
+        ProtoBeamBasicRepeatPrimitive protoIn = ProtoBeamBasicRepeatPrimitive.newBuilder()
                 .addRepeatedString("fooBar1")
                 .addRepeatedString("fooBar2")
                 .build();

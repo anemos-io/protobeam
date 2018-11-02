@@ -1,6 +1,6 @@
-import io.anemos.examples.Message;
-import io.anemos.examples.MessagePrimitive;
-import io.anemos.examples.MessageRepeatPrimitive;
+import io.anemos.protobeam.examples.ProtoBeamBasicMessage;
+import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
+import io.anemos.protobeam.examples.ProtoBeamBasicRepeatPrimitive;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.transforms.ParDo;
 
@@ -12,31 +12,30 @@ public class ProtoFromBigQueryPipeline extends DemoPipelineBase {
     }
 
     private void run() {
-
         Pipeline pipeline = createPipeline();
-
-        primitive(pipeline);
-        repeat(pipeline);
-        message(pipeline);
-
+        fromBqPrimitive(pipeline);
+        fromBqRepeat(pipeline);
+        fromBqMessage(pipeline);
         pipeline.run();
-
     }
 
-    private void primitive(Pipeline pipeline) {
-        pipeline.apply(BigQueryRead(MessagePrimitive.class, MessagePrimitive.getDescriptor(), "protobeam_primitive"))
+    private void fromBqPrimitive(Pipeline pipeline) {
+        pipeline.apply(BigQueryRead(ProtoBeamBasicPrimitive.class, ProtoBeamBasicPrimitive.getDescriptor(),
+                "protobeam_primitive"))
                 .apply(ParDo.of(end()))
         ;
     }
 
-    private void repeat(Pipeline pipeline) {
-        pipeline.apply(BigQueryRead(MessageRepeatPrimitive.class, MessageRepeatPrimitive.getDescriptor(), "protobeam_repeat"))
+    private void fromBqRepeat(Pipeline pipeline) {
+        pipeline.apply(BigQueryRead(ProtoBeamBasicRepeatPrimitive.class, ProtoBeamBasicRepeatPrimitive.getDescriptor(),
+                "protobeam_repeat"))
                 .apply(ParDo.of(end()))
         ;
     }
 
-    private void message(Pipeline pipeline) {
-        pipeline.apply(BigQueryRead(Message.class, Message.getDescriptor(), "protobeam_message"))
+    private void fromBqMessage(Pipeline pipeline) {
+        pipeline.apply(BigQueryRead(ProtoBeamBasicMessage.class, ProtoBeamBasicMessage.getDescriptor(),
+                "protobeam_message"))
                 .apply(ParDo.of(end()))
         ;
     }
