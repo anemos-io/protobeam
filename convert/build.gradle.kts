@@ -40,6 +40,7 @@ dependencies {
     api("org.apache.commons:commons-math3:3.6.1")
 
 
+    compile("org.apache.avro:avro:1.8.2")
     compile("com.google.protobuf:protobuf-java:3.6.1")
     implementation("com.google.protobuf:protobuf-java:3.6.1") //3.2.0
     implementation("com.google.protobuf:protobuf-java-util:3.6.1")

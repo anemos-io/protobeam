@@ -5,22 +5,14 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericRecord;
 
-public class StringFieldConvert extends AbstractConvert<String> {
-    public StringFieldConvert(Descriptors.FieldDescriptor descriptor) {
+public class DoubleFieldConvert extends AbstractConvert {
+    public DoubleFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
-    }
-
-
-    @Override
-    public String convert(Object in) {
-        return String.valueOf(in);
     }
 
     @Override
     public void convert(Message message, TableRow row) {
-        String fieldName = descriptor.getName();
-        String value = convert(message.getField(descriptor));
-        row.set(fieldName, value);
+        row.set(descriptor.getName(), message.getField(descriptor));
     }
 
     @Override
@@ -29,12 +21,8 @@ public class StringFieldConvert extends AbstractConvert<String> {
     }
 
     @Override
-    public String convertFromGenericRecord(Object in) {
-        return in.toString();
-    }
-
-    @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, row.get(descriptor.getName()).toString());
+        Double value = (Double) row.get(descriptor.getName());
+        builder.setField(descriptor, convertFromGenericRecord(value));
     }
 }

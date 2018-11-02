@@ -3,7 +3,6 @@ package io.anemos.protobeam.convert;
 import com.google.protobuf.Descriptors;
 import io.anemos.examples.Message;
 import io.anemos.examples.MessagePrimitive;
-import io.anemos.examples.SchemaTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +23,8 @@ public class MessageTest extends AbstractProtoBigQueryTest {
         plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
     }
 
-    @Test
+    //    @Test
+//    @Ignore
     public void testSchema() {
         Message x = Message.newBuilder().build();
         Descriptors.Descriptor descriptor = x.getDescriptorForType();

@@ -2,8 +2,6 @@ package io.anemos.protobeam.convert;
 
 
 import com.google.protobuf.Timestamp;
-import com.google.protobuf.util.Timestamps;
-import io.anemos.examples.MessageRepeatPrimitive;
 import io.anemos.examples.MessageWkt;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +22,7 @@ public class WktTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void booleanFieldTest() {
+    public void timestampFieldTest() {
         MessageWkt protoIn = MessageWkt.newBuilder()
                 .setTimestamp(Timestamp.newBuilder().build())
                 .build();

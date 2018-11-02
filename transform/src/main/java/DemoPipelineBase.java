@@ -1,11 +1,11 @@
-import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import io.anemos.protobeam.transform.bigquery.ProtoBeamFactory;
 import org.apache.beam.runners.dataflow.DataflowRunner;
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
-import org.apache.beam.runners.direct.DirectOptions;
+import org.apache.beam.runners.direct.DirectRunner;
 import org.apache.beam.sdk.Pipeline;
+import org.apache.beam.sdk.extensions.protobuf.ProtoCoder;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
@@ -18,10 +18,10 @@ import java.util.logging.Logger;
 public class DemoPipelineBase implements Serializable {
 
     private static Logger LOG = Logger.getLogger(DemoPipelineBase.class.toString());
-    public static final String GOOGLE_PROJECT_ID = "GOOGLE_PROJECT_ID";
-    public static final String BQ_OUT_DATASET = "BQ_OUT_DATASET";
-    public static final String BQ_GCS_TEMP = "BQ_GCS_TEMP";
-    public static final String RUNNER = "RUNNER";
+    protected static final String GOOGLE_PROJECT_ID = "GOOGLE_PROJECT_ID";
+    protected static final String BQ_OUT_DATASET = "BQ_OUT_DATASET";
+    protected static final String BQ_GCS_TEMP = "BQ_GCS_TEMP";
+    protected static final String RUNNER = "RUNNER";
 
     protected void fail(String message) {
         throw new RuntimeException(message);
@@ -35,11 +35,15 @@ public class DemoPipelineBase implements Serializable {
         return value;
     }
 
+
     private PipelineOptions createDirect() {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%5$s%n");
-        DirectOptions flinkOptions = PipelineOptionsFactory.as(DirectOptions.class);
-
-        return flinkOptions;
+        DirectTestOptions options = PipelineOptionsFactory.as(DirectTestOptions.class);
+        options.setGcpTempLocation(env(BQ_GCS_TEMP));
+        options.setTempLocation(env(BQ_GCS_TEMP));
+        options.setProject(env(GOOGLE_PROJECT_ID));
+        options.setRunner(DirectRunner.class);
+        return options;
     }
 
     private PipelineOptions createDataflow() {
@@ -57,45 +61,24 @@ public class DemoPipelineBase implements Serializable {
         return Pipeline.create(createDirect());
     }
 
-    protected DoFn<String, TableRow> stringToTableRowFn() {
-        return new DoFn<String, TableRow>() {
+    protected DoFn<Message, String> end() {
+        return new DoFn<Message, String>() {
 
             @DoFn.ProcessElement
-            public void processElement(ProcessContext c) throws Exception {
-                TableRow row = new TableRow();
-                row.set("out", c.element().toString());
-                c.output(row);
-                LOG.info(row.toString());
+            public void processElement(ProcessContext c) {
+                LOG.info(c.element().toString());
             }
         };
     }
 
-    protected DoFn<Message, TableRow> protoToTableRow() {
-        return new DoFn<Message, TableRow>() {
-
-            @DoFn.ProcessElement
-            public void processElement(ProcessContext c) throws Exception {
-
-
-//                TableRow row = new TableRow();
-//                row.set("out", c.element().toString());
-//                c.output(row);
-//                LOG.info(row.toString());
-            }
-        };
+    protected <M extends Message> BigQueryIO.TypedRead<M> BigQueryRead(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
+        ProtoBeamFactory factory = new ProtoBeamFactory(messageClass, descriptor);
+        return BigQueryIO.read(factory.getBigQueryReadFormatFunction())
+                .from(env(BQ_OUT_DATASET) + "." + name)
+                .withCoder(ProtoCoder.of(messageClass));
     }
 
-    protected DoFn<Long, String> longToStringFn() {
-        return new DoFn<Long, String>() {
-
-            @ProcessElement
-            public void processElement(ProcessContext c) throws Exception {
-                c.output(c.element().toString());
-            }
-        };
-    }
-
-    protected <M extends Message> BigQueryIO.Write<M> bigqueryIO(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
+    protected <M extends Message> BigQueryIO.Write<M> BigQueryWrite(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
 
         ProtoBeamFactory factory = new ProtoBeamFactory(messageClass, descriptor);
 

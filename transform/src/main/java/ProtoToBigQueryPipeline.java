@@ -11,8 +11,7 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
         new ProtoToBigQueryPipeline().run();
     }
 
-    public void run() {
-
+    private void run() {
 
         Pipeline pipeline = createPipeline();
 
@@ -35,8 +34,7 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
                 .setPrimitiveInt32(14)
                 .build();
         pipeline.apply(Create.of(m1, m2, m3))
-//                .apply(ParDo.of(protoToTableRow()))
-                .apply(bigqueryIO(MessagePrimitive.class, MessagePrimitive.getDescriptor(), "protobeam_primitive"));
+                .apply(BigQueryWrite(MessagePrimitive.class, MessagePrimitive.getDescriptor(), "protobeam_primitive"));
     }
 
     private void repeat(Pipeline pipeline) {
@@ -53,8 +51,7 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
                 .addRepeatedString("bar")
                 .build();
         pipeline.apply(Create.of(m1, m2, m3))
-//                .apply(ParDo.of(protoToTableRow()))
-                .apply(bigqueryIO(MessageRepeatPrimitive.class, MessageRepeatPrimitive.getDescriptor(), "protobeam_repeat"));
+                .apply(BigQueryWrite(MessageRepeatPrimitive.class, MessageRepeatPrimitive.getDescriptor(), "protobeam_repeat"));
     }
 
     private void message(Pipeline pipeline) {
@@ -74,8 +71,7 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
                         .build()
                 ).build();
         pipeline.apply(Create.of(m1, m2, m3))
-//                .apply(ParDo.of(protoToTableRow()))
-                .apply(bigqueryIO(Message.class, Message.getDescriptor(), "protobeam_message"));
+                .apply(BigQueryWrite(Message.class, Message.getDescriptor(), "protobeam_message"));
     }
 
 

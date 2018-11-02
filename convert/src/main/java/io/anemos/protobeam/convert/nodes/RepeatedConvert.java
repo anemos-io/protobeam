@@ -1,9 +1,9 @@
 package io.anemos.protobeam.convert.nodes;
 
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
+import org.apache.avro.generic.GenericRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +28,17 @@ public class RepeatedConvert extends AbstractConvert {
 
     @Override
     public void convertToProto(Message.Builder builder, TableRow row) {
-        //fields.forEach(e -> e.convertToProto(builder, row));
         List list = (List) row.get(descriptor.getName());
         list.forEach(
                 obj -> builder.addRepeatedField(descriptor, obj)
+        );
+    }
+
+    @Override
+    public void convertToProto(Message.Builder builder, GenericRecord row) {
+        List list = (List) row.get(descriptor.getName());
+        list.forEach(
+                obj -> builder.addRepeatedField(descriptor, field.convertFromGenericRecord(obj))
         );
     }
 }

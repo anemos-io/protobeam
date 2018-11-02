@@ -19,6 +19,10 @@ public class ProtoBeamFactory<T extends Message> {
         return new BigQueryWriteFormatFunction<>(messageClass);
     }
 
+    public BigQueryReadFormatFunction<T> getBigQueryReadFormatFunction() {
+        return new BigQueryReadFormatFunction<>(messageClass);
+    }
+
     public TableSchema getBigQuerySchema() {
         return new SchemaProtoToBigQueryModel().getSchema(descriptor);
     }

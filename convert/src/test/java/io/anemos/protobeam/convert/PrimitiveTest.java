@@ -4,7 +4,6 @@ package io.anemos.protobeam.convert;/*
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
-import io.anemos.examples.Message;
 import io.anemos.examples.MessagePrimitive;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +41,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void booleanFieldTest() throws Exception {
+    public void booleanFieldTest() {
         MessagePrimitive protoIn = MessagePrimitive.newBuilder()
                 .setPrimitiveBool(true)
                 .build();
@@ -50,7 +49,39 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void stringFieldTest() throws Exception {
+    public void floatFieldTest() {
+        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+                .setPrimitiveFloat(45.56f)
+                .build();
+        testPingPong(plan, protoIn);
+    }
+
+    @Test
+    public void doubleFieldTest() {
+        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+                .setPrimitiveDouble(12.45)
+                .build();
+        testPingPong(plan, protoIn);
+    }
+
+    @Test
+    public void intFieldTest() {
+        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+                .setPrimitiveInt32(42)
+                .build();
+        testPingPong(plan, protoIn);
+    }
+
+    @Test
+    public void longFieldTest() {
+        MessagePrimitive protoIn = MessagePrimitive.newBuilder()
+                .setPrimitiveInt64(42)
+                .build();
+        testPingPong(plan, protoIn);
+    }
+
+    @Test
+    public void stringFieldTest() {
         MessagePrimitive protoIn = MessagePrimitive.newBuilder()
                 .setPrimitiveString("fooBar")
                 .build();
@@ -58,7 +89,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void bytesFieldTest() throws Exception {
+    public void bytesFieldTest() {
         byte[] buffer  = new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE };
 
         MessagePrimitive protoIn = MessagePrimitive.newBuilder()

@@ -1,9 +1,9 @@
 package io.anemos.protobeam.convert.nodes;
 
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
+import org.apache.avro.generic.GenericRecord;
 
 public class StringEmptyIsNullConvert extends AbstractConvert {
     public StringEmptyIsNullConvert(Descriptors.FieldDescriptor descriptor) {
@@ -30,6 +30,11 @@ public class StringEmptyIsNullConvert extends AbstractConvert {
 
     @Override
     public void convertToProto(Message.Builder message, TableRow row) {
+
+    }
+
+    @Override
+    public void convertToProto(Message.Builder builder, GenericRecord row) {
 
     }
 }

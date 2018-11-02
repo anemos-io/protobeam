@@ -7,12 +7,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProtoBigQueryPlanner implements Serializable {
+class ProtoBigQueryPlanner implements Serializable {
 
     private Descriptors.Descriptor descriptor;
 
 
-    public ProtoBigQueryPlanner(Descriptors.Descriptor descriptor) {
+    ProtoBigQueryPlanner(Descriptors.Descriptor descriptor) {
         this.descriptor = descriptor;
     }
 
@@ -20,20 +20,24 @@ public class ProtoBigQueryPlanner implements Serializable {
     private AbstractConvert planField(Descriptors.FieldDescriptor fieldDescriptor) {
         Descriptors.FieldDescriptor.Type fieldType = fieldDescriptor.getType();
         switch (fieldType) {
-            case DOUBLE:
-            case FLOAT:
-            case INT64:
-            case UINT64:
-            case INT32:
-            case FIXED64:
-            case FIXED32:
-            case UINT32:
-            case SFIXED32:
-            case SFIXED64:
-            case SINT32:
-            case SINT64:
             case BOOL:
                 return new ObjectFieldConvert(fieldDescriptor);
+            case INT64:
+            case UINT64:
+            case FIXED64:
+            case SFIXED64:
+            case SINT64:
+                return new LongFieldConvert(fieldDescriptor);
+            case INT32:
+            case UINT32:
+            case SFIXED32:
+            case FIXED32:
+            case SINT32:
+                return new IntegerFieldConvert(fieldDescriptor);
+            case DOUBLE:
+                return new DoubleFieldConvert(fieldDescriptor);
+            case FLOAT:
+                return new FloatFieldConvert(fieldDescriptor);
             case BYTES:
                 return new BytesFieldConvert(fieldDescriptor);
             case STRING:
@@ -66,7 +70,7 @@ public class ProtoBigQueryPlanner implements Serializable {
         return new MessageConvert(null, list);
     }
 
-    public AbstractConvert createPlan() {
+    AbstractConvert createPlan() {
         return planMessage(null, descriptor.getFields());
     }
 

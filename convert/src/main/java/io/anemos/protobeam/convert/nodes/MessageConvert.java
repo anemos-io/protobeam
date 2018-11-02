@@ -1,9 +1,9 @@
 package io.anemos.protobeam.convert.nodes;
 
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
+import org.apache.avro.generic.GenericRecord;
 
 import java.util.List;
 
@@ -19,7 +19,6 @@ public class MessageConvert extends AbstractConvert {
 
     @Override
     public void convert(Message message, TableRow row) {
-
         fields.forEach(
                 e -> e.convert(message, row)
         );
@@ -27,6 +26,11 @@ public class MessageConvert extends AbstractConvert {
 
     @Override
     public void convertToProto(Message.Builder builder, TableRow row) {
+        fields.forEach(e -> e.convertToProto(builder, row));
+    }
+
+    @Override
+    public void convertToProto(Message.Builder builder, GenericRecord row) {
         fields.forEach(e -> e.convertToProto(builder, row));
     }
 

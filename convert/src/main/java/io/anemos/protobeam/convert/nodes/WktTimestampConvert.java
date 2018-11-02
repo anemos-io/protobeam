@@ -5,6 +5,7 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
+import org.apache.avro.generic.GenericRecord;
 
 import java.text.ParseException;
 
@@ -32,6 +33,11 @@ public class WktTimestampConvert extends AbstractConvert {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public void convertToProto(Message.Builder builder, GenericRecord row) {
+
     }
 
     public static boolean isHandler(Descriptors.FieldDescriptor fieldDescriptor) {

@@ -5,6 +5,7 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
+import org.apache.avro.generic.GenericRecord;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -54,6 +55,28 @@ public class ProtoBigQueryExecutionPlan<T extends Message> implements Serializab
     public T convertToProto(TableRow row) {
         DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
         convert.convertToProto(builder, row);
+        return convertToConcrete(builder);
+    }
+
+    public T convertToProto(GenericRecord row) {
+        DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
+        convert.convertToProto(builder, row);
+        return convertToConcrete(builder);
+    }
+
+    private T convertToConcrete(DynamicMessage.Builder builder) {
+        if (!this.messageClass.equals(DynamicMessage.class)) {
+            try {
+                Method method = messageClass.getMethod("parseFrom", byte[].class);
+                return (T) method.invoke(null, builder.build().toByteArray());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
         return (T) builder.build();
     }
 

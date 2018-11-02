@@ -5,6 +5,8 @@ import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
 
 public class MessageFieldConvert extends AbstractConvert {
     MessageConvert convert;
@@ -25,8 +27,17 @@ public class MessageFieldConvert extends AbstractConvert {
 
     @Override
     public void convertToProto(Message.Builder builder, TableRow row) {
-        //Message.Builder fieldBuilder = builder.getFieldBuilder(descriptor);
         TableRow nested = (TableRow) row.get(descriptor.getName());
+        if (nested != null) {
+            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(descriptor.getMessageType());
+            convert.convertToProto(fieldBuilder, nested);
+            builder.setField(descriptor, fieldBuilder.build());
+        }
+    }
+
+    @Override
+    public void convertToProto(Message.Builder builder, GenericRecord row) {
+        GenericData.Record nested = (GenericData.Record) row.get(descriptor.getName());
         if (nested != null) {
             DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(descriptor.getMessageType());
             convert.convertToProto(fieldBuilder, nested);
