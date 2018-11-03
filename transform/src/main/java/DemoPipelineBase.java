@@ -1,3 +1,4 @@
+import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import io.anemos.protobeam.transform.bigquery.ProtoBeamFactory;
@@ -11,6 +12,8 @@ import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.DoFn;
+import org.apache.beam.sdk.transforms.ParDo;
+import org.apache.beam.sdk.values.PCollection;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -18,16 +21,16 @@ import java.util.logging.Logger;
 public class DemoPipelineBase implements Serializable {
 
     private static Logger LOG = Logger.getLogger(DemoPipelineBase.class.toString());
-    protected static final String GOOGLE_PROJECT_ID = "GOOGLE_PROJECT_ID";
-    protected static final String BQ_OUT_DATASET = "BQ_OUT_DATASET";
-    protected static final String BQ_GCS_TEMP = "BQ_GCS_TEMP";
-    protected static final String RUNNER = "RUNNER";
+    private static final String GOOGLE_PROJECT_ID = "GOOGLE_PROJECT_ID";
+    private static final String BQ_OUT_DATASET = "BQ_OUT_DATASET";
+    private static final String BQ_GCS_TEMP = "BQ_GCS_TEMP";
+    private static final String RUNNER = "RUNNER";
 
-    protected void fail(String message) {
+    private void fail(String message) {
         throw new RuntimeException(message);
     }
 
-    protected String env(String key) {
+    private String env(String key) {
         String value = System.getenv(key);
         if ((value == null) || (value.length() == 0)) {
             fail("Environment variable [" + key + "] is set.");
@@ -61,7 +64,7 @@ public class DemoPipelineBase implements Serializable {
         return Pipeline.create(createDirect());
     }
 
-    protected DoFn<Message, String> end() {
+    protected DoFn<Message, String> endMessage() {
         return new DoFn<Message, String>() {
 
             @DoFn.ProcessElement
@@ -71,11 +74,30 @@ public class DemoPipelineBase implements Serializable {
         };
     }
 
-    protected <M extends Message> BigQueryIO.TypedRead<M> BigQueryRead(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
+    protected DoFn<TableRow, String> endTableRow() {
+        return new DoFn<TableRow, String>() {
+
+            @DoFn.ProcessElement
+            public void processElement(ProcessContext c) {
+                LOG.info(c.element().toString());
+            }
+        };
+    }
+
+    protected <M extends Message> BigQueryIO.TypedRead<M> BigQueryTypedRead(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
         ProtoBeamFactory factory = new ProtoBeamFactory(messageClass, descriptor);
         return BigQueryIO.read(factory.getBigQueryReadFormatFunction())
                 .from(env(BQ_OUT_DATASET) + "." + name)
                 .withCoder(ProtoCoder.of(messageClass));
+    }
+
+    protected <M extends Message> PCollection<M> BigQueryRead(Pipeline pipeline, Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
+        ProtoBeamFactory factory = new ProtoBeamFactory(messageClass, descriptor);
+        PCollection<TableRow> in = pipeline.apply(BigQueryIO.readTableRows()
+                .from(env(BQ_OUT_DATASET) + "." + name));
+        PCollection<M> typedIn = (PCollection<M>) in.apply(ParDo.of(factory.getBigQueryReadDoFn()));
+        typedIn.setCoder(ProtoCoder.of(messageClass));
+        return typedIn;
     }
 
     protected <M extends Message> BigQueryIO.Write<M> BigQueryWrite(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {

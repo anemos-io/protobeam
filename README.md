@@ -74,4 +74,6 @@ Read the created tables, convert to protobuf and output to stderr
     - Description
     - Deprecation
     - Flattening
+    - Event time
 - Register standard Options
+

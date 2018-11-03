@@ -8,12 +8,19 @@ import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 
+import java.util.Map;
+
 public class MessageFieldConvert extends AbstractConvert {
     MessageConvert convert;
 
     public MessageFieldConvert(Descriptors.FieldDescriptor descriptor, MessageConvert convert) {
         super(descriptor);
         this.convert = convert;
+    }
+
+    @Override
+    public Object convert(Object in) {
+        return in;
     }
 
     @Override
@@ -26,8 +33,8 @@ public class MessageFieldConvert extends AbstractConvert {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, TableRow row) {
-        TableRow nested = (TableRow) row.get(descriptor.getName());
+    public void convertToProto(Message.Builder builder, Map row) {
+        Map nested = (Map) row.get(descriptor.getName());
         if (nested != null) {
             DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(descriptor.getMessageType());
             convert.convertToProto(fieldBuilder, nested);

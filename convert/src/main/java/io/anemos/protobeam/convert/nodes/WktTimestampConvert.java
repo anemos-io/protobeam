@@ -5,13 +5,18 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
+import io.anemos.protobeam.util.TimestampUtil;
 import org.apache.avro.generic.GenericRecord;
 
-import java.text.ParseException;
+import java.util.Map;
 
 public class WktTimestampConvert extends AbstractConvert {
     public WktTimestampConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
+    }
+
+    public static boolean isHandler(Descriptors.FieldDescriptor fieldDescriptor) {
+        return ".google.protobuf.Timestamp".equals(fieldDescriptor.toProto().getTypeName());
     }
 
     @Override
@@ -24,24 +29,31 @@ public class WktTimestampConvert extends AbstractConvert {
     }
 
     @Override
-    public void convertToProto(Message.Builder message, TableRow row) {
+    public Object convertFromTableCell(Object in) {
+        return TimestampUtil.fromBQ((String) in);
+    }
+
+    @Override
+    public void convertToProto(Message.Builder message, Map row) {
         String cell = (String) row.get(descriptor.getName());
-        if(cell != null) {
-            try {
-                message.setField(descriptor, Timestamps.parse(cell));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+        if (cell != null) {
+            message.setField(descriptor, convertFromTableCell(cell));
         }
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-
+    public Object convert(Object in) {
+        return in.toString();
     }
 
-    public static boolean isHandler(Descriptors.FieldDescriptor fieldDescriptor) {
-        return ".google.protobuf.Timestamp".equals(fieldDescriptor.toProto().getTypeName());
+    @Override
+    public Object convertFromGenericRecord(Object in) {
+        return Timestamps.fromMicros((Long) in);
+    }
+
+    @Override
+    public void convertToProto(Message.Builder builder, GenericRecord row) {
+        builder.setField(descriptor, convertFromGenericRecord(row.get(descriptor.getName())));
     }
 
 }

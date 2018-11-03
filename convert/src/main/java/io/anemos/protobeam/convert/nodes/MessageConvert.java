@@ -6,6 +6,7 @@ import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericRecord;
 
 import java.util.List;
+import java.util.Map;
 
 public class MessageConvert extends AbstractConvert {
 
@@ -18,6 +19,11 @@ public class MessageConvert extends AbstractConvert {
     }
 
     @Override
+    public Object convert(Object in) {
+        return in;
+    }
+
+    @Override
     public void convert(Message message, TableRow row) {
         fields.forEach(
                 e -> e.convert(message, row)
@@ -25,7 +31,7 @@ public class MessageConvert extends AbstractConvert {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, TableRow row) {
+    public void convertToProto(Message.Builder builder, Map row) {
         fields.forEach(e -> e.convertToProto(builder, row));
     }
 

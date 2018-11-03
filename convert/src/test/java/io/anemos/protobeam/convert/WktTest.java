@@ -1,10 +1,12 @@
 package io.anemos.protobeam.convert;
 
 
-import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.Timestamps;
 import io.anemos.protobeam.examples.ProtoBeamWktMessage;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.text.ParseException;
 
 public class WktTest extends AbstractProtoBigQueryTest {
 
@@ -22,9 +24,9 @@ public class WktTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void timestampFieldTest() {
+    public void timestampFieldTest() throws ParseException {
         ProtoBeamWktMessage protoIn = ProtoBeamWktMessage.newBuilder()
-                .setTimestamp(Timestamp.newBuilder().build())
+                .setTimestamp(Timestamps.parse("2018-11-28T12:34:56.123456789Z"))
                 .build();
         testPingPong(plan, protoIn);
     }

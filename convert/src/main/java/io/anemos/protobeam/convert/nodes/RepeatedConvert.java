@@ -7,6 +7,7 @@ import org.apache.avro.generic.GenericRecord;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RepeatedConvert extends AbstractConvert {
 
@@ -15,6 +16,11 @@ public class RepeatedConvert extends AbstractConvert {
     public RepeatedConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
         super(descriptor);
         this.field = field;
+    }
+
+    @Override
+    public Object convert(Object in) {
+        return in;
     }
 
     @Override
@@ -27,10 +33,10 @@ public class RepeatedConvert extends AbstractConvert {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, TableRow row) {
+    public void convertToProto(Message.Builder builder, Map row) {
         List list = (List) row.get(descriptor.getName());
         list.forEach(
-                obj -> builder.addRepeatedField(descriptor, obj)
+                obj -> builder.addRepeatedField(descriptor, field.convertFromTableCell(obj))
         );
     }
 

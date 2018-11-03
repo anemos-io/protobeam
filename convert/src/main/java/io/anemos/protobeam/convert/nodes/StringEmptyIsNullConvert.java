@@ -5,6 +5,8 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericRecord;
 
+import java.util.Map;
+
 public class StringEmptyIsNullConvert extends AbstractConvert {
     public StringEmptyIsNullConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
@@ -29,7 +31,12 @@ public class StringEmptyIsNullConvert extends AbstractConvert {
     }
 
     @Override
-    public void convertToProto(Message.Builder message, TableRow row) {
+    public Object convert(Object in) {
+        return in;
+    }
+
+    @Override
+    public void convertToProto(Message.Builder message, Map row) {
 
     }
 

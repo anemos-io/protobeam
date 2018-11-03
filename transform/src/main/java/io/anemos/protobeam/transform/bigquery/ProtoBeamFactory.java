@@ -1,9 +1,11 @@
 package io.anemos.protobeam.transform.bigquery;
 
+import com.google.api.services.bigquery.model.TableRow;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import io.anemos.protobeam.convert.SchemaProtoToBigQueryModel;
+import org.apache.beam.sdk.transforms.DoFn;
 
 public class ProtoBeamFactory<T extends Message> {
 
@@ -27,4 +29,7 @@ public class ProtoBeamFactory<T extends Message> {
         return new SchemaProtoToBigQueryModel().getSchema(descriptor);
     }
 
+    public DoFn<TableRow, T> getBigQueryReadDoFn() {
+        return new BigQueryReadDoFn<>(messageClass);
+    }
 }

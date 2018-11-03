@@ -7,9 +7,14 @@ import org.apache.avro.generic.GenericRecord;
 
 import java.util.Map;
 
-public class FloatFieldConvert extends AbstractConvert {
-    public FloatFieldConvert(Descriptors.FieldDescriptor descriptor) {
+public class BooleanFieldConvert extends AbstractConvert<Boolean> {
+    public BooleanFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
+    }
+
+    @Override
+    public Object convert(Object in) {
+        return in;
     }
 
     @Override
@@ -18,25 +23,15 @@ public class FloatFieldConvert extends AbstractConvert {
     }
 
     @Override
-    public Object convert(Object in) {
-        return ((Float) in).doubleValue();
-    }
-
-    @Override
-    public Object convertFromTableCell(Object in) {
-        return ((Double) in).floatValue();
-        //return Float.parseFloat((String)in);
-    }
-
-    @Override
-    public void convertToProto(Message.Builder builder, Map row) {
+    public void convertToProto(Message.Builder builder, Map<String, Object> row) {
         builder.setField(descriptor, convertFromTableCell(row.get(descriptor.getName())));
     }
 
     @Override
-    public Object convertFromGenericRecord(Object in) {
-        return ((Double) in).floatValue();
+    public Boolean convertFromTableCell(Object in) {
+        return (Boolean) in;
     }
+
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {

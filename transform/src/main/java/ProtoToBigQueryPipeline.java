@@ -1,12 +1,14 @@
-import io.anemos.protobeam.examples.ProtoBeamBasicMessage;
-import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
-import io.anemos.protobeam.examples.ProtoBeamBasicRepeatPrimitive;
-import io.anemos.protobeam.examples.ProtoBeamOptionMessage;
+import com.google.protobuf.ByteString;
+import io.anemos.protobeam.examples.*;
+import io.anemos.protobeam.test.BytesGenerator;
+import io.anemos.protobeam.test.TimestampGenerator;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.transforms.Create;
 
 public class ProtoToBigQueryPipeline extends DemoPipelineBase {
 
+    private transient BytesGenerator bytesGenerator = new BytesGenerator();
+    private transient TimestampGenerator tsGenerator = new TimestampGenerator();
 
     public static void main(String... args) {
         new ProtoToBigQueryPipeline().run();
@@ -18,6 +20,7 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
         toBqepeat(pipeline);
         toBqMessage(pipeline);
         toBqOption(pipeline);
+        toBqWkt(pipeline);
         pipeline.run();
     }
 
@@ -26,16 +29,19 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
                 .setTestIndex(1)
                 .setTestName("ProtoToBigQueryPipeline.toBqrimitive")
                 .setPrimitiveString("abc")
+                .setPrimitiveBytes(ByteString.copyFrom(bytesGenerator.nextBytes()))
                 .build();
         ProtoBeamBasicPrimitive m2 = ProtoBeamBasicPrimitive.newBuilder()
                 .setTestIndex(2)
                 .setTestName("ProtoToBigQueryPipeline.toBqrimitive")
                 .setPrimitiveDouble(42.13)
+                .setPrimitiveBytes(ByteString.copyFrom(bytesGenerator.nextBytes()))
                 .build();
         ProtoBeamBasicPrimitive m3 = ProtoBeamBasicPrimitive.newBuilder()
                 .setTestIndex(3)
                 .setTestName("ProtoToBigQueryPipeline.toBqrimitive")
                 .setPrimitiveInt32(14)
+                .setPrimitiveBytes(ByteString.copyFrom(bytesGenerator.nextBytes()))
                 .build();
         pipeline.apply(Create.of(m1, m2, m3))
                 .apply(BigQueryWrite(ProtoBeamBasicPrimitive.class, ProtoBeamBasicPrimitive.getDescriptor(), "protobeam_primitive"));
@@ -92,13 +98,40 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
 
 
     private void toBqOption(Pipeline pipeline) {
+        int ix = 1;
         ProtoBeamOptionMessage m1 = ProtoBeamOptionMessage.newBuilder()
-                .setTestIndex(1)
+                .setTestIndex(ix++)
                 .setTestName("ProtoToBigQueryPipeline.toBqOption")
                 .setOptionDescription("deprecated")
                 .build();
         pipeline.apply(Create.of(m1))
                 .apply(BigQueryWrite(ProtoBeamOptionMessage.class, ProtoBeamOptionMessage.getDescriptor(), "protobeam_option"));
+    }
+
+    private void toBqWkt(Pipeline pipeline) {
+        int ix = 1;
+        ProtoBeamWktMessage m1 = ProtoBeamWktMessage.newBuilder()
+                .setTestIndex(ix++)
+                .setTestName("ProtoToBigQueryPipeline.toBqWkt")
+                .setTimestamp(tsGenerator.nextTimestamp())
+                .build();
+        ProtoBeamWktMessage m2 = ProtoBeamWktMessage.newBuilder()
+                .setTestIndex(ix++)
+                .setTestName("ProtoToBigQueryPipeline.toBqWkt")
+                .setTimestamp(tsGenerator.nextTimestamp())
+                .build();
+        ProtoBeamWktMessage m3 = ProtoBeamWktMessage.newBuilder()
+                .setTestIndex(ix++)
+                .setTestName("ProtoToBigQueryPipeline.toBqWkt")
+                .setTimestamp(tsGenerator.nextTimestamp())
+                .build();
+        ProtoBeamWktMessage m4 = ProtoBeamWktMessage.newBuilder()
+                .setTestIndex(ix++)
+                .setTestName("ProtoToBigQueryPipeline.toBqWkt")
+                .setTimestamp(tsGenerator.nextTimestamp())
+                .build();
+        pipeline.apply(Create.of(m1, m2, m3, m4))
+                .apply(BigQueryWrite(ProtoBeamWktMessage.class, ProtoBeamWktMessage.getDescriptor(), "protobeam_wkt"));
     }
 
 

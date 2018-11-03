@@ -5,6 +5,8 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericRecord;
 
+import java.util.Map;
+
 public class StringFieldConvert extends AbstractConvert<String> {
     public StringFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
@@ -13,7 +15,7 @@ public class StringFieldConvert extends AbstractConvert<String> {
 
     @Override
     public String convert(Object in) {
-        return String.valueOf(in);
+        return (String) in;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class StringFieldConvert extends AbstractConvert<String> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, TableRow row) {
+    public void convertToProto(Message.Builder builder, Map row) {
         builder.setField(descriptor, row.get(descriptor.getName()));
     }
 

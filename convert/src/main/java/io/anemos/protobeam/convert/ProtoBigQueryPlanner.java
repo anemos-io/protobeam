@@ -21,7 +21,7 @@ class ProtoBigQueryPlanner implements Serializable {
         Descriptors.FieldDescriptor.Type fieldType = fieldDescriptor.getType();
         switch (fieldType) {
             case BOOL:
-                return new ObjectFieldConvert(fieldDescriptor);
+                return new BooleanFieldConvert(fieldDescriptor);
             case INT64:
             case UINT64:
             case FIXED64:

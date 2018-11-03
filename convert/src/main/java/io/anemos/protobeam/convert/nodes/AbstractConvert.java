@@ -5,6 +5,8 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericRecord;
 
+import java.util.Map;
+
 public abstract class AbstractConvert<T> {
     protected Descriptors.FieldDescriptor descriptor;
 
@@ -12,13 +14,11 @@ public abstract class AbstractConvert<T> {
         this.descriptor = descriptor;
     }
 
-    public T convert(Object in) {
-        return (T) in;
-    }
+    public abstract Object convert(Object in);
 
     public abstract void convert(Message message, TableRow row);
 
-    public abstract void convertToProto(Message.Builder builder, TableRow row);
+    public abstract void convertToProto(Message.Builder builder, Map<String, Object> row);
 
     public abstract void convertToProto(Message.Builder builder, GenericRecord row);
 
