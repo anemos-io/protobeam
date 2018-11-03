@@ -16,6 +16,7 @@ public class ProtoFromBigQueryPipeline extends DemoPipelineBase {
         fromBqMessage(pipeline);
         fromBqOption(pipeline);
         fromBqWkt(pipeline);
+        fromBqSpecial(pipeline);
         pipeline.run();
     }
 
@@ -50,6 +51,13 @@ public class ProtoFromBigQueryPipeline extends DemoPipelineBase {
     private void fromBqWkt(Pipeline pipeline) {
         pipeline.apply(BigQueryTypedRead(ProtoBeamWktMessage.class, ProtoBeamWktMessage.getDescriptor(),
                 "protobeam_wkt"))
+                .apply(ParDo.of(endMessage()))
+        ;
+    }
+
+    private void fromBqSpecial(Pipeline pipeline) {
+        pipeline.apply(BigQueryTypedRead(ProtoBeamBasicSpecial.class, ProtoBeamBasicSpecial.getDescriptor(),
+                "protobeam_special"))
                 .apply(ParDo.of(endMessage()))
         ;
     }

@@ -15,6 +15,7 @@ public class ProtoFromTableRowPipeline extends DemoPipelineBase {
         fromBqMessage();
         fromBqOption();
         fromBqWkt();
+        fromBqSpecial();
     }
 
     private void fromBqPrimitive() {
@@ -57,6 +58,15 @@ public class ProtoFromTableRowPipeline extends DemoPipelineBase {
         Pipeline pipeline = createPipeline();
         BigQueryRead(pipeline, ProtoBeamWktMessage.class, ProtoBeamWktMessage.getDescriptor(),
                 "protobeam_wkt")
+                .apply(ParDo.of(endMessage()))
+        ;
+        pipeline.run();
+    }
+
+    private void fromBqSpecial() {
+        Pipeline pipeline = createPipeline();
+        BigQueryRead(pipeline, ProtoBeamBasicSpecial.class, ProtoBeamBasicSpecial.getDescriptor(),
+                "protobeam_special")
                 .apply(ParDo.of(endMessage()))
         ;
         pipeline.run();

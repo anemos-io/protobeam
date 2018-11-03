@@ -21,6 +21,7 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
         toBqMessage(pipeline);
         toBqOption(pipeline);
         toBqWkt(pipeline);
+        toBqSpecial(pipeline);
         pipeline.run();
     }
 
@@ -133,6 +134,20 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
         pipeline.apply(Create.of(m1, m2, m3, m4))
                 .apply(BigQueryWrite(ProtoBeamWktMessage.class, ProtoBeamWktMessage.getDescriptor(), "protobeam_wkt"));
     }
+
+    private void toBqSpecial(Pipeline pipeline) {
+        int ix = 1;
+        ProtoBeamBasicSpecial m1 = ProtoBeamBasicSpecial.newBuilder()
+                .setTestIndex(ix++)
+                .setTestName("ProtoToBigQueryPipeline.toBqSpecial")
+                .setSpecialEnum(ProtoBeamBasicSpecial.EnumSpecial.FOO)
+                .addRepeatedEnum(ProtoBeamBasicSpecial.EnumSpecial.BAR)
+                .addRepeatedEnum(ProtoBeamBasicSpecial.EnumSpecial.FOO)
+                .build();
+        pipeline.apply(Create.of(m1))
+                .apply(BigQueryWrite(ProtoBeamBasicSpecial.class, ProtoBeamBasicSpecial.getDescriptor(), "protobeam_special"));
+    }
+
 
 
 }

@@ -42,9 +42,8 @@ class ProtoBigQueryPlanner implements Serializable {
                 return new BytesFieldConvert(fieldDescriptor);
             case STRING:
                 return new StringFieldConvert(fieldDescriptor);
-//            case ENUM:
-//                addEnumFieldToRow(message, fieldDescriptor, row);
-//                break;
+            case ENUM:
+                return new EnumConvert(fieldDescriptor);
             case MESSAGE:
                 return planMessageField(fieldDescriptor);
         }
