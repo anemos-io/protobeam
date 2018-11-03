@@ -53,11 +53,11 @@ limited to Apache Beam.
 
 Create 3 tables in a dataset, converted from Protobuf
 
-[transform/src/main/java/ProtoToBigQueryPipeline](transform/src/main/java/ProtoToBigQueryPipeline)
+[transform/src/main/java/ProtoToBigQueryPipeline](transform/src/main/java/ProtoToBigQueryPipeline.java)
 
 Read the created tables, convert to protobuf and output to stderr
 
-[transform/src/main/java/ProtoFromBigQueryPipeline](transform/src/main/java/ProtoFromBigQueryPipeline)
+[transform/src/main/java/ProtoFromBigQueryPipeline](transform/src/main/java/ProtoFromBigQueryPipeline.java)
 
 ## Roadmap
 

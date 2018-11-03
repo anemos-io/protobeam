@@ -10,7 +10,6 @@ import org.apache.beam.sdk.extensions.protobuf.ProtoCoder;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
-import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
@@ -51,8 +50,10 @@ public class DemoPipelineBase implements Serializable {
 
     private PipelineOptions createDataflow() {
         DataflowPipelineOptions options = PipelineOptionsFactory.as(DataflowPipelineOptions.class);
-        options.setStreaming(true);
+        options.setStreaming(false);
         options.setProject(env(GOOGLE_PROJECT_ID));
+        options.setGcpTempLocation(env(BQ_GCS_TEMP));
+        options.setTempLocation(env(BQ_GCS_TEMP));
         options.setRunner(DataflowRunner.class);
         return options;
     }
@@ -103,26 +104,26 @@ public class DemoPipelineBase implements Serializable {
     protected <M extends Message> BigQueryIO.Write<M> BigQueryWrite(Class<M> messageClass, Descriptors.Descriptor descriptor, String name) {
 
         ProtoBeamFactory factory = new ProtoBeamFactory(messageClass, descriptor);
-
-        ValueProvider<String> gcs = new ValueProvider<String>() {
-            @Override
-            public String get() {
-                return env(BQ_GCS_TEMP);
-            }
-
-            @Override
-            public boolean isAccessible() {
-                return true;
-            }
-        };
-
+//
+//        ValueProvider<String> gcs = new ValueProvider<String>() {
+//            @Override
+//            public String get() {
+//                return env(BQ_GCS_TEMP);
+//            }
+//
+//            @Override
+//            public boolean isAccessible() {
+//                return true;
+//            }
+//        };
+//
         return BigQueryIO
                 .write().withFormatFunction(factory.getBigQueryWriteFormatFunction())
                 .to(env(BQ_OUT_DATASET) + "." + name)
                 .withSchema(factory.getBigQuerySchema())
                 .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
-                .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND)
-                .withCustomGcsTempLocation(gcs);
+                .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_APPEND);
+        //.withCustomGcsTempLocation(gcs);
     }
 
 }
