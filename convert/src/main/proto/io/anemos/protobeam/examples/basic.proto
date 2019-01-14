@@ -62,4 +62,20 @@ message ProtoBeamBasicSpecial {
     int32 test_index = 2;
     EnumSpecial special_enum = 3;
     repeated EnumSpecial repeated_enum = 4;
+
+    oneof special_oneof {
+        int32 oneof_int32 = 5;
+        bool oneof_bool = 6;
+        string oneof_string = 7;
+        ProtoBeamBasicPrimitive oneof_primitive = 8;
+    }
+
+    map<string, int32> x = 9;
+    map<string, string> y = 10;
+    map<string, ProtoBeamBasicPrimitive> z = 11;
+
+    oneof second_oneof {
+        int64 oneof_int64 = 12;
+        double oneof_double = 13;
+    }
 }

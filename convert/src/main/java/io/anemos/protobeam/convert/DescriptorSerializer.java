@@ -53,7 +53,9 @@ public class DescriptorSerializer {
                     dependencies.add(convertToFileDescriptorMap(dependencyName, inMap, outMap)));
         }
         try {
-            return Descriptors.FileDescriptor.buildFrom(fileDescriptorProto, dependencies.toArray(new Descriptors.FileDescriptor[0]));
+            Descriptors.FileDescriptor fileDescriptor = Descriptors.FileDescriptor.buildFrom(fileDescriptorProto, dependencies.toArray(new Descriptors.FileDescriptor[0]));
+            outMap.put(name, fileDescriptor);
+            return fileDescriptor;
         } catch (Descriptors.DescriptorValidationException e) {
             throw new RuntimeException(e);
         }
