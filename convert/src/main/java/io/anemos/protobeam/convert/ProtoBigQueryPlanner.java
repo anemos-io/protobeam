@@ -1,7 +1,9 @@
 package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
-import io.anemos.protobeam.convert.nodes.*;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
+import io.anemos.protobeam.convert.nodes.MessageConvert;
+import io.anemos.protobeam.convert.nodes.WktTimestampConvert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +13,10 @@ class ProtoBigQueryPlanner implements Serializable {
 
     private Descriptors.Descriptor descriptor;
 
+    private ConvertNodeFactory nodeFactory;
 
     ProtoBigQueryPlanner(Descriptors.Descriptor descriptor) {
+        this.nodeFactory = new BigQueryConvertNodeFactory();
         this.descriptor = descriptor;
     }
 
@@ -21,29 +25,29 @@ class ProtoBigQueryPlanner implements Serializable {
         Descriptors.FieldDescriptor.Type fieldType = fieldDescriptor.getType();
         switch (fieldType) {
             case BOOL:
-                return new BooleanFieldConvert(fieldDescriptor);
+                return nodeFactory.createBooleanFieldConvert(fieldDescriptor);
             case INT64:
             case UINT64:
             case FIXED64:
             case SFIXED64:
             case SINT64:
-                return new LongFieldConvert(fieldDescriptor);
+                return nodeFactory.createLongFieldConvert(fieldDescriptor);
             case INT32:
             case UINT32:
             case SFIXED32:
             case FIXED32:
             case SINT32:
-                return new IntegerFieldConvert(fieldDescriptor);
+                return nodeFactory.createIntegerFieldConvert(fieldDescriptor);
             case DOUBLE:
-                return new DoubleFieldConvert(fieldDescriptor);
+                return nodeFactory.createDoubleFieldConvert(fieldDescriptor);
             case FLOAT:
-                return new FloatFieldConvert(fieldDescriptor);
+                return nodeFactory.createFloatFieldConvert(fieldDescriptor);
             case BYTES:
-                return new BytesFieldConvert(fieldDescriptor);
+                return nodeFactory.createBytesFieldConvert(fieldDescriptor);
             case STRING:
-                return new StringFieldConvert(fieldDescriptor);
+                return nodeFactory.createStringFieldConvert(fieldDescriptor);
             case ENUM:
-                return new EnumConvert(fieldDescriptor);
+                return nodeFactory.createEnumFieldConvert(fieldDescriptor);
             case MESSAGE:
                 return planMessageField(fieldDescriptor);
         }
@@ -52,21 +56,21 @@ class ProtoBigQueryPlanner implements Serializable {
 
     private AbstractConvert planMessageField(Descriptors.FieldDescriptor fieldDescriptor) {
         if (WktTimestampConvert.isHandler(fieldDescriptor)) {
-            return new WktTimestampConvert(fieldDescriptor);
+            return nodeFactory.createWktTimestampFieldConvert(fieldDescriptor);
         }
-        return new MessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, fieldDescriptor.getMessageType().getFields()));
+        return nodeFactory.createMessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, fieldDescriptor.getMessageType().getFields()));
     }
 
     private MessageConvert planMessage(Descriptors.FieldDescriptor fieldDescriptor, List<Descriptors.FieldDescriptor> fields) {
         List<AbstractConvert> list = new ArrayList<>();
         fields.forEach(fd -> {
             if (fd.isRepeated()) {
-                list.add(new RepeatedConvert(fd, planField(fd)));
+                list.add(nodeFactory.createRepeatedFieldConvert(fd, planField(fd)));
             } else {
                 list.add(planField(fd));
             }
         });
-        return new MessageConvert(null, list);
+        return nodeFactory.createMessageConvert(null, list);
     }
 
     AbstractConvert createPlan() {
