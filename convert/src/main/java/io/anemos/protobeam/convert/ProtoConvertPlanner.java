@@ -2,24 +2,29 @@ package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
-import io.anemos.protobeam.convert.nodes.MessageConvert;
-import io.anemos.protobeam.convert.nodes.WktTimestampConvert;
+import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class ProtoBigQueryPlanner implements Serializable {
+class ProtoConvertPlanner implements Serializable {
 
     private Descriptors.Descriptor descriptor;
 
     private ConvertNodeFactory nodeFactory;
 
-    ProtoBigQueryPlanner(Descriptors.Descriptor descriptor) {
-        this.nodeFactory = new BigQueryConvertNodeFactory();
+    private SchemaProtoContext context = new SchemaProtoContext();
+
+
+    ProtoConvertPlanner(Descriptors.Descriptor descriptor, ConvertNodeFactory factory) {
+        this.nodeFactory = factory;
         this.descriptor = descriptor;
     }
 
+    public String getNodeFactoryClassName() {
+        return nodeFactory.getClass().getName();
+    }
 
     private AbstractConvert planField(Descriptors.FieldDescriptor fieldDescriptor) {
         Descriptors.FieldDescriptor.Type fieldType = fieldDescriptor.getType();
@@ -55,13 +60,13 @@ class ProtoBigQueryPlanner implements Serializable {
     }
 
     private AbstractConvert planMessageField(Descriptors.FieldDescriptor fieldDescriptor) {
-        if (WktTimestampConvert.isHandler(fieldDescriptor)) {
+        if (context.isTimestamp(fieldDescriptor)) {
             return nodeFactory.createWktTimestampFieldConvert(fieldDescriptor);
         }
         return nodeFactory.createMessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, fieldDescriptor.getMessageType().getFields()));
     }
 
-    private MessageConvert planMessage(Descriptors.FieldDescriptor fieldDescriptor, List<Descriptors.FieldDescriptor> fields) {
+    private AbstractMessageConvert planMessage(Descriptors.FieldDescriptor fieldDescriptor, List<Descriptors.FieldDescriptor> fields) {
         List<AbstractConvert> list = new ArrayList<>();
         fields.forEach(fd -> {
             if (fd.isRepeated()) {
@@ -77,8 +82,8 @@ class ProtoBigQueryPlanner implements Serializable {
         return planMessage(null, descriptor.getFields());
     }
 
-//    public ProtoBigQueryExecutionPlan create() {
-//        return new ProtoBigQueryExecutionPlan(descriptor, planMessage(null, descriptor.getFields()));
+//    public ProtoTableRowExecutionPlan create() {
+//        return new ProtoTableRowExecutionPlan(descriptor, planMessage(null, descriptor.getFields()));
 //    }
 
 

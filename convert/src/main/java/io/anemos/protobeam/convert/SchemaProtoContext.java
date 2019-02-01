@@ -19,5 +19,6 @@ public class SchemaProtoContext {
         return ".bcl.Decimal".equals(fieldDescriptor.toProto().getTypeName());
     }
 
+
 }
 

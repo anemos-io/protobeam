@@ -2,27 +2,28 @@ package io.anemos.protobeam.convert.nodes.beamsql;
 
 
 import com.google.protobuf.Descriptors;
-import io.anemos.protobeam.convert.ProtoBigQueryExecutionPlan;
+import io.anemos.protobeam.convert.ProtoBeamSqlExecutionPlan;
 import io.anemos.protobeam.convert.SchemaProtoToBeamSQL;
 import io.anemos.protobeam.examples.ProtoBeamBasicRepeatPrimitive;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class RepeatedTest extends AbstractProtoBeamSqlTest {
 
-    private ProtoBigQueryExecutionPlan plan;
+    private ProtoBeamSqlExecutionPlan plan;
 
-//
-//    @Before
-//    public void setup() {
-//        ProtoBeamBasicRepeatPrimitive x = ProtoBeamBasicRepeatPrimitive.newBuilder()
-//                .build();
-//        plan = new ProtoBigQueryExecutionPlan(x);
-//
-//        byte[] so = SerializeTest.serializeToByteArray(plan);
-//        plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
-//    }
+
+    @Before
+    public void setup() {
+        ProtoBeamBasicRepeatPrimitive x = ProtoBeamBasicRepeatPrimitive.newBuilder()
+                .build();
+        plan = new ProtoBeamSqlExecutionPlan(x);
+
+        byte[] so = SerializeTest.serializeToByteArray(plan);
+        plan = (ProtoBeamSqlExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
+    }
 
     @Test
     public void testSchema() {
@@ -51,22 +52,22 @@ public class RepeatedTest extends AbstractProtoBeamSqlTest {
         assertEquals(modelRef, model.getSchema(descriptor).toString());
     }
 
-//    @Test
-//    public void booleanFieldTest() {
-//        ProtoBeamBasicRepeatPrimitive protoIn = ProtoBeamBasicRepeatPrimitive.newBuilder()
-//                .addRepeatedBool(false)
-//                .addRepeatedBool(true)
-//                .build();
-//        testPingPong(plan, protoIn);
-//    }
-//
-//
-//    @Test
-//    public void stringFieldTest() {
-//        ProtoBeamBasicRepeatPrimitive protoIn = ProtoBeamBasicRepeatPrimitive.newBuilder()
-//                .addRepeatedString("fooBar1")
-//                .addRepeatedString("fooBar2")
-//                .build();
-//        testPingPong(plan, protoIn);
-//    }
+    @Test
+    public void booleanFieldTest() {
+        ProtoBeamBasicRepeatPrimitive protoIn = ProtoBeamBasicRepeatPrimitive.newBuilder()
+                .addRepeatedBool(false)
+                .addRepeatedBool(true)
+                .build();
+        testPingPong(plan, protoIn);
+    }
+
+
+    @Test
+    public void stringFieldTest() {
+        ProtoBeamBasicRepeatPrimitive protoIn = ProtoBeamBasicRepeatPrimitive.newBuilder()
+                .addRepeatedString("fooBar1")
+                .addRepeatedString("fooBar2")
+                .build();
+        testPingPong(plan, protoIn);
+    }
 }

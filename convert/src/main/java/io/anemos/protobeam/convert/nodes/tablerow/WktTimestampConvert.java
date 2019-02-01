@@ -1,16 +1,16 @@
-package io.anemos.protobeam.convert.nodes;
+package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import io.anemos.protobeam.util.TimestampUtil;
-import org.apache.avro.generic.GenericRecord;
 
 import java.util.Map;
 
-public class WktTimestampConvert extends AbstractConvert {
+class WktTimestampConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
     public WktTimestampConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
     }
@@ -29,15 +29,15 @@ public class WktTimestampConvert extends AbstractConvert {
     }
 
     @Override
-    public Object convertFromTableCell(Object in) {
+    public Object convertFrom(Object in) {
         return TimestampUtil.fromBQ((String) in);
     }
 
     @Override
-    public void convertToProto(Message.Builder message, Map row) {
+    public void convertToProto(Message.Builder message, Map<String, Object> row) {
         String cell = (String) row.get(descriptor.getName());
         if (cell != null) {
-            message.setField(descriptor, convertFromTableCell(cell));
+            message.setField(descriptor, convertFrom(cell));
         }
     }
 
@@ -45,15 +45,4 @@ public class WktTimestampConvert extends AbstractConvert {
     public Object convert(Object in) {
         return in.toString();
     }
-
-    @Override
-    public Object convertFromGenericRecord(Object in) {
-        return Timestamps.fromMicros((Long) in);
-    }
-
-    @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, convertFromGenericRecord(row.get(descriptor.getName())));
-    }
-
 }

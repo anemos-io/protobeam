@@ -12,17 +12,17 @@ import static org.junit.Assert.assertEquals;
 
 public class PrimitiveTest extends AbstractProtoBigQueryTest {
 
-    private ProtoBigQueryExecutionPlan plan;
+    private ProtoTableRowExecutionPlan plan;
 
 
     @Before
     public void setup() {
         ProtoBeamBasicPrimitive x = ProtoBeamBasicPrimitive.newBuilder()
                 .build();
-        plan = new ProtoBigQueryExecutionPlan(x);
+        plan = new ProtoTableRowExecutionPlan(x);
 
         byte[] so = SerializeTest.serializeToByteArray(plan);
-        plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
+        plan = (ProtoTableRowExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
     }
 
     @Test

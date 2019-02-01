@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class AbstractProtoBigQueryTest {
 
-    protected void testPingPong(ProtoBigQueryExecutionPlan plan, AbstractMessage protoIn) {
+    protected void testPingPong(ProtoTableRowExecutionPlan plan, AbstractMessage protoIn) {
         TableRow result = plan.convert(protoIn);
         System.out.println(result.toString());
         Message protoOut = plan.convertToProto(result);

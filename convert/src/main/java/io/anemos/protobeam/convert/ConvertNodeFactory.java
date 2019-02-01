@@ -2,7 +2,7 @@ package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
-import io.anemos.protobeam.convert.nodes.MessageConvert;
+import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ public interface ConvertNodeFactory {
 
     AbstractConvert createLongFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
-    AbstractConvert createMessageFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, MessageConvert convert);
+    AbstractConvert createMessageFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert);
 
-    MessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields);
+    AbstractMessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields);
 
     AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 

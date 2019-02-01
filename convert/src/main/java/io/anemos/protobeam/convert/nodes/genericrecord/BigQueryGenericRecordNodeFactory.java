@@ -1,4 +1,4 @@
-package io.anemos.protobeam.convert.nodes.beamsql;
+package io.anemos.protobeam.convert.nodes.genericrecord;
 
 import com.google.protobuf.Descriptors;
 import io.anemos.protobeam.convert.ConvertNodeFactory;
@@ -7,7 +7,9 @@ import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
 import java.util.List;
 
-public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
+public class BigQueryGenericRecordNodeFactory implements ConvertNodeFactory {
+
+
     @Override
     public AbstractConvert createBooleanFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new BooleanFieldConvert(fieldDescriptor);
@@ -44,13 +46,13 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createMessageFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
-        return new MessageFieldConvert(fieldDescriptor, convert);
+    public AbstractMessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields) {
+        return new MessageConvert(fieldDescriptor, fields);
     }
 
     @Override
-    public AbstractMessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields) {
-        return new MessageConvert(fieldDescriptor, fields);
+    public AbstractConvert createMessageFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
+        return new MessageFieldConvert(fieldDescriptor, convert);
     }
 
     @Override
@@ -77,4 +79,5 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     public AbstractConvert createWktWrapperFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return null;
     }
+
 }

@@ -1,11 +1,13 @@
-package io.anemos.protobeam.convert;
+package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.protobuf.Descriptors;
-import io.anemos.protobeam.convert.nodes.*;
+import io.anemos.protobeam.convert.ConvertNodeFactory;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
+import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
 import java.util.List;
 
-public class BigQueryConvertNodeFactory implements ConvertNodeFactory {
+public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
 
 
     @Override
@@ -44,12 +46,12 @@ public class BigQueryConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public MessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields) {
+    public AbstractMessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields) {
         return new MessageConvert(fieldDescriptor, fields);
     }
 
     @Override
-    public AbstractConvert createMessageFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, MessageConvert convert) {
+    public AbstractConvert createMessageFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
         return new MessageFieldConvert(fieldDescriptor, convert);
     }
 

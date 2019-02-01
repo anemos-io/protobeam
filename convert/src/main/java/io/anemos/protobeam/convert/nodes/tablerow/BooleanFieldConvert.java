@@ -1,13 +1,13 @@
-package io.anemos.protobeam.convert.nodes;
+package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import org.apache.avro.generic.GenericRecord;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
 
 import java.util.Map;
 
-public class BooleanFieldConvert extends AbstractConvert<Boolean> {
+class BooleanFieldConvert extends AbstractConvert<Boolean, TableRow, Map<String, Object>> {
     public BooleanFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
     }
@@ -24,17 +24,11 @@ public class BooleanFieldConvert extends AbstractConvert<Boolean> {
 
     @Override
     public void convertToProto(Message.Builder builder, Map<String, Object> row) {
-        builder.setField(descriptor, convertFromTableCell(row.get(descriptor.getName())));
+        builder.setField(descriptor, convertFrom(row.get(descriptor.getName())));
     }
 
     @Override
-    public Boolean convertFromTableCell(Object in) {
+    public Boolean convertFrom(Object in) {
         return (Boolean) in;
-    }
-
-
-    @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, convertFromGenericRecord(row.get(descriptor.getName())));
     }
 }

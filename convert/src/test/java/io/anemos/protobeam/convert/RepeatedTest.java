@@ -7,17 +7,17 @@ import org.junit.Test;
 
 public class RepeatedTest extends AbstractProtoBigQueryTest {
 
-    private ProtoBigQueryExecutionPlan plan;
+    private ProtoTableRowExecutionPlan plan;
 
 
     @Before
     public void setup() {
         ProtoBeamBasicRepeatPrimitive x = ProtoBeamBasicRepeatPrimitive.newBuilder()
                 .build();
-        plan = new ProtoBigQueryExecutionPlan(x);
+        plan = new ProtoTableRowExecutionPlan(x);
 
         byte[] so = SerializeTest.serializeToByteArray(plan);
-        plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
+        plan = (ProtoTableRowExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
     }
 
     @Test

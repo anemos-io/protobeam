@@ -1,15 +1,15 @@
-package io.anemos.protobeam.convert.nodes;
+package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import org.apache.avro.generic.GenericRecord;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RepeatedConvert extends AbstractConvert {
+class RepeatedConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
 
     private AbstractConvert field;
 
@@ -36,15 +36,8 @@ public class RepeatedConvert extends AbstractConvert {
     public void convertToProto(Message.Builder builder, Map row) {
         List list = (List) row.get(descriptor.getName());
         list.forEach(
-                obj -> builder.addRepeatedField(descriptor, field.convertFromTableCell(obj))
+                obj -> builder.addRepeatedField(descriptor, field.convertFrom(obj))
         );
     }
 
-    @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-        List list = (List) row.get(descriptor.getName());
-        list.forEach(
-                obj -> builder.addRepeatedField(descriptor, field.convertFromGenericRecord(obj))
-        );
-    }
 }

@@ -1,11 +1,9 @@
 package io.anemos.protobeam.convert;
 
-import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
-import org.apache.avro.generic.GenericRecord;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,23 +12,21 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class ProtoBigQueryExecutionPlan<T extends Message> implements Serializable {
+public class AbstractExecutionPlan<T extends Message> implements Serializable {
 
-    private Class<T> messageClass;
-    private transient AbstractConvert convert;
-    private transient Descriptors.Descriptor descriptor;
+    protected Class<T> messageClass;
+    protected transient AbstractConvert convert;
+    protected transient Descriptors.Descriptor descriptor;
+    protected String factoryClassName;
 
-    public ProtoBigQueryExecutionPlan(Message message) {
-        this((Class<T>) message.getClass());
-    }
-
-    public ProtoBigQueryExecutionPlan(Class<T> messageClass) {
+    public AbstractExecutionPlan(Class<T> messageClass, ConvertNodeFactory factory) {
         this.messageClass = messageClass;
         inferDescriptor();
-        this.convert = new ProtoBigQueryPlanner(this.descriptor).createPlan();
+        this.convert = new ProtoConvertPlanner(this.descriptor, factory).createPlan();
+        this.factoryClassName = factory.getClass().getName();
     }
 
-    private void inferDescriptor() {
+    protected void inferDescriptor() {
         try {
             //public static final com.google.protobuf.Descriptors.Descriptor
             //getDescriptor() {
@@ -46,25 +42,7 @@ public class ProtoBigQueryExecutionPlan<T extends Message> implements Serializab
         }
     }
 
-    public TableRow convert(T message) {
-        TableRow row = new TableRow();
-        convert.convert(message, row);
-        return row;
-    }
-
-    public T convertToProto(TableRow row) {
-        DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
-        convert.convertToProto(builder, row);
-        return convertToConcrete(builder);
-    }
-
-    public T convertToProto(GenericRecord row) {
-        DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
-        convert.convertToProto(builder, row);
-        return convertToConcrete(builder);
-    }
-
-    private T convertToConcrete(DynamicMessage.Builder builder) {
+    protected T convertToConcrete(DynamicMessage.Builder builder) {
         if (!this.messageClass.equals(DynamicMessage.class)) {
             try {
                 Method method = messageClass.getMethod("parseFrom", byte[].class);
@@ -79,11 +57,6 @@ public class ProtoBigQueryExecutionPlan<T extends Message> implements Serializab
         }
         return (T) builder.build();
     }
-
-//    public static ProtoBigQueryExecutionPlan create(Descriptors.Descriptor descriptor) {
-//        return new ProtoBigQueryExecutionPlan(descriptor);
-//    }
-
 
     private void writeObject(ObjectOutputStream oos)
             throws IOException {
@@ -101,7 +74,13 @@ public class ProtoBigQueryExecutionPlan<T extends Message> implements Serializab
         } else {
             inferDescriptor();
         }
-        convert = new ProtoBigQueryPlanner(descriptor).createPlan();
+        try {
+            convert = new ProtoConvertPlanner(descriptor, (ConvertNodeFactory) Class.forName(factoryClassName).newInstance()).createPlan();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
 }

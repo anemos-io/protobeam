@@ -1,13 +1,13 @@
-package io.anemos.protobeam.convert.nodes;
+package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import org.apache.avro.generic.GenericRecord;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
 
 import java.util.Map;
 
-public class StringEmptyIsNullConvert extends AbstractConvert {
+class StringEmptyIsNullConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
     public StringEmptyIsNullConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
     }
@@ -37,11 +37,6 @@ public class StringEmptyIsNullConvert extends AbstractConvert {
 
     @Override
     public void convertToProto(Message.Builder message, Map row) {
-
-    }
-
-    @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
 
     }
 }

@@ -1,21 +1,21 @@
 package io.anemos.protobeam.convert.nodes.beamsql;
 
 
-import io.anemos.protobeam.convert.ProtoBigQueryExecutionPlan;
+import io.anemos.protobeam.convert.ProtoBeamSqlExecutionPlan;
 
 public class WktTest extends AbstractProtoBeamSqlTest {
 
-    private ProtoBigQueryExecutionPlan plan;
+    private ProtoBeamSqlExecutionPlan plan;
 
 
 //    @Before
 //    public void setup() {
 //        ProtoBeamWktMessage x = ProtoBeamWktMessage.newBuilder()
 //                .build();
-//        plan = new ProtoBigQueryExecutionPlan(x);
+//        plan = new ProtoTableRowExecutionPlan(x);
 //
 //        byte[] so = SerializeTest.serializeToByteArray(plan);
-//        plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
+//        plan = (ProtoTableRowExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
 //    }
 //
 //    @Test

@@ -1,26 +1,28 @@
 package io.anemos.protobeam.convert.nodes.beamsql;
 
 import com.google.protobuf.Descriptors;
-import io.anemos.protobeam.convert.ProtoBigQueryExecutionPlan;
+import io.anemos.protobeam.convert.ProtoBeamSqlExecutionPlan;
 import io.anemos.protobeam.convert.SchemaProtoToBeamSQL;
 import io.anemos.protobeam.examples.ProtoBeamBasicMessage;
+import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class MessageTest extends AbstractProtoBeamSqlTest {
 
-    private ProtoBigQueryExecutionPlan plan;
+    private ProtoBeamSqlExecutionPlan plan;
 
 
-//    @Before
-//    public void setup() {
-//        ProtoBeamBasicMessage x = ProtoBeamBasicMessage.newBuilder().build();
-//        plan = new ProtoBigQueryExecutionPlan(x);
-//
-//        byte[] so = SerializeTest.serializeToByteArray(plan);
-//        plan = (ProtoBigQueryExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
-//    }
+    @Before
+    public void setup() {
+        ProtoBeamBasicMessage x = ProtoBeamBasicMessage.newBuilder().build();
+        plan = new ProtoBeamSqlExecutionPlan(x);
+
+        byte[] so = SerializeTest.serializeToByteArray(plan);
+        plan = (ProtoBeamSqlExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
+    }
 
     @Test
     public void testSchema() {
@@ -73,24 +75,24 @@ public class MessageTest extends AbstractProtoBeamSqlTest {
     }
 
 
-//    @Test
-//    public void nestedMessageTest() {
-//        ProtoBeamBasicMessage protoIn = ProtoBeamBasicMessage.newBuilder()
-//                .setMessage(ProtoBeamBasicPrimitive.newBuilder()
-//                        .setPrimitiveBool(true)
-//                        .build())
-//                .build();
-//        testPingPong(plan, protoIn);
-//    }
-//
-//    @Test
-//    public void repeatedNestedMessageTest() {
-//        ProtoBeamBasicPrimitive.Builder nested = ProtoBeamBasicPrimitive.newBuilder()
-//                .setPrimitiveBool(true);
-//        ProtoBeamBasicMessage protoIn = ProtoBeamBasicMessage.newBuilder()
-//                .addRepeatedMessage(nested.build())
-//                .addRepeatedMessage(nested.build())
-//                .build();
-//        testPingPong(plan, protoIn);
-//    }
+    @Test
+    public void nestedMessageTest() {
+        ProtoBeamBasicMessage protoIn = ProtoBeamBasicMessage.newBuilder()
+                .setMessage(ProtoBeamBasicPrimitive.newBuilder()
+                        .setPrimitiveBool(true)
+                        .build())
+                .build();
+        testPingPong(plan, protoIn);
+    }
+
+    @Test
+    public void repeatedNestedMessageTest() {
+        ProtoBeamBasicPrimitive.Builder nested = ProtoBeamBasicPrimitive.newBuilder()
+                .setPrimitiveBool(true);
+        ProtoBeamBasicMessage protoIn = ProtoBeamBasicMessage.newBuilder()
+                .addRepeatedMessage(nested.build())
+                .addRepeatedMessage(nested.build())
+                .build();
+        testPingPong(plan, protoIn);
+    }
 }

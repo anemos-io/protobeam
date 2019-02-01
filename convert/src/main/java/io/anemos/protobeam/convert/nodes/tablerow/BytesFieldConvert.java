@@ -1,16 +1,15 @@
-package io.anemos.protobeam.convert.nodes;
+package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
-import org.apache.avro.generic.GenericRecord;
+import io.anemos.protobeam.convert.nodes.AbstractConvert;
 
-import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.Map;
 
-public class BytesFieldConvert extends AbstractConvert {
+class BytesFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
     private Base64.Decoder decoder = Base64.getDecoder();
     private Base64.Encoder encoder = Base64.getEncoder();
 
@@ -29,25 +28,15 @@ public class BytesFieldConvert extends AbstractConvert {
     }
 
     @Override
-    public Object convertFromTableCell(Object in) {
+    public Object convertFrom(Object in) {
         return decoder.decode((String) in);
     }
 
     @Override
     public void convertToProto(Message.Builder builder, Map row) {
 
-        byte[] bytes = (byte[]) convertFromTableCell(row.get(descriptor.getName()));
+        byte[] bytes = (byte[]) convertFrom(row.get(descriptor.getName()));
         if (bytes != null && bytes.length > 0) {
-            builder.setField(descriptor, bytes);
-        }
-    }
-
-
-    @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-        ByteBuffer bb = (ByteBuffer) row.get(descriptor.getName());
-        byte[] bytes = bb.array();
-        if (bytes.length > 0) {
             builder.setField(descriptor, bytes);
         }
     }
