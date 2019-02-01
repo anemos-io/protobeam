@@ -15,11 +15,12 @@ dependencies {
     compile("org.apache.beam:beam-runners-direct-java:$beamVersion")
     compile("org.apache.beam:beam-runners-google-cloud-dataflow-java:$beamVersion")
     compile("org.apache.beam:beam-sdks-java-extensions-protobuf:$beamVersion")
-    testImplementation("org.apache.beam:beam-sdks-java-extensions-sql:$beamVersion")
     compile("org.apache.beam:beam-sdks-java-extensions-google-cloud-platform-core:$beamVersion")
     compile("org.apache.beam:beam-sdks-java-io-google-cloud-platform:$beamVersion")
     compile("org.apache.beam:beam-sdks-java-io-common:$beamVersion")
+    testImplementation("org.apache.beam:beam-sdks-java-extensions-sql:$beamVersion")
     testImplementation("junit:junit:4.12")
+    testImplementation("org.hamcrest:hamcrest-all:1.3")
 }
 
 protobuf {

@@ -1,11 +1,22 @@
 package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.Message;
 import org.apache.beam.sdk.schemas.Schema;
 
 public class SchemaProtoToBeamSQL {
 
     SchemaProtoContext context = new SchemaProtoContext();
+
+    public <T extends Message> Schema getSchema(Class<T> messageClass) {
+        Descriptors.Descriptor descriptor = null;
+        try {
+            descriptor = (Descriptors.Descriptor) messageClass.getMethod("getDescriptor").invoke(null);
+        } catch (Exception e) {
+            throw new RuntimeException("ProtoBeam: Unable to get descriptor from Message. Maybe the class is not a Message?", e);
+        }
+        return getSchema(descriptor);
+    }
 
     public Schema getSchema(Descriptors.Descriptor descriptor) {
         Schema.Builder schemaBuilder = new Schema.Builder();
