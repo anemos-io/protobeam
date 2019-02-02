@@ -11,6 +11,6 @@ class FloatFieldConvert extends AbstractBeamSqlConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(descriptor, convertFrom(row.getFloat(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.getFloat(fieldDescriptor.getName())));
     }
 }

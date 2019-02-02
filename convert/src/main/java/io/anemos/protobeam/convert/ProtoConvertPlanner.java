@@ -1,6 +1,7 @@
 package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.WrappersProto;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
@@ -71,6 +72,8 @@ class ProtoConvertPlanner implements Serializable {
         fields.forEach(fd -> {
             if (fd.isRepeated()) {
                 list.add(nodeFactory.createRepeatedFieldConvert(fd, planField(fd)));
+            } else if (context.isNullable(fd)) {
+                list.add(nodeFactory.createNullableFieldConvert(fd, planField(fd)));
             } else {
                 list.add(planField(fd));
             }
@@ -82,8 +85,9 @@ class ProtoConvertPlanner implements Serializable {
         return planMessage(null, descriptor.getFields());
     }
 
+    //TODO remove?
 //    public ProtoTableRowExecutionPlan create() {
-//        return new ProtoTableRowExecutionPlan(descriptor, planMessage(null, descriptor.getFields()));
+//        return new ProtoTableRowExecutionPlan(fieldDescriptor, planMessage(null, fieldDescriptor.getFields()));
 //    }
 
 

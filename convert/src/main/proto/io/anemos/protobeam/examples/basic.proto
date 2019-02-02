@@ -3,6 +3,8 @@ syntax = "proto3";
 option java_package = "io.anemos.protobeam.examples";
 option java_multiple_files = true;
 
+import "google/protobuf/wrappers.proto";
+
 package io.anemos.protobeam.examples;
 
 message ProtoBeamBasicMessage {
@@ -50,6 +52,18 @@ message ProtoBeamBasicRepeatPrimitive {
     repeated bool repeated_bool = 15;
     repeated string repeated_string = 16;
     repeated bytes repeated_bytes = 17;
+}
+
+message ProtoBeamBasicNullablePrimitive {
+    google.protobuf.StringValue nullable_string = 1;
+    google.protobuf.DoubleValue nullable_double = 2;
+    google.protobuf.FloatValue nullable_float = 3;
+    google.protobuf.Int32Value nullable_int32 = 4;
+    google.protobuf.Int64Value nullable_int64 = 5;
+    google.protobuf.UInt32Value nullable_uint32 = 6;
+    google.protobuf.UInt64Value nullable_uint64 = 7;
+    google.protobuf.BoolValue nullable_bool = 8;
+    google.protobuf.BytesValue nullable_bytes = 9;
 }
 
 message ProtoBeamBasicSpecial {

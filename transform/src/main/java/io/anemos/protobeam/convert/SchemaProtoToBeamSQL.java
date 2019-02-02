@@ -35,6 +35,10 @@ public class SchemaProtoToBeamSQL {
         Schema.FieldType fieldType = null;
         if (context.isPrimitiveField(fieldDescriptor)) {
             fieldType = extractFieldType(fieldDescriptor);
+        } else if (context.isNullable(fieldDescriptor)) {
+            Descriptors.FieldDescriptor valueFieldDescriptor = fieldDescriptor.getMessageType().findFieldByName("value");
+            fieldType = extractFieldType(valueFieldDescriptor);
+            return Schema.Field.nullable(fieldDescriptor.getName(), fieldType);
         } else {
             fieldType = convertMessage(fieldDescriptor);
         }

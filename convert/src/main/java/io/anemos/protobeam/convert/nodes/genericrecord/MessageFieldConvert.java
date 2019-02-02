@@ -17,11 +17,11 @@ class MessageFieldConvert extends AbstractGenericRecordConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        GenericData.Record nested = (GenericData.Record) row.get(descriptor.getName());
+        GenericData.Record nested = (GenericData.Record) row.get(fieldDescriptor.getName());
         if (nested != null) {
-            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(descriptor.getMessageType());
+            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
             convert.convertToProto(fieldBuilder, nested);
-            builder.setField(descriptor, fieldBuilder.build());
+            builder.setField(fieldDescriptor, fieldBuilder.build());
         }
     }
 }

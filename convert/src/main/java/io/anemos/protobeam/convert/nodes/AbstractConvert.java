@@ -4,10 +4,10 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 
 public abstract class AbstractConvert<FIELD, IN, OUT> {
-    protected Descriptors.FieldDescriptor descriptor;
+    protected Descriptors.FieldDescriptor fieldDescriptor;
 
-    public AbstractConvert(Descriptors.FieldDescriptor descriptor) {
-        this.descriptor = descriptor;
+    public AbstractConvert(Descriptors.FieldDescriptor fieldDescriptor) {
+        this.fieldDescriptor = fieldDescriptor;
     }
 
     public abstract Object convert(Object in);

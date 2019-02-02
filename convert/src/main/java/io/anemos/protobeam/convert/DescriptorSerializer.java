@@ -71,7 +71,7 @@ public class DescriptorSerializer {
         oos.writeInt(buffer.length);
         oos.write(buffer);
 
-        //descriptor.getFile().
+        //fieldDescriptor.getFile().
         //DescriptorProtos.FileDescriptorSet
         // HashMap<String, Descriptors.FileDescriptor> fileDescriptorMap = new HashMap<>();
 
@@ -106,7 +106,7 @@ public class DescriptorSerializer {
 
 
 //        DescriptorProtos.DescriptorProto descriptorProto = DescriptorProtos.DescriptorProto.parseFrom(buffer);
-        //       descriptor = new Descriptors.Descriptor(descriptorProto, null, null, index);
+        //       fieldDescriptor = new Descriptors.Descriptor(descriptorProto, null, null, index);
         //new Descriptors.Descriptor()
 
 

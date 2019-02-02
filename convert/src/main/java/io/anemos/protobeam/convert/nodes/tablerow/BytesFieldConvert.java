@@ -24,7 +24,7 @@ class BytesFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Ob
 
     @Override
     public void convert(Message message, TableRow row) {
-        row.set(descriptor.getName(), convert(message.getField(descriptor)));
+        row.set(fieldDescriptor.getName(), convert(message.getField(fieldDescriptor)));
     }
 
     @Override
@@ -35,9 +35,9 @@ class BytesFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Ob
     @Override
     public void convertToProto(Message.Builder builder, Map row) {
 
-        byte[] bytes = (byte[]) convertFrom(row.get(descriptor.getName()));
+        byte[] bytes = (byte[]) convertFrom(row.get(fieldDescriptor.getName()));
         if (bytes != null && bytes.length > 0) {
-            builder.setField(descriptor, bytes);
+            builder.setField(fieldDescriptor, bytes);
         }
     }
 }

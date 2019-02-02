@@ -16,11 +16,13 @@ class RepeatedConvert extends AbstractBeamSqlConvert<Object> {
         this.field = field;
     }
 
+    //TODO convert
+
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        List list = row.getArray(descriptor.getName());
+        List list = row.getArray(fieldDescriptor.getName());
         list.forEach(
-                obj -> builder.addRepeatedField(descriptor, field.convertFrom(obj))
+                obj -> builder.addRepeatedField(fieldDescriptor, field.convertFrom(obj))
         );
     }
 }

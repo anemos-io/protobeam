@@ -17,7 +17,7 @@ class WktTimestampConvert extends AbstractBeamSqlConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(descriptor, convertFrom(row.getDateTime(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.getDateTime(fieldDescriptor.getName())));
     }
 
 }

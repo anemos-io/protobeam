@@ -21,10 +21,10 @@ class WktTimestampConvert extends AbstractConvert<Object, TableRow, Map<String, 
 
     @Override
     public void convert(Message message, TableRow row) {
-        if (message.hasField(descriptor)) {
-            Timestamp timestamp = (Timestamp) message.getField(descriptor);
+        if (message.hasField(fieldDescriptor)) {
+            Timestamp timestamp = (Timestamp) message.getField(fieldDescriptor);
             // TODO: WHY check on default instance?
-            row.set(descriptor.getName(), Timestamps.toString(timestamp));
+            row.set(fieldDescriptor.getName(), Timestamps.toString(timestamp));
         }
     }
 
@@ -35,9 +35,9 @@ class WktTimestampConvert extends AbstractConvert<Object, TableRow, Map<String, 
 
     @Override
     public void convertToProto(Message.Builder message, Map<String, Object> row) {
-        String cell = (String) row.get(descriptor.getName());
+        String cell = (String) row.get(fieldDescriptor.getName());
         if (cell != null) {
-            message.setField(descriptor, convertFrom(cell));
+            message.setField(fieldDescriptor, convertFrom(cell));
         }
     }
 

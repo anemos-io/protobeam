@@ -11,6 +11,6 @@ public class BooleanFieldConvert extends AbstractBeamSqlConvert<Boolean> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(descriptor, convertFrom(row.getValue(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.getValue(fieldDescriptor.getName())));
     }
 }

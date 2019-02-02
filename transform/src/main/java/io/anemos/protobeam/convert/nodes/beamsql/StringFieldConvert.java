@@ -16,6 +16,6 @@ class StringFieldConvert extends AbstractBeamSqlConvert<String> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(descriptor, row.getValue(descriptor.getName()).toString());
+        builder.setField(fieldDescriptor, row.getValue(fieldDescriptor.getName()).toString());
     }
 }

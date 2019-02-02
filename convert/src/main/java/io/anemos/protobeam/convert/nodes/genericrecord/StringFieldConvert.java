@@ -16,6 +16,6 @@ class StringFieldConvert extends AbstractGenericRecordConvert<String> {
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, row.get(descriptor.getName()).toString());
+        builder.setField(fieldDescriptor, row.get(fieldDescriptor.getName()).toString());
     }
 }

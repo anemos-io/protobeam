@@ -11,7 +11,7 @@ class DoubleFieldConvert extends AbstractGenericRecordConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        Double value = (Double) row.get(descriptor.getName());
-        builder.setField(descriptor, convertFrom(value));
+        Double value = (Double) row.get(fieldDescriptor.getName());
+        builder.setField(fieldDescriptor, convertFrom(value));
     }
 }

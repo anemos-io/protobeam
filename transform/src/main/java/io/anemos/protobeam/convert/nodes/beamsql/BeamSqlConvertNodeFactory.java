@@ -54,6 +54,11 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
+    public AbstractConvert createNullableFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
+        return new NullableConvert(fieldDescriptor, field);
+    }
+
+    @Override
     public AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
         return new RepeatedConvert(fieldDescriptor, field);
     }

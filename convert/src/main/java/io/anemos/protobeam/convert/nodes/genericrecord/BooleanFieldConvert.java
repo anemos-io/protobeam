@@ -11,6 +11,6 @@ class BooleanFieldConvert extends AbstractGenericRecordConvert<Boolean> {
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, convertFrom(row.get(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
     }
 }

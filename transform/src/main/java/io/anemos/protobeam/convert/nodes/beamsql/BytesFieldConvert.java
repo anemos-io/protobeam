@@ -17,9 +17,9 @@ class BytesFieldConvert extends AbstractBeamSqlConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        byte[] bytes = row.getBytes(descriptor.getName());
+        byte[] bytes = row.getBytes(fieldDescriptor.getName());
         if (bytes.length > 0) {
-            builder.setField(descriptor, bytes);
+            builder.setField(fieldDescriptor, bytes);
         }
     }
 }

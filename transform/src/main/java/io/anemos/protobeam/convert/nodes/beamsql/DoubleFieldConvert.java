@@ -11,7 +11,7 @@ class DoubleFieldConvert extends AbstractBeamSqlConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        Double value = row.getDouble(descriptor.getName());
-        builder.setField(descriptor, convertFrom(value));
+        Double value = row.getDouble(fieldDescriptor.getName());
+        builder.setField(fieldDescriptor, convertFrom(value));
     }
 }
