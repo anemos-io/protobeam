@@ -13,12 +13,12 @@ class EnumConvert extends AbstractGenericRecordConvert<Object> {
 
     @Override
     public Object convertFrom(Object in) {
-        Descriptors.EnumDescriptor enumType = descriptor.getEnumType();
+        Descriptors.EnumDescriptor enumType = fieldDescriptor.getEnumType();
         return enumType.findValueByName(((Utf8) in).toString());
     }
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, convertFrom(row.get(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
     }
 }

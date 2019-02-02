@@ -17,6 +17,6 @@ public abstract class AbstractBeamSqlConvert<T> extends AbstractConvert<T, Row.B
 
     @Override
     public void convert(Message message, Row.Builder row) {
-        row.addValue(convert(message.getField(descriptor)));
+        row.addValue(convert(message.getField(fieldDescriptor)));
     }
 }

@@ -18,9 +18,9 @@ class RepeatedConvert extends AbstractGenericRecordConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        List list = (List) row.get(descriptor.getName());
+        List list = (List) row.get(fieldDescriptor.getName());
         list.forEach(
-                obj -> builder.addRepeatedField(descriptor, field.convertFrom(obj))
+                obj -> builder.addRepeatedField(fieldDescriptor, field.convertFrom(obj))
         );
     }
 }

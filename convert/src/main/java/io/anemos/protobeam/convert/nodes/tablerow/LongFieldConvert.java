@@ -19,12 +19,12 @@ class LongFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Obj
 
     @Override
     public void convert(Message message, TableRow row) {
-        row.set(descriptor.getName(), convert(message.getField(descriptor)));
+        row.set(fieldDescriptor.getName(), convert(message.getField(fieldDescriptor)));
     }
 
     @Override
     public void convertToProto(Message.Builder builder, Map row) {
-        builder.setField(descriptor, convertFrom(row.get(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
     }
 
     @Override

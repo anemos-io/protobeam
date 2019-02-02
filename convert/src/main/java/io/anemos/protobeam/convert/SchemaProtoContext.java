@@ -1,13 +1,34 @@
 package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.WrappersProto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SchemaProtoContext {
+
+    private List<String> wrapperDescriptors;
+
+    public SchemaProtoContext() {
+        this.wrapperDescriptors  = new ArrayList<>();
+        WrappersProto.getDescriptor().getMessageTypes().forEach( d -> {
+            this.wrapperDescriptors.add(d.getFullName());
+        });
+    }
+
     public boolean isPrimitiveField(Descriptors.FieldDescriptor fieldDescriptor) {
         if (fieldDescriptor.getType() == Descriptors.FieldDescriptor.Type.MESSAGE) {
             return isTimestamp(fieldDescriptor) || isDecimal(fieldDescriptor);
         }
         return true;
+    }
+
+    public boolean isNullable(Descriptors.FieldDescriptor fieldDescriptor) {
+        if (fieldDescriptor.getType() != Descriptors.FieldDescriptor.Type.MESSAGE) {
+            return false;
+        }
+        return wrapperDescriptors.contains(fieldDescriptor.getMessageType().getFullName());
     }
 
 

@@ -25,20 +25,20 @@ class MessageFieldConvert extends AbstractConvert<Object, TableRow, Map<String, 
 
     @Override
     public void convert(Message message, TableRow row) {
-        if (message.hasField(descriptor)) {
+        if (message.hasField(fieldDescriptor)) {
             TableRow nested = new TableRow();
-            convert.convert((AbstractMessage) message.getField(descriptor), nested);
-            row.set(descriptor.getName(), nested);
+            convert.convert((AbstractMessage) message.getField(fieldDescriptor), nested);
+            row.set(fieldDescriptor.getName(), nested);
         }
     }
 
     @Override
     public void convertToProto(Message.Builder builder, Map row) {
-        Map nested = (Map) row.get(descriptor.getName());
+        Map nested = (Map) row.get(fieldDescriptor.getName());
         if (nested != null) {
-            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(descriptor.getMessageType());
+            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
             convert.convertToProto(fieldBuilder, nested);
-            builder.setField(descriptor, fieldBuilder.build());
+            builder.setField(fieldDescriptor, fieldBuilder.build());
         }
     }
 }

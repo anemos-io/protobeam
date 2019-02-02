@@ -16,11 +16,11 @@ public class MessageFieldConvert extends AbstractBeamSqlConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {
-        Row nested = row.getRow(descriptor.getName());
+        Row nested = row.getRow(fieldDescriptor.getName());
         if (nested != null) {
-            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(descriptor.getMessageType());
+            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
             convert.convertToProto(fieldBuilder, nested);
-            builder.setField(descriptor, fieldBuilder.build());
+            builder.setField(fieldDescriptor, fieldBuilder.build());
         }
     }
 }

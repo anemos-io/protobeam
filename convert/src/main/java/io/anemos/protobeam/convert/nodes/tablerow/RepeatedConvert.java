@@ -26,17 +26,17 @@ class RepeatedConvert extends AbstractConvert<Object, TableRow, Map<String, Obje
     @Override
     public void convert(Message message, TableRow row) {
         List tableCells = new ArrayList<>();
-        ((List) message.getField(descriptor)).forEach(
+        ((List) message.getField(fieldDescriptor)).forEach(
                 obj -> tableCells.add(field.convert(obj))
         );
-        row.set(descriptor.getName(), tableCells);
+        row.set(fieldDescriptor.getName(), tableCells);
     }
 
     @Override
     public void convertToProto(Message.Builder builder, Map row) {
-        List list = (List) row.get(descriptor.getName());
+        List list = (List) row.get(fieldDescriptor.getName());
         list.forEach(
-                obj -> builder.addRepeatedField(descriptor, field.convertFrom(obj))
+                obj -> builder.addRepeatedField(fieldDescriptor, field.convertFrom(obj))
         );
     }
 

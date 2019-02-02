@@ -26,6 +26,8 @@ public interface ConvertNodeFactory {
 
     AbstractMessageConvert createMessageConvert(Descriptors.FieldDescriptor fieldDescriptor, List<AbstractConvert> fields);
 
+    AbstractConvert createNullableFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
+
     AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 
     @Deprecated

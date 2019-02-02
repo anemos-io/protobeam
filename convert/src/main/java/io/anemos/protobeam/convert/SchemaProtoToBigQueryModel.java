@@ -2,7 +2,9 @@ package io.anemos.protobeam.convert;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
+import com.google.cloud.bigquery.Field;
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.WrappersProto;
 import io.anemos.Meta;
 
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SchemaProtoToBigQueryModel {
+
+    private SchemaProtoContext context = new SchemaProtoContext();
 
     public TableSchema getSchema(Descriptors.Descriptor descriptor) {
         List<TableFieldSchema> fieldSchemas = convertSchema(descriptor);
@@ -25,18 +29,27 @@ public class SchemaProtoToBigQueryModel {
     }
 
     private TableFieldSchema convertField(Descriptors.FieldDescriptor fieldDescriptor) {
+        //TODO remove?
 //        if (isNested(fieldDescriptor))
 //            return getNestedSchema(fieldDescriptor);
-        String bigQueryType = extractFieldType(fieldDescriptor);
         TableFieldSchema fieldSchema =
                 new TableFieldSchema()
-                        .setName(fieldDescriptor.getName())
-                        .setType(bigQueryType);
+                        .setName(fieldDescriptor.getName());
+        String bigQueryType = extractFieldType(fieldDescriptor);
+        fieldSchema.setMode("REQUIRED");
+        if ("STRUCT".equals(bigQueryType)) {
+            if (context.isNullable(fieldDescriptor)) {
+                fieldSchema.setMode("NULLABLE");
+                Descriptors.FieldDescriptor primitiveFieldDescriptor = fieldDescriptor.getMessageType().getFields().get(0);
+                bigQueryType = extractFieldType(primitiveFieldDescriptor);
+            } else {
+                fieldSchema.setFields(convertSchema(fieldDescriptor.getMessageType()));
+            }
+        }
+
+        fieldSchema.setType(bigQueryType);
         if (fieldDescriptor.isRepeated())
             fieldSchema.setMode("REPEATED");
-        if ("STRUCT".equals(bigQueryType)) {
-            fieldSchema.setFields(convertSchema(fieldDescriptor.getMessageType()));
-        }
         // OK, this could be better...
         Map<Descriptors.FieldDescriptor, Object> allFields = fieldDescriptor.getOptions().getAllFields();
         if (allFields.size() > 0) {
@@ -70,9 +83,9 @@ public class SchemaProtoToBigQueryModel {
     }
 
     private String extractFieldType(Descriptors.FieldDescriptor fieldDescriptor) {
-        if (isTimestamp(fieldDescriptor))
+        if (context.isTimestamp(fieldDescriptor))
             return "TIMESTAMP";
-        if (isDecimal(fieldDescriptor))
+        if (context.isDecimal(fieldDescriptor))
             return "FLOAT64";
         Descriptors.FieldDescriptor.Type fieldType = fieldDescriptor.getType();
         switch (fieldType) {
@@ -104,15 +117,9 @@ public class SchemaProtoToBigQueryModel {
         throw new RuntimeException("Field type not matched.");
     }
 
-    private boolean isTimestamp(Descriptors.FieldDescriptor fieldDescriptor) {
-        return (".google.protobuf.Timestamp".equals(fieldDescriptor.toProto().getTypeName()));
-    }
-
-    private boolean isDecimal(Descriptors.FieldDescriptor fieldDescriptor) {
-        return ".bcl.Decimal".equals(fieldDescriptor.toProto().getTypeName());
-    }
 
     private TableFieldSchema getNestedSchema(Descriptors.FieldDescriptor fieldDescriptor) {
+        //TODO remove?
 //        if (isCampaignCategory(fieldDescriptor))
 //            return getCampaignCategorySchema();
 //        else if (isArticleReservation(fieldDescriptor))

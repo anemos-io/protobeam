@@ -17,7 +17,7 @@ class WktTimestampConvert extends AbstractGenericRecordConvert<Object> {
 
     @Override
     public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(descriptor, convertFrom(row.get(descriptor.getName())));
+        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
     }
 
 }

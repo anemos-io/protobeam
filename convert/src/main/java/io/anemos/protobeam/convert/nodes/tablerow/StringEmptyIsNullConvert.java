@@ -14,7 +14,7 @@ class StringEmptyIsNullConvert extends AbstractConvert<Object, TableRow, Map<Str
 
     @Override
     public void convert(Message message, TableRow row) {
-        String fieldName = descriptor.getName();
+        String fieldName = fieldDescriptor.getName();
 //        if (fieldDescriptor.isRepeated()) {
 //            List<Object> tableCells = new ArrayList<>();
 //            for (String value : (List<String>) message.getField(fieldDescriptor))
@@ -22,7 +22,7 @@ class StringEmptyIsNullConvert extends AbstractConvert<Object, TableRow, Map<Str
 //                    tableCells.add(value);
 //            row.set(fieldName, tableCells);
 //        } else {
-        String value = String.valueOf(message.getField(descriptor));
+        String value = String.valueOf(message.getField(fieldDescriptor));
         if (!value.isEmpty()) {
             row.set(fieldName, value);
         }
