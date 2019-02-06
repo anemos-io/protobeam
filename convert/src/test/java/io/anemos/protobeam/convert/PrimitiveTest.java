@@ -34,7 +34,28 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         assertEquals(modelRef, model.getSchema(descriptor).toString());
 
+<<<<<<< Updated upstream
         String apiRef = "Schema{fields=[Field{name=test_name, value=Type{value=STRING, fields=null}, mode=null, description=null}, Field{name=test_index, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_double, value=Type{value=FLOAT, fields=null}, mode=null, description=null}, Field{name=primitive_float, value=Type{value=FLOAT, fields=null}, mode=null, description=null}, Field{name=primitive_int32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_int64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_uint32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_uint64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sint32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sint64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_fixed32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_fixed64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sfixed32, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_sfixed64, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=primitive_bool, value=Type{value=BOOLEAN, fields=null}, mode=null, description=null}, Field{name=primitive_string, value=Type{value=STRING, fields=null}, mode=null, description=null}, Field{name=primitive_bytes, value=Type{value=BYTES, fields=null}, mode=null, description=null}]}";
+=======
+        String apiRef = "Schema{fields=[" +
+                "Field{name=test_name, type=STRING, mode=REQUIRED, description=null}, " +
+                "Field{name=test_index, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_double, type=FLOAT, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_float, type=FLOAT, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_int32, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_int64, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_uint32, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_uint64, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_sint32, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_sint64, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_fixed32, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_fixed64, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_sfixed32, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_sfixed64, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_bool, type=BOOLEAN, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_string, type=STRING, mode=REQUIRED, description=null}, " +
+                "Field{name=primitive_bytes, type=BYTES, mode=REQUIRED, description=null}]}";
+>>>>>>> Stashed changes
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
     }

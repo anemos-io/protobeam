@@ -20,8 +20,16 @@ public class SchemaProtoToBigQueryTest extends AbstractProtoBigQueryTest {
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         assertEquals(modelRef, model.getSchema(descriptor).toString());
 
+<<<<<<< Updated upstream
         String apiRef = "Schema{fields=[Field{name=test_name, value=Type{value=STRING, fields=null}, mode=null, description=null}, Field{name=test_index, value=Type{value=INTEGER, fields=null}, mode=null, description=null}, Field{name=option_deprecated, value=Type{value=STRING, fields=null}, mode=null, description=@deprecated\n" +
                 "}, Field{name=option_description, value=Type{value=STRING, fields=null}, mode=null, description=A very detailed description}]}";
+=======
+        String apiRef = "Schema{fields=[" +
+                "Field{name=test_name, type=STRING, mode=REQUIRED, description=null}, " +
+                "Field{name=test_index, type=INTEGER, mode=REQUIRED, description=null}, " +
+                "Field{name=option_deprecated, type=STRING, mode=REQUIRED, description=@deprecated\n" +"}, " + //TODO check newline at deprication
+                "Field{name=option_description, type=STRING, mode=REQUIRED, description=A very detailed description}]}";
+>>>>>>> Stashed changes
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
     }

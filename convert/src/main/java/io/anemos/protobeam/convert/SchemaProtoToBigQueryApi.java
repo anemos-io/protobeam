@@ -2,6 +2,8 @@ package io.anemos.protobeam.convert;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.cloud.bigquery.Field;
+import com.google.cloud.bigquery.FieldList;
+import com.google.cloud.bigquery.LegacySQLTypeName;
 import com.google.cloud.bigquery.Schema;
 import com.google.protobuf.Descriptors;
 
@@ -25,7 +27,14 @@ public class SchemaProtoToBigQueryApi {
     }
 
     private Field convertField(TableFieldSchema tableFieldSchema) {
-        Field.Builder fieldBuilder = Field.newBuilder(tableFieldSchema.getName(), extractFieldType(tableFieldSchema));
+        LegacySQLTypeName fieldType = extractFieldType(tableFieldSchema);
+        Field.Builder fieldBuilder;
+        if (fieldType.equals(LegacySQLTypeName.RECORD)) {
+            FieldList fieldList = FieldList.of(convertFieldList(tableFieldSchema.getFields()));
+            fieldBuilder = Field.newBuilder(tableFieldSchema.getName(), extractFieldType(tableFieldSchema), fieldList);
+        } else {
+            fieldBuilder = Field.newBuilder(tableFieldSchema.getName(), extractFieldType(tableFieldSchema));
+        }
         if (tableFieldSchema.getMode() != null)
             fieldBuilder.setMode(extractFieldMode(tableFieldSchema));
         if ((tableFieldSchema.getDescription() != null) && (tableFieldSchema.getDescription().length() > 0)) {
@@ -34,22 +43,22 @@ public class SchemaProtoToBigQueryApi {
         return fieldBuilder.build();
     }
 
-    private Field.Type extractFieldType(TableFieldSchema tableFieldSchema) {
+    private LegacySQLTypeName extractFieldType(TableFieldSchema tableFieldSchema) {
         switch (tableFieldSchema.getType()) {
             case "FLOAT64":
-                return Field.Type.floatingPoint();
+                return LegacySQLTypeName.FLOAT;
             case "INT64":
-                return Field.Type.integer();
+                return LegacySQLTypeName.INTEGER;
             case "BOOL":
-                return Field.Type.bool();
+                return LegacySQLTypeName.BOOLEAN;
             case "STRING":
-                return Field.Type.string();
+                return LegacySQLTypeName.STRING;
             case "BYTES":
-                return Field.Type.bytes();
+                return LegacySQLTypeName.BYTES;
             case "TIMESTAMP":
-                return Field.Type.timestamp();
+                return LegacySQLTypeName.TIMESTAMP;
             case "STRUCT":
-                return Field.Type.record(convertFieldList(tableFieldSchema.getFields()));
+                return LegacySQLTypeName.RECORD;
             default:
                 throw new RuntimeException("Cannot extractFieldType TableFieldSchema type " + tableFieldSchema.getType() + " to Field.Type");
         }

@@ -14,7 +14,7 @@ dependencies {
     compile("com.google.protobuf:protobuf-java:3.6.1")
     implementation("com.google.protobuf:protobuf-java:3.6.1") //3.2.0
     implementation("com.google.protobuf:protobuf-java-util:3.6.1")
-    implementation("com.google.cloud:google-cloud-bigquery:0.22.0-beta")
+    implementation("com.google.cloud:google-cloud-bigquery:1.27.0")
     testImplementation("junit:junit:4.12")
 }
 
