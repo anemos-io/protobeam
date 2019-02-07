@@ -1,13 +1,14 @@
-val repoUrl: String by project
-var beamVersion = "2.9.0"
 
 plugins {
     id("net.ltgt.apt") version "0.20"
     id("com.google.protobuf") version "0.8.8"
-    `java-library`
-    `maven-publish`
-    idea
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
 }
+
+def beamVersion = "2.9.0"
+
 
 dependencies {
     compile(project(":convert"))
@@ -32,11 +33,17 @@ publishing {
         maven {
             // change to point to your repo, e.g. http://my.org/repo
             url = uri(repoUrl)
+            if (project.hasProperty('repoUser') && project.hasProperty('repoPass')) {
+                credentials {
+                    username repoUser
+                    password repoPass
+                }
+            }
         }
     }
     publications {
-        register("mavenJava", MavenPublication::class) {
-            from(components["java"])
+        maven(MavenPublication) {
+            from components.java
         }
     }
 }
