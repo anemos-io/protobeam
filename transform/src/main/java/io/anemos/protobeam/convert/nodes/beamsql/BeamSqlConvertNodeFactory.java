@@ -4,6 +4,7 @@ import com.google.protobuf.Descriptors;
 import io.anemos.protobeam.convert.ConvertNodeFactory;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
+import io.anemos.protobeam.convert.nodes.tablerow.FlattenConvert;
 
 import java.util.List;
 
@@ -26,6 +27,11 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     @Override
     public AbstractConvert createEnumFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new EnumConvert(fieldDescriptor);
+    }
+
+    @Override
+    public AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert field) {
+        return new FlattenConvert(fieldDescriptor, field);
     }
 
     @Override

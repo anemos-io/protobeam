@@ -25,6 +25,10 @@ public class SchemaProtoToBigQueryModel {
             Descriptors.FieldDescriptor fieldDescriptor = field.fieldDescriptor;
             if (field.isOneOf) {
                 fieldSchemas.add(convertField(fieldDescriptor, "NULLABLE"));
+            } else if (context.flatten(fieldDescriptor)) {
+                fieldDescriptor.getMessageType().getFields().forEach(subfieldDescriptor -> {
+                    fieldSchemas.add(convertField(subfieldDescriptor));
+                });
             } else {
                 fieldSchemas.add(convertField(fieldDescriptor));
             }

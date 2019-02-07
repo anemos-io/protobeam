@@ -16,6 +16,8 @@ public interface ConvertNodeFactory {
 
     AbstractConvert createEnumFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
+    AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert);
+
     AbstractConvert createFloatFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
     AbstractConvert createIntegerFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);

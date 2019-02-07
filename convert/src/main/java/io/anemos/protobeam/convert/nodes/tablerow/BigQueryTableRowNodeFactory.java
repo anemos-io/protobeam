@@ -31,6 +31,11 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
+    public AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
+        return new FlattenConvert(fieldDescriptor, convert);
+    }
+
+    @Override
     public AbstractConvert createFloatFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new FloatFieldConvert(fieldDescriptor);
     }

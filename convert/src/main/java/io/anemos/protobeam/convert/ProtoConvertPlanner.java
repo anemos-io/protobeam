@@ -62,6 +62,8 @@ class ProtoConvertPlanner implements Serializable {
     private AbstractConvert planMessageField(Descriptors.FieldDescriptor fieldDescriptor) {
         if (context.isTimestamp(fieldDescriptor)) {
             return nodeFactory.createWktTimestampFieldConvert(fieldDescriptor);
+        } else if (context.flatten(fieldDescriptor)) {
+            return nodeFactory.createFlattenConvert(fieldDescriptor, planMessage(fieldDescriptor, FieldExplorer.of(fieldDescriptor.getMessageType())));
         } else if (context.isNullable(fieldDescriptor)) {
             return nodeFactory.createWktWrapperFieldConvert(fieldDescriptor);
         }
