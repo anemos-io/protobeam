@@ -1,7 +1,11 @@
 package io.anemos.protobeam.convert;
 
+import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.WrappersProto;
+import io.anemos.Annotations;
+import io.anemos.Meta;
+import io.anemos.Rewrite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,15 @@ public class SchemaProtoContext {
 
     public boolean isDecimal(Descriptors.FieldDescriptor fieldDescriptor) {
         return ".bcl.Decimal".equals(fieldDescriptor.toProto().getTypeName());
+    }
+
+    public boolean flatten(Descriptors.FieldDescriptor fieldDescriptor) {
+        DescriptorProtos.FieldOptions fieldOptions = fieldDescriptor.getOptions();
+        if (fieldDescriptor.getOptions().hasExtension(Annotations.fieldRewrite)) {
+            Descriptors.FieldDescriptor flattenFieldDescriptor = Rewrite.FieldRewriteRule.getDescriptor().findFieldByName("flatten");
+            return (Boolean) fieldDescriptor.getOptions().getExtension(Annotations.fieldRewrite).getField(flattenFieldDescriptor);
+        }
+        return false;
     }
 
 
