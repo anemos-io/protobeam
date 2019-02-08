@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class AssumtionTest {
+public class AssumptionTest {
 
     @Test
     public void testPrimitive() throws InvalidProtocolBufferException {

@@ -25,9 +25,9 @@ class WktWrapperConvert extends AbstractConvert<Object, TableRow, Map<String, Ob
 
     @Override
     public void convert(Message message, TableRow row) {
-        Message nullableWrapperMessage = (Message) message.getField(fieldDescriptor);
-        if (!valueFieldDescriptor.getDefaultValue().equals(nullableWrapperMessage.getField(valueFieldDescriptor))) {
-            Object value = convert(nullableWrapperMessage.getField(valueFieldDescriptor));
+        if (message.hasField(fieldDescriptor)) {
+            Message valueMessage = (Message) message.getField(fieldDescriptor);
+            Object value = convert(valueMessage.getField(valueFieldDescriptor));
             row.set(fieldDescriptor.getName(), value);
         }
     }
