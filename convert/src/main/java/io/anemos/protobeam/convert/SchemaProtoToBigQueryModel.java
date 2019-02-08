@@ -2,9 +2,7 @@ package io.anemos.protobeam.convert;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.cloud.bigquery.Field;
 import com.google.protobuf.Descriptors;
-import com.google.protobuf.WrappersProto;
 import io.anemos.Meta;
 
 import java.util.ArrayList;
@@ -22,13 +20,23 @@ public class SchemaProtoToBigQueryModel {
 
     private List<TableFieldSchema> convertSchema(Descriptors.Descriptor descriptor) {
         List<TableFieldSchema> fieldSchemas = new ArrayList<>();
-        for (Descriptors.FieldDescriptor fieldDescriptor : descriptor.getFields()) {
-            fieldSchemas.add(convertField(fieldDescriptor));
-        }
+        FieldExplorer fieldExplorer = new FieldExplorer(descriptor);
+        fieldExplorer.forEach(field -> {
+            Descriptors.FieldDescriptor fieldDescriptor = field.fieldDescriptor;
+            if (field.isOneOf) {
+                fieldSchemas.add(convertField(fieldDescriptor, "NULLABLE"));
+            } else {
+                fieldSchemas.add(convertField(fieldDescriptor));
+            }
+        });
         return fieldSchemas;
     }
 
     private TableFieldSchema convertField(Descriptors.FieldDescriptor fieldDescriptor) {
+        return convertField(fieldDescriptor, "REQUIRED");
+    }
+
+    private TableFieldSchema convertField(Descriptors.FieldDescriptor fieldDescriptor, String mode) {
         //TODO remove?
 //        if (isNested(fieldDescriptor))
 //            return getNestedSchema(fieldDescriptor);
@@ -36,7 +44,7 @@ public class SchemaProtoToBigQueryModel {
                 new TableFieldSchema()
                         .setName(fieldDescriptor.getName());
         String bigQueryType = extractFieldType(fieldDescriptor);
-        fieldSchema.setMode("REQUIRED");
+        fieldSchema.setMode(mode);
         if ("STRUCT".equals(bigQueryType)) {
             if (context.isNullable(fieldDescriptor)) {
                 fieldSchema.setMode("NULLABLE");

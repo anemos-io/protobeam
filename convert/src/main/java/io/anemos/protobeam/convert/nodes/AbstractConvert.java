@@ -10,6 +10,13 @@ public abstract class AbstractConvert<FIELD, IN, OUT> {
         this.fieldDescriptor = fieldDescriptor;
     }
 
+    /**
+     * Take a object that came from a proto field, and convert it into the format that the target
+     * container expect
+     *
+     * @param in proto field object
+     * @return container field object
+     */
     public abstract Object convert(Object in);
 
     public abstract void convert(Message message, IN row);

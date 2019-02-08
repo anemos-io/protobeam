@@ -15,10 +15,6 @@ class WktTimestampConvert extends AbstractConvert<Object, TableRow, Map<String, 
         super(descriptor);
     }
 
-    public static boolean isHandler(Descriptors.FieldDescriptor fieldDescriptor) {
-        return ".google.protobuf.Timestamp".equals(fieldDescriptor.toProto().getTypeName());
-    }
-
     @Override
     public void convert(Message message, TableRow row) {
         if (message.hasField(fieldDescriptor)) {

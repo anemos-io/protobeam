@@ -3,27 +3,22 @@ package io.anemos.protobeam.convert.nodes.beamsql;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
-import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import org.apache.beam.sdk.values.Row;
 
-import java.util.ArrayList;
-import java.util.List;
+class WktWrapperConvert extends AbstractBeamSqlConvert<Object> {
 
-class NullableConvert extends AbstractBeamSqlConvert<Object> {
-
-    private AbstractConvert field;
     private Descriptors.FieldDescriptor valueFieldDescriptor;
 
 
-    public NullableConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
+    public WktWrapperConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
-        this.field = field;
         this.valueFieldDescriptor = fieldDescriptor.getMessageType().findFieldByName("value");
     }
 
     @Override
     public void convert(Message message, Row.Builder row) {
         Message nullableWrapperMessage = (Message) message.getField(fieldDescriptor);
+        // TODO is not correct, need hasField
         if (!valueFieldDescriptor.getDefaultValue().equals(nullableWrapperMessage.getField(valueFieldDescriptor))) {
             Object value = convert(nullableWrapperMessage.getField(valueFieldDescriptor));
             row.addValue(value);

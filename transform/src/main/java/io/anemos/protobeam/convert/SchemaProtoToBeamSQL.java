@@ -33,6 +33,7 @@ public class SchemaProtoToBeamSQL {
 
     private Schema.Field convertField(Descriptors.FieldDescriptor fieldDescriptor) {
         Schema.FieldType fieldType = null;
+        boolean isNullable = false;
         if (context.isPrimitiveField(fieldDescriptor)) {
             fieldType = extractFieldType(fieldDescriptor);
         } else if (context.isNullable(fieldDescriptor)) {
@@ -41,6 +42,7 @@ public class SchemaProtoToBeamSQL {
             return Schema.Field.nullable(fieldDescriptor.getName(), fieldType);
         } else {
             fieldType = convertMessage(fieldDescriptor);
+            isNullable = true;
         }
         if (fieldDescriptor.isRepeated()) {
             fieldType = Schema.FieldType.array(fieldType);
@@ -48,7 +50,7 @@ public class SchemaProtoToBeamSQL {
         if (fieldType == null) {
             throw new RuntimeException();
         }
-        return Schema.Field.of(fieldDescriptor.getName(), fieldType);
+        return Schema.Field.of(fieldDescriptor.getName(), fieldType).withNullable(isNullable);
     }
 
     private Schema.FieldType extractFieldType(Descriptors.FieldDescriptor fieldDescriptor) {

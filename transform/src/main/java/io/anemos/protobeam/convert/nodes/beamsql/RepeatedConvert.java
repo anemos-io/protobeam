@@ -5,6 +5,7 @@ import com.google.protobuf.Message;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import org.apache.beam.sdk.values.Row;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class RepeatedConvert extends AbstractBeamSqlConvert<Object> {
@@ -16,7 +17,15 @@ class RepeatedConvert extends AbstractBeamSqlConvert<Object> {
         this.field = field;
     }
 
-    //TODO convert
+    @Override
+    public void convert(Message message, Row.Builder row) {
+        List list = new ArrayList<>();
+        ((List) message.getField(fieldDescriptor)).forEach(
+                obj -> list.add(field.convert(obj))
+        );
+        row.addArray(list);
+    }
+
 
     @Override
     public void convertToProto(Message.Builder builder, Row row) {

@@ -55,7 +55,7 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createNullableFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
-        return new NullableConvert(fieldDescriptor, field);
+        return null;
     }
 
     @Override
@@ -80,6 +80,6 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createWktWrapperFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return null;
+        return new WktWrapperConvert(fieldDescriptor);
     }
 }

@@ -1,7 +1,6 @@
 package io.anemos.protobeam.convert;
 
 import com.google.protobuf.Descriptors;
-import com.google.protobuf.WrappersProto;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
@@ -64,15 +63,18 @@ class ProtoConvertPlanner implements Serializable {
         if (context.isTimestamp(fieldDescriptor)) {
             return nodeFactory.createWktTimestampFieldConvert(fieldDescriptor);
         }
-        return nodeFactory.createMessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, fieldDescriptor.getMessageType().getFields()));
+        return nodeFactory.createMessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, FieldExplorer.of(fieldDescriptor.getMessageType())));
     }
 
-    private AbstractMessageConvert planMessage(Descriptors.FieldDescriptor fieldDescriptor, List<Descriptors.FieldDescriptor> fields) {
+    private AbstractMessageConvert planMessage(Descriptors.FieldDescriptor fieldDescriptor, FieldExplorer fields) {
         List<AbstractConvert> list = new ArrayList<>();
-        fields.forEach(fd -> {
+        fields.forEach(field -> {
+            Descriptors.FieldDescriptor fd = field.fieldDescriptor;
             if (fd.isRepeated()) {
                 list.add(nodeFactory.createRepeatedFieldConvert(fd, planField(fd)));
             } else if (context.isNullable(fd)) {
+                list.add(nodeFactory.createWktWrapperFieldConvert(fd));
+            } else if (field.isOneOf) {
                 list.add(nodeFactory.createNullableFieldConvert(fd, planField(fd)));
             } else {
                 list.add(planField(fd));
@@ -82,7 +84,7 @@ class ProtoConvertPlanner implements Serializable {
     }
 
     AbstractConvert createPlan() {
-        return planMessage(null, descriptor.getFields());
+        return planMessage(null, FieldExplorer.of(descriptor));
     }
 
     //TODO remove?

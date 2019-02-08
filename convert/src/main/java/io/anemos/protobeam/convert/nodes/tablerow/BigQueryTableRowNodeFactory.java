@@ -82,6 +82,6 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createWktWrapperFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return null;
+        return new WktWrapperConvert(fieldDescriptor);
     }
 }
