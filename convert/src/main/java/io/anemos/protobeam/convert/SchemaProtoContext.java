@@ -3,7 +3,7 @@ package io.anemos.protobeam.convert;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.WrappersProto;
-import io.anemos.Annotations;
+import io.anemos.Options;
 import io.anemos.Meta;
 import io.anemos.Rewrite;
 
@@ -46,9 +46,9 @@ public class SchemaProtoContext {
 
     public boolean flatten(Descriptors.FieldDescriptor fieldDescriptor) {
         DescriptorProtos.FieldOptions fieldOptions = fieldDescriptor.getOptions();
-        if (fieldDescriptor.getOptions().hasExtension(Annotations.fieldRewrite)) {
+        if (fieldDescriptor.getOptions().hasExtension(Options.fieldRewrite)) {
             Descriptors.FieldDescriptor flattenFieldDescriptor = Rewrite.FieldRewriteRule.getDescriptor().findFieldByName("flatten");
-            return (Boolean) fieldDescriptor.getOptions().getExtension(Annotations.fieldRewrite).getField(flattenFieldDescriptor);
+            return (Boolean) fieldDescriptor.getOptions().getExtension(Options.fieldRewrite).getField(flattenFieldDescriptor);
         }
         return false;
     }
