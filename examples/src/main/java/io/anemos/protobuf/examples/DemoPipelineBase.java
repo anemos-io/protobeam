@@ -1,3 +1,5 @@
+package io.anemos.protobuf.examples;
+
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;

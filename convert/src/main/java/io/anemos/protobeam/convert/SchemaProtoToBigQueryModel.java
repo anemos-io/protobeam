@@ -73,7 +73,7 @@ public class SchemaProtoToBigQueryModel {
                             fieldSchema.setDescription("@deprecated\n" + description);
                         }
                         break;
-                    case "io.anemos.field_meta":
+                    case "anemos.field_meta":
                         Meta.FieldMeta meta = (Meta.FieldMeta) opt;
                         String description = fieldSchema.getDescription();
                         if ((description == null) || description.length() == 0) {

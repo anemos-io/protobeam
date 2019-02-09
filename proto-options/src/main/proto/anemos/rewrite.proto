@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-package io.anemos;
+package anemos;
+
+option java_package = "io.anemos";
 
 message MessageRewriteRule {
 

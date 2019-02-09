@@ -1,12 +1,17 @@
 plugins {
     id 'base'
 }
+
+ext.beamVersion = "2.9.0"
+ext.protobufVersion = "3.6.1"
+
 allprojects {
     group = "io.anemos.protobeam"
-    version = "0.0.1"
-    
+    version = "0.0.2"
+
     repositories {
         mavenLocal()
         jcenter()
     }
 }
+

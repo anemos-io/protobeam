@@ -7,14 +7,9 @@ plugins {
 }
 
 dependencies {
-    api("org.apache.commons:commons-math3:3.6.1")
-    protobuf(project(":proto-options"))
-    compile("org.apache.avro:avro:1.8.2")
     compile("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("com.google.protobuf:protobuf-java-util:$protobufVersion")
-    implementation("com.google.cloud:google-cloud-bigquery:1.27.0")
-    testProtobuf(project(":proto-examples"))
     testImplementation("junit:junit:4.12")
 }
 
@@ -37,7 +32,14 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
-            from components.java
+            artifact protoJar
         }
+    }
+}
+
+task protoJar(type: Jar) {
+    classifier = 'proto'
+    from('src/main/proto') {
+        include '/**/*'
     }
 }

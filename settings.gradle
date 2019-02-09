@@ -10,3 +10,7 @@ rootProject.name = "proto-beam"
 
 include ':convert'
 include ':transform'
+include ':examples'
+include ':proto-options'
+include ':proto-examples'
+

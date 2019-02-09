@@ -1,3 +1,5 @@
+package io.anemos.protobuf.examples;
+
 import io.anemos.protobeam.examples.*;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.transforms.ParDo;

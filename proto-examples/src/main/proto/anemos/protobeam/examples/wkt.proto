@@ -5,7 +5,7 @@ import "google/protobuf/timestamp.proto";
 option java_package = "io.anemos.protobeam.examples";
 option java_multiple_files = true;
 
-package io.anemos.protobeam.examples;
+package anemos.protobeam.examples;
 
 message ProtoBeamWktMessage {
     string test_name = 1;
