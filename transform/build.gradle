@@ -1,4 +1,3 @@
-
 plugins {
     id("net.ltgt.apt") version "0.20"
     id("com.google.protobuf") version "0.8.8"
@@ -31,7 +30,12 @@ protobuf {
 publishing {
     repositories {
         maven {
-            url = uri(repoUrl)
+            // change to point to your repo, e.g. http://my.org/repo
+            if(project.version.endsWith('-SNAPSHOT')) {
+                url = uri(snapshotRepoUrl)
+            } else {
+                url = uri(repoUrl)
+            }
             if (project.hasProperty('repoUser') && project.hasProperty('repoPass')) {
                 credentials {
                     username repoUser
@@ -42,6 +46,8 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
+            groupId 'io.anemos'
+            artifactId 'protobeam-transform'
             from components.java
         }
     }

@@ -6,12 +6,11 @@ ext.beamVersion = "2.9.0"
 ext.protobufVersion = "3.6.1"
 
 allprojects {
-    group = "io.anemos.protobeam"
-    version = "0.0.2"
+    group = "io.anemos"
+    version = "0.0.3-SNAPSHOT"
 
     repositories {
         mavenLocal()
         jcenter()
     }
 }
-

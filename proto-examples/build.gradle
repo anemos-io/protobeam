@@ -23,7 +23,11 @@ publishing {
     repositories {
         maven {
             // change to point to your repo, e.g. http://my.org/repo
-            url = uri(repoUrl)
+            if(project.version.endsWith('-SNAPSHOT')) {
+                url = uri(snapshotRepoUrl)
+            } else {
+                url = uri(repoUrl)
+            }
             if (project.hasProperty('repoUser') && project.hasProperty('repoPass')) {
                 credentials {
                     username repoUser
@@ -34,6 +38,8 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
+            groupId 'io.anemos'
+            artifactId 'protobeam-testing-proto'
             artifact protoJar
         }
     }
