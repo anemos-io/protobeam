@@ -20,7 +20,9 @@ class MessageFieldConvert extends AbstractConvert<Object, TableRow, Map<String, 
 
     @Override
     public Object convert(Object in) {
-        return in;
+        TableRow nested = new TableRow();
+        convert.convert((Message) in, nested);
+        return nested;
     }
 
     @Override
@@ -40,5 +42,12 @@ class MessageFieldConvert extends AbstractConvert<Object, TableRow, Map<String, 
             convert.convertToProto(fieldBuilder, nested);
             builder.setField(fieldDescriptor, fieldBuilder.build());
         }
+    }
+
+    @Override
+    public Object convertFrom(Object in) {
+        DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
+        convert.convertToProto(fieldBuilder, in);
+        return fieldBuilder.build();
     }
 }
