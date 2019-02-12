@@ -41,9 +41,6 @@ public class SchemaProtoToBigQueryModel {
     }
 
     private TableFieldSchema convertField(Descriptors.FieldDescriptor fieldDescriptor, String mode) {
-        //TODO remove?
-//        if (isNested(fieldDescriptor))
-//            return getNestedSchema(fieldDescriptor);
         TableFieldSchema fieldSchema =
                 new TableFieldSchema()
                         .setName(fieldDescriptor.getName());
@@ -62,7 +59,6 @@ public class SchemaProtoToBigQueryModel {
         fieldSchema.setType(bigQueryType);
         if (fieldDescriptor.isRepeated())
             fieldSchema.setMode("REPEATED");
-        // OK, this could be better...
         Map<Descriptors.FieldDescriptor, Object> allFields = fieldDescriptor.getOptions().getAllFields();
         if (allFields.size() > 0) {
             allFields.forEach((f, opt) -> {
@@ -88,8 +84,6 @@ public class SchemaProtoToBigQueryModel {
                 }
             });
         }
-
-        //Meta.FieldMeta
 
         return fieldSchema;
     }

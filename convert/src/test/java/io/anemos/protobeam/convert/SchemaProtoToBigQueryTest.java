@@ -26,7 +26,7 @@ public class SchemaProtoToBigQueryTest extends AbstractProtoBigQueryTest {
         String apiRef = "Schema{fields=[" +
                 "Field{name=test_name, type=STRING, mode=REQUIRED, description=null}, " +
                 "Field{name=test_index, type=INTEGER, mode=REQUIRED, description=null}, " +
-                "Field{name=option_deprecated, type=STRING, mode=REQUIRED, description=@deprecated\n" +"}, " + //TODO check newline at deprication
+                "Field{name=option_deprecated, type=STRING, mode=REQUIRED, description=@deprecated\n" +"}, " +
                 "Field{name=option_description, type=STRING, mode=REQUIRED, description=A very detailed description}]}";
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
