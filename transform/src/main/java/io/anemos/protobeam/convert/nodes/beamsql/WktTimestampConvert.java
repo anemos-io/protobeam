@@ -11,13 +11,13 @@ class WktTimestampConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public Object convertFrom(Object in) {
+    public Object toProtoValue(Object in) {
         return Timestamps.fromMicros((Long) in);
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(fieldDescriptor, convertFrom(row.getDateTime(fieldDescriptor.getName())));
+    public void toProto(Row row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.getDateTime(fieldDescriptor.getName())));
     }
 
 }

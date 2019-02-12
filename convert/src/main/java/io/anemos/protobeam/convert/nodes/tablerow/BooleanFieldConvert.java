@@ -13,22 +13,22 @@ class BooleanFieldConvert extends AbstractConvert<Boolean, TableRow, Map<String,
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
-        row.set(fieldDescriptor.getName(), convert(message.getField(fieldDescriptor)));
+    public void fromProto(Message message, TableRow row) {
+        row.set(fieldDescriptor.getName(), fromProtoValue(message.getField(fieldDescriptor)));
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map<String, Object> row) {
-        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
+    public void toProto(Map<String, Object> row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.get(fieldDescriptor.getName())));
     }
 
     @Override
-    public Boolean convertFrom(Object in) {
+    public Boolean toProtoValue(Object in) {
         return (Boolean) in;
     }
 }

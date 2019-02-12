@@ -16,16 +16,16 @@ class FlattenConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convert(Message message, Row.Builder row) {
+    public void fromProto(Message message, Row.Builder row) {
         Message messageField = (Message) message.getField(fieldDescriptor);
         fieldDescriptor.getMessageType().getFields().forEach(subfieldDescriptor -> {
-            Object value = field.convert(messageField.getField(subfieldDescriptor));
+            Object value = field.fromProtoValue(messageField.getField(subfieldDescriptor));
             row.addValue(value);
         });
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
+    public void toProto(Row row, Message.Builder builder) {
         DynamicMessage.Builder dynamicMessageBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
         fieldDescriptor.getMessageType().getFields().forEach(subFieldDescriptor -> {
             Object value = row.getValue(subFieldDescriptor.getName());

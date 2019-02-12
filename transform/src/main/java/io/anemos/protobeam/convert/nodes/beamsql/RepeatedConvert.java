@@ -18,20 +18,20 @@ class RepeatedConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convert(Message message, Row.Builder row) {
+    public void fromProto(Message message, Row.Builder row) {
         List list = new ArrayList<>();
         ((List) message.getField(fieldDescriptor)).forEach(
-                obj -> list.add(field.convert(obj))
+                obj -> list.add(field.fromProtoValue(obj))
         );
         row.addArray(list);
     }
 
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
+    public void toProto(Row row, Message.Builder builder) {
         List list = row.getArray(fieldDescriptor.getName());
         list.forEach(
-                obj -> builder.addRepeatedField(fieldDescriptor, field.convertFrom(obj))
+                obj -> builder.addRepeatedField(fieldDescriptor, field.toProtoValue(obj))
         );
     }
 }

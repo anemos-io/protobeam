@@ -10,7 +10,7 @@ public class BooleanFieldConvert extends AbstractBeamSqlConvert<Boolean> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(fieldDescriptor, convertFrom(row.getValue(fieldDescriptor.getName())));
+    public void toProto(Row row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.getValue(fieldDescriptor.getName())));
     }
 }

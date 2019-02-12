@@ -20,10 +20,10 @@ public class MessageFieldConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convert(Message message, Row.Builder row) {
+    public void fromProto(Message message, Row.Builder row) {
         if (message.hasField(fieldDescriptor)) {
             Row.Builder nested = Row.withSchema(schema);
-            convert.convert((AbstractMessage) message.getField(fieldDescriptor), nested);
+            convert.fromProto((AbstractMessage) message.getField(fieldDescriptor), nested);
             row.addValue(nested.build());
         } else {
             row.addValue(null);
@@ -31,11 +31,11 @@ public class MessageFieldConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
+    public void toProto(Row row, Message.Builder builder) {
         Row nested = row.getRow(fieldDescriptor.getName());
         if (nested != null) {
             DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
-            convert.convertToProto(fieldBuilder, nested);
+            convert.toProto(nested, fieldBuilder);
             builder.setField(fieldDescriptor, fieldBuilder.build());
         }
     }

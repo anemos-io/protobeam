@@ -10,12 +10,12 @@ class StringFieldConvert extends AbstractGenericRecordConvert<String> {
     }
 
     @Override
-    public String convertFrom(Object in) {
+    public String toProtoValue(Object in) {
         return in.toString();
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
+    public void toProto(GenericRecord row, Message.Builder builder) {
         builder.setField(fieldDescriptor, row.get(fieldDescriptor.getName()).toString());
     }
 }

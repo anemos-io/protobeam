@@ -10,7 +10,7 @@ class StringEmptyIsNullConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
+    public void toProto(Row row, Message.Builder builder) {
 
     }
 }

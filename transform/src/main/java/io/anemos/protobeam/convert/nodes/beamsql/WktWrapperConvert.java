@@ -16,11 +16,11 @@ class WktWrapperConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convert(Message message, Row.Builder row) {
+    public void fromProto(Message message, Row.Builder row) {
         Message nullableWrapperMessage = (Message) message.getField(fieldDescriptor);
         // TODO is not correct, need hasField
         if (!valueFieldDescriptor.getDefaultValue().equals(nullableWrapperMessage.getField(valueFieldDescriptor))) {
-            Object value = convert(nullableWrapperMessage.getField(valueFieldDescriptor));
+            Object value = fromProtoValue(nullableWrapperMessage.getField(valueFieldDescriptor));
             row.addValue(value);
         } else {
             row.addValue(null);
@@ -28,7 +28,7 @@ class WktWrapperConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
+    public void toProto(Row row, Message.Builder builder) {
         Object value = row.getValue(fieldDescriptor.getName());
         if (null != value) {
             DynamicMessage wrapperMessage = DynamicMessage.newBuilder(fieldDescriptor.getMessageType()).setField(valueFieldDescriptor, value).build();

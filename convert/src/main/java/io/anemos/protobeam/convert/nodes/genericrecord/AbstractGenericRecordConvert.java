@@ -11,12 +11,12 @@ abstract class AbstractGenericRecordConvert<T> extends AbstractConvert<T, Generi
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return null;
     }
 
     @Override
-    public void convert(Message message, GenericRecord row) {
+    public void fromProto(Message message, GenericRecord row) {
 
     }
 }

@@ -15,10 +15,10 @@ class NullableConvert extends AbstractGenericRecordConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
+    public void toProto(GenericRecord row, Message.Builder builder) {
         Object cell = row.get(fieldDescriptor.getName());
         if (cell != null) {
-            field.convertToProto(builder, row);
+            field.toProto(row, builder);
         }
     }
 }

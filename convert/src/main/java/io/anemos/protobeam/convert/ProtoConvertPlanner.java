@@ -75,11 +75,7 @@ class ProtoConvertPlanner implements Serializable {
         fields.forEach(field -> {
             Descriptors.FieldDescriptor fd = field.fieldDescriptor;
             if (fd.isRepeated()) {
-//                if(fd.getType() == Descriptors.FieldDescriptor.Type.MESSAGE) {
-//                    list.add(nodeFactory.createRepeatedFieldConvert(fd, planMessage(fd, FieldExplorer.of(fd.getMessageType()))));
-//                } else {
                 list.add(nodeFactory.createRepeatedFieldConvert(fd, planField(fd)));
-//                }
             } else if (field.isOneOf) {
                 list.add(nodeFactory.createNullableFieldConvert(fd, planField(fd)));
             } else {
@@ -92,11 +88,4 @@ class ProtoConvertPlanner implements Serializable {
     AbstractConvert createPlan() {
         return planMessage(null, FieldExplorer.of(descriptor));
     }
-
-    //TODO remove?
-//    public ProtoTableRowExecutionPlan create() {
-//        return new ProtoTableRowExecutionPlan(fieldDescriptor, planMessage(null, fieldDescriptor.getFields()));
-//    }
-
-
 }

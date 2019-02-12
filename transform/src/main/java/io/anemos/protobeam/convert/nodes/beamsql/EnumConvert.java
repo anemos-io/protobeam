@@ -12,13 +12,13 @@ class EnumConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public Object convertFrom(Object in) {
+    public Object toProtoValue(Object in) {
         Descriptors.EnumDescriptor enumType = fieldDescriptor.getEnumType();
         return enumType.findValueByName(((Utf8) in).toString());
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(fieldDescriptor, convertFrom(row.getString(fieldDescriptor.getName())));
+    public void toProto(Row row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.getString(fieldDescriptor.getName())));
     }
 }

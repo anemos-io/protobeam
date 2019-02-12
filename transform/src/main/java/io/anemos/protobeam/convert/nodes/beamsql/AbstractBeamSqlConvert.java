@@ -11,12 +11,12 @@ public abstract class AbstractBeamSqlConvert<T> extends AbstractConvert<T, Row.B
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convert(Message message, Row.Builder row) {
-        row.addValue(convert(message.getField(fieldDescriptor)));
+    public void fromProto(Message message, Row.Builder row) {
+        row.addValue(fromProtoValue(message.getField(fieldDescriptor)));
     }
 }

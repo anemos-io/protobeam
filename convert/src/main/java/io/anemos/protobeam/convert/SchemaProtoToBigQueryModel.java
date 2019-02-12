@@ -131,11 +131,6 @@ public class SchemaProtoToBigQueryModel {
 
 
     private TableFieldSchema getNestedSchema(Descriptors.FieldDescriptor fieldDescriptor) {
-        //TODO remove?
-//        if (isCampaignCategory(fieldDescriptor))
-//            return getCampaignCategorySchema();
-//        else if (isArticleReservation(fieldDescriptor))
-//            return getArticleReservationSchema();
         throw new RuntimeException("No nested schema found for field " + fieldDescriptor.getName());
     }
 }

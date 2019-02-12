@@ -10,7 +10,7 @@ class BooleanFieldConvert extends AbstractGenericRecordConvert<Boolean> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
+    public void toProto(GenericRecord row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.get(fieldDescriptor.getName())));
     }
 }

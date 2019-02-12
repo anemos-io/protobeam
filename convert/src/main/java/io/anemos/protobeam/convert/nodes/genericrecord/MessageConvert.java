@@ -19,20 +19,20 @@ class MessageConvert extends AbstractMessageConvert<Object, GenericRecord, Gener
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convert(Message message, GenericRecord row) {
+    public void fromProto(Message message, GenericRecord row) {
         fields.forEach(
-                e -> e.convert(message, row)
+                e -> e.fromProto(message, row)
         );
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
-        fields.forEach(e -> e.convertToProto(builder, row));
+    public void toProto(GenericRecord row, Message.Builder builder) {
+        fields.forEach(e -> e.toProto(row, builder));
     }
 
 

@@ -28,8 +28,6 @@ public class AbstractExecutionPlan<T extends Message> implements Serializable {
 
     protected void inferDescriptor() {
         try {
-            //public static final com.google.protobuf.Descriptors.Descriptor
-            //getDescriptor() {
             Method method = messageClass.getMethod("getDescriptor");
             descriptor = (Descriptors.Descriptor) method.invoke(null);
         } catch (IllegalAccessException e) {

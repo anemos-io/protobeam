@@ -10,7 +10,7 @@ class IntegerFieldConvert extends AbstractBeamSqlConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
-        builder.setField(fieldDescriptor, convertFrom(row.getInt32(fieldDescriptor.getName())));
+    public void toProto(Row row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.getInt32(fieldDescriptor.getName())));
     }
 }

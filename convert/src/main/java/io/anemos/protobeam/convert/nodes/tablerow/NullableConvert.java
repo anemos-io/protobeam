@@ -17,22 +17,22 @@ class NullableConvert extends AbstractConvert<Object, TableRow, Map<String, Obje
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
+    public void fromProto(Message message, TableRow row) {
         if (message.hasField(fieldDescriptor)) {
-            field.convert(message, row);
+            field.fromProto(message, row);
         }
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map row) {
+    public void toProto(Map row, Message.Builder builder) {
         Object cell = row.get(fieldDescriptor.getName());
         if (cell != null) {
-            field.convertToProto(builder, field);
+            field.toProto(field, builder);
         }
     }
 

@@ -11,8 +11,8 @@ class LongFieldConvert extends AbstractBeamSqlConvert<Object> {
 
 
     @Override
-    public void convertToProto(Message.Builder builder, Row row) {
+    public void toProto(Row row, Message.Builder builder) {
         Long value = row.getInt64(fieldDescriptor.getName());
-        builder.setField(fieldDescriptor, convertFrom(value));
+        builder.setField(fieldDescriptor, toProtoValue(value));
     }
 }

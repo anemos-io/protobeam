@@ -23,7 +23,7 @@ public class ProtoGenericRecordExecutionPlan<T extends Message> extends Abstract
 
     public T convertToProto(GenericRecord row) {
         DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
-        convert.convertToProto(builder, row);
+        convert.toProto(row, builder);
         return convertToConcrete(builder);
     }
 }

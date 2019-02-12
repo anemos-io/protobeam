@@ -1,7 +1,6 @@
 package io.anemos.protobeam.convert.nodes.tablerow;
 
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.protobuf.AbstractMessage;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
@@ -19,22 +18,22 @@ public class FlattenConvert extends AbstractMessageConvert<Object, TableRow, Map
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
 
     @Override
-    public void convert(Message message, TableRow row) {
+    public void fromProto(Message message, TableRow row) {
         Message field = (Message) message.getField(fieldDescriptor);
         fieldDescriptor.getMessageType().getFields().forEach( subfieldDescriptor -> {
-            Object value = convert.convert(field.getField(subfieldDescriptor));
+            Object value = convert.fromProtoValue(field.getField(subfieldDescriptor));
             row.set(subfieldDescriptor.getName(), value);
         });
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map row) {
+    public void toProto(Map row, Message.Builder builder) {
         DynamicMessage.Builder dynamicMessageBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
         fieldDescriptor.getMessageType().getFields().forEach(subFieldDescriptor -> {
             Object value = row.get(subFieldDescriptor.getName());

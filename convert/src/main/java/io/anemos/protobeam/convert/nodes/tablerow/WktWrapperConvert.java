@@ -19,21 +19,21 @@ class WktWrapperConvert extends AbstractConvert<Object, TableRow, Map<String, Ob
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
+    public void fromProto(Message message, TableRow row) {
         if (message.hasField(fieldDescriptor)) {
             Message valueMessage = (Message) message.getField(fieldDescriptor);
-            Object value = convert(valueMessage.getField(valueFieldDescriptor));
+            Object value = fromProtoValue(valueMessage.getField(valueFieldDescriptor));
             row.set(fieldDescriptor.getName(), value);
         }
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map<String, Object> row) {
+    public void toProto(Map<String, Object> row, Message.Builder builder) {
         if (row.containsKey(fieldDescriptor.getName())) {
             Object obj = row.get(fieldDescriptor.getName());
             DynamicMessage wrapperMessage = DynamicMessage.newBuilder(fieldDescriptor.getMessageType()).setField(valueFieldDescriptor, obj).build();

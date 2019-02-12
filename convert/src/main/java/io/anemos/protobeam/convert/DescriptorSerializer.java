@@ -95,20 +95,5 @@ public class DescriptorSerializer {
 
         }
         return null;
-
-//
-//        try {
-//            Descriptors.FileDescriptor[] dependencies = new Descriptors.FileDescriptor[]{};
-//            Descriptors.FileDescriptor.buildFrom(fileDescriptorProto, dependencies);
-//        } catch (Descriptors.DescriptorValidationException e) {
-//            throw new IOException(e);
-//        }
-
-
-//        DescriptorProtos.DescriptorProto descriptorProto = DescriptorProtos.DescriptorProto.parseFrom(buffer);
-        //       fieldDescriptor = new Descriptors.Descriptor(descriptorProto, null, null, index);
-        //new Descriptors.Descriptor()
-
-
     }
 }

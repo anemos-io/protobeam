@@ -12,7 +12,7 @@ class BytesFieldConvert extends AbstractGenericRecordConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
+    public void toProto(GenericRecord row, Message.Builder builder) {
         ByteBuffer bb = (ByteBuffer) row.get(fieldDescriptor.getName());
         byte[] bytes = bb.array();
         if (bytes.length > 0) {

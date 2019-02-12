@@ -7,7 +7,6 @@ plugins {
 }
 
 dependencies {
-    api("org.apache.commons:commons-math3:3.6.1")
     protobuf(project(":proto-options"))
     compile("com.google.protobuf:protobuf-java:$protobufVersion")
     implementation("com.google.protobuf:protobuf-java:$protobufVersion")

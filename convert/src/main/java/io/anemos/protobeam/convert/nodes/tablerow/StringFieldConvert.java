@@ -14,19 +14,19 @@ class StringFieldConvert extends AbstractConvert<String, TableRow, Map<String, O
 
 
     @Override
-    public String convert(Object in) {
+    public String fromProtoValue(Object in) {
         return (String) in;
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
+    public void fromProto(Message message, TableRow row) {
         String fieldName = fieldDescriptor.getName();
-        String value = convert(message.getField(fieldDescriptor));
+        String value = fromProtoValue(message.getField(fieldDescriptor));
         row.set(fieldName, value);
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map row) {
+    public void toProto(Map row, Message.Builder builder) {
         builder.setField(fieldDescriptor, row.get(fieldDescriptor.getName()));
     }
 }

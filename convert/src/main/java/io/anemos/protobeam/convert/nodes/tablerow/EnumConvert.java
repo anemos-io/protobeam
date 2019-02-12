@@ -14,25 +14,25 @@ class EnumConvert extends AbstractConvert<Object, TableRow, Map<String, Object>>
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         Descriptors.EnumValueDescriptor enumValue = ((Descriptors.EnumValueDescriptor) in);
         return enumValue.getName();
         // TODO what with            if (!"__UNDEFINED_0".equals(value))
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
-        row.set(fieldDescriptor.getName(), convert(message.getField(fieldDescriptor)));
+    public void fromProto(Message message, TableRow row) {
+        row.set(fieldDescriptor.getName(), fromProtoValue(message.getField(fieldDescriptor)));
     }
 
     @Override
-    public Object convertFrom(Object in) {
+    public Object toProtoValue(Object in) {
         Descriptors.EnumDescriptor enumType = fieldDescriptor.getEnumType();
         return enumType.findValueByName((String) in);
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map row) {
-        builder.setField(fieldDescriptor, convertFrom(row.get(fieldDescriptor.getName())));
+    public void toProto(Map row, Message.Builder builder) {
+        builder.setField(fieldDescriptor, toProtoValue(row.get(fieldDescriptor.getName())));
     }
 }

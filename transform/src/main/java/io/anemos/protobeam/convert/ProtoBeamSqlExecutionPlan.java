@@ -24,13 +24,13 @@ public class ProtoBeamSqlExecutionPlan<T extends Message> extends AbstractExecut
 
     public Row convert(T message) {
         Row.Builder row = Row.withSchema(schema);
-        convert.convert(message, row);
+        convert.fromProto(message, row);
         return row.build();
     }
 
     public T convertToProto(Row row) {
         DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
-        convert.convertToProto(builder, row);
+        convert.toProto(row, builder);
         return convertToConcrete(builder);
     }
 }

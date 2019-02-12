@@ -15,7 +15,7 @@ class WktWrapperConvert extends AbstractGenericRecordConvert<Object> {
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
+    public void toProto(GenericRecord row, Message.Builder builder) {
         if (null != row.get(fieldDescriptor.getName())) {
             Object obj = row.get(fieldDescriptor.getName());
             DynamicMessage wrapperMessage = DynamicMessage.newBuilder(fieldDescriptor.getMessageType()).setField(valueFieldDescriptor, obj).build();

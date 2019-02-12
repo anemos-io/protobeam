@@ -18,24 +18,24 @@ class BytesFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Ob
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return encoder.encodeToString(((ByteString) in).toByteArray());
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
-        row.set(fieldDescriptor.getName(), convert(message.getField(fieldDescriptor)));
+    public void fromProto(Message message, TableRow row) {
+        row.set(fieldDescriptor.getName(), fromProtoValue(message.getField(fieldDescriptor)));
     }
 
     @Override
-    public Object convertFrom(Object in) {
+    public Object toProtoValue(Object in) {
         return decoder.decode((String) in);
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map row) {
+    public void toProto(Map row, Message.Builder builder) {
 
-        byte[] bytes = (byte[]) convertFrom(row.get(fieldDescriptor.getName()));
+        byte[] bytes = (byte[]) toProtoValue(row.get(fieldDescriptor.getName()));
         if (bytes != null && bytes.length > 0) {
             builder.setField(fieldDescriptor, bytes);
         }

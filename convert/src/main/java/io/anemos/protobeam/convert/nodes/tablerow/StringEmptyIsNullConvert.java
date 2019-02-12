@@ -13,7 +13,7 @@ class StringEmptyIsNullConvert extends AbstractConvert<Object, TableRow, Map<Str
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
+    public void fromProto(Message message, TableRow row) {
         String fieldName = fieldDescriptor.getName();
 //        if (fieldDescriptor.isRepeated()) {
 //            List<Object> tableCells = new ArrayList<>();
@@ -31,12 +31,12 @@ class StringEmptyIsNullConvert extends AbstractConvert<Object, TableRow, Map<Str
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convertToProto(Message.Builder message, Map row) {
+    public void toProto(Map row, Message.Builder message) {
 
     }
 }

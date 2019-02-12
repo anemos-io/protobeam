@@ -11,8 +11,8 @@ class LongFieldConvert extends AbstractGenericRecordConvert<Object> {
 
 
     @Override
-    public void convertToProto(Message.Builder builder, GenericRecord row) {
+    public void toProto(GenericRecord row, Message.Builder builder) {
         Long value = (Long) row.get(fieldDescriptor.getName());
-        builder.setField(fieldDescriptor, convertFrom(value));
+        builder.setField(fieldDescriptor, toProtoValue(value));
     }
 }

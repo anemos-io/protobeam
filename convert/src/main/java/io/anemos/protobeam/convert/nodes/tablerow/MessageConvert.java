@@ -20,19 +20,19 @@ class MessageConvert extends AbstractMessageConvert<Object, TableRow, Map<String
     }
 
     @Override
-    public Object convert(Object in) {
+    public Object fromProtoValue(Object in) {
         return in;
     }
 
     @Override
-    public void convert(Message message, TableRow row) {
+    public void fromProto(Message message, TableRow row) {
         fields.forEach(
-                e -> e.convert(message, row)
+                e -> e.fromProto(message, row)
         );
     }
 
     @Override
-    public void convertToProto(Message.Builder builder, Map row) {
-        fields.forEach(e -> e.convertToProto(builder, row));
+    public void toProto(Map row, Message.Builder builder) {
+        fields.forEach(e -> e.toProto(row, builder));
     }
 }

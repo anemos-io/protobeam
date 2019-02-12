@@ -19,13 +19,13 @@ public class ProtoTableRowExecutionPlan<T extends Message> extends AbstractExecu
 
     public TableRow convert(T message) {
         TableRow row = new TableRow();
-        convert.convert(message, row);
+        convert.fromProto(message, row);
         return row;
     }
 
     public T convertToProto(TableRow row) {
         DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
-        convert.convertToProto(builder, row);
+        convert.toProto(row, builder);
         return convertToConcrete(builder);
     }
 }
