@@ -19,7 +19,6 @@ class WktTimestampConvert extends AbstractConvert<Object, TableRow, Map<String, 
     public void fromProto(Message message, TableRow row) {
         if (message.hasField(fieldDescriptor)) {
             Timestamp timestamp = (Timestamp) message.getField(fieldDescriptor);
-            // TODO: WHY check on default instance?
             row.set(fieldDescriptor.getName(), Timestamps.toString(timestamp));
         }
     }

@@ -12,8 +12,8 @@ public abstract class AbstractConvert<FIELD, TARGET, SOURCE> {
     }
 
     /**
-     * Convert an object that came from a proto field into the format that the target ccontainer
-     * expect.
+     * Convert an object that came from a proto field into the format that the target container
+     * expects.
      *
      * @param in proto field object
      * @return container field object

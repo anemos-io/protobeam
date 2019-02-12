@@ -17,7 +17,6 @@ class EnumConvert extends AbstractConvert<Object, TableRow, Map<String, Object>>
     public Object fromProtoValue(Object in) {
         Descriptors.EnumValueDescriptor enumValue = ((Descriptors.EnumValueDescriptor) in);
         return enumValue.getName();
-        // TODO what with            if (!"__UNDEFINED_0".equals(value))
     }
 
     @Override
