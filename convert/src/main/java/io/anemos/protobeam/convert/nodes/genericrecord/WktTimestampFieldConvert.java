@@ -5,8 +5,8 @@ import com.google.protobuf.Message;
 import com.google.protobuf.util.Timestamps;
 import org.apache.avro.generic.GenericRecord;
 
-class WktTimestampConvert extends AbstractGenericRecordConvert<Object> {
-    public WktTimestampConvert(Descriptors.FieldDescriptor descriptor) {
+class WktTimestampFieldConvert extends AbstractGenericRecordConvert<Object> {
+    public WktTimestampFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
     }
 

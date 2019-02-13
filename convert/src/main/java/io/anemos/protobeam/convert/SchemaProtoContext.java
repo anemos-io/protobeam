@@ -28,7 +28,7 @@ public class SchemaProtoContext {
         return true;
     }
 
-    public boolean isNullable(Descriptors.FieldDescriptor fieldDescriptor) {
+    public boolean isWrapper(Descriptors.FieldDescriptor fieldDescriptor) {
         if (fieldDescriptor.getType() != Descriptors.FieldDescriptor.Type.MESSAGE) {
             return false;
         }

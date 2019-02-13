@@ -10,8 +10,8 @@ import io.anemos.protobeam.util.TimestampUtil;
 
 import java.util.Map;
 
-class WktTimestampConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
-    public WktTimestampConvert(Descriptors.FieldDescriptor descriptor) {
+class WktTimestampFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
+    public WktTimestampFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
     }
 

@@ -47,7 +47,7 @@ public class SchemaProtoToBigQueryModel {
         String bigQueryType = extractFieldType(fieldDescriptor);
         fieldSchema.setMode(mode);
         if ("STRUCT".equals(bigQueryType)) {
-            if (context.isNullable(fieldDescriptor)) {
+            if (context.isWrapper(fieldDescriptor)) {
                 fieldSchema.setMode("NULLABLE");
                 Descriptors.FieldDescriptor primitiveFieldDescriptor = fieldDescriptor.getMessageType().getFields().get(0);
                 bigQueryType = extractFieldType(primitiveFieldDescriptor);

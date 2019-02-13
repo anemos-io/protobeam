@@ -16,7 +16,7 @@ public interface ConvertNodeFactory {
 
     AbstractConvert createEnumFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
-    AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert);
+    AbstractConvert createFlattenFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert);
 
     AbstractConvert createFloatFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
@@ -33,7 +33,7 @@ public interface ConvertNodeFactory {
     AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 
     @Deprecated
-    AbstractConvert createStringEmptryIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
+    AbstractConvert createStringEmptyIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
     AbstractConvert createStringFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 

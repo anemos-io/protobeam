@@ -4,7 +4,7 @@ import com.google.protobuf.Descriptors;
 import io.anemos.protobeam.convert.ConvertNodeFactory;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
-import io.anemos.protobeam.convert.nodes.tablerow.FlattenConvert;
+import io.anemos.protobeam.convert.nodes.tablerow.FlattenFieldConvert;
 
 import java.util.List;
 
@@ -32,8 +32,8 @@ public class BigQueryGenericRecordNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
-        return new FlattenConvert(fieldDescriptor, convert);
+    public AbstractConvert createFlattenFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
+        return new FlattenFieldConvert(fieldDescriptor, convert);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class BigQueryGenericRecordNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createNullableFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
-        return new NullableConvert(fieldDescriptor, field);
+        return new NullableFieldConvert(fieldDescriptor, field);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class BigQueryGenericRecordNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createStringEmptryIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
+    public AbstractConvert createStringEmptyIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new StringEmptyIsNullConvert(fieldDescriptor);
     }
 
@@ -83,12 +83,12 @@ public class BigQueryGenericRecordNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createWktTimestampFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return new WktTimestampConvert(fieldDescriptor);
+        return new WktTimestampFieldConvert(fieldDescriptor);
     }
 
     @Override
     public AbstractConvert createWktWrapperFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return new WktWrapperConvert(fieldDescriptor);
+        return new WktWrapperFieldConvert(fieldDescriptor);
     }
 
 }
