@@ -5,11 +5,11 @@ import com.google.protobuf.Message;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import org.apache.avro.generic.GenericRecord;
 
-class NullableConvert extends AbstractGenericRecordConvert<Object> {
+class NullableFieldConvert extends AbstractGenericRecordConvert<Object> {
 
     private AbstractConvert field;
 
-    public NullableConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
+    public NullableFieldConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
         super(descriptor);
         this.field = field;
     }

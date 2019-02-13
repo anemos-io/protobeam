@@ -8,11 +8,11 @@ import io.anemos.protobeam.convert.nodes.AbstractConvert;
 
 import java.util.Map;
 
-class WktWrapperConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
+class WktWrapperFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
 
     private Descriptors.FieldDescriptor valueFieldDescriptor;
 
-    public WktWrapperConvert(Descriptors.FieldDescriptor fieldDescriptor) {
+    public WktWrapperFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         super(fieldDescriptor);
         this.valueFieldDescriptor = fieldDescriptor.getMessageType().findFieldByName("value");
 
