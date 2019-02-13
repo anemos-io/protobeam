@@ -2,15 +2,11 @@ package io.anemos.protobeam.convert;
 
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
-import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
 import io.anemos.protobeam.examples.Meta;
-import io.anemos.protobeam.examples.ProtoBeamBasicNullablePrimitive;
 import io.anemos.protobeam.examples.ToFlatten;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 

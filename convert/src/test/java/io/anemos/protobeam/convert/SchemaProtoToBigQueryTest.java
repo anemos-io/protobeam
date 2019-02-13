@@ -1,9 +1,7 @@
 package io.anemos.protobeam.convert;
 
 
-import com.google.api.services.bigquery.model.TableSchema;
 import com.google.protobuf.Descriptors;
-import io.anemos.protobeam.examples.ProtoBeamBasicNullablePrimitive;
 import io.anemos.protobeam.examples.ProtoBeamOptionMessage;
 import org.junit.Test;
 
