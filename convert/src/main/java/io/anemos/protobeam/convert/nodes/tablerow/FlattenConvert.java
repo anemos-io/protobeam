@@ -12,7 +12,7 @@ public class FlattenConvert extends AbstractMessageConvert<Object, TableRow, Map
 
     AbstractMessageConvert convert;
 
-    public FlattenConvert(Descriptors.FieldDescriptor descriptor, AbstractMessageConvert convert) {
+    FlattenConvert(Descriptors.FieldDescriptor descriptor, AbstractMessageConvert convert) {
         super(descriptor);
         this.convert = convert;
     }
