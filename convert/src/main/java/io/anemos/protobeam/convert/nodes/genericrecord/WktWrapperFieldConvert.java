@@ -5,11 +5,11 @@ import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.Message;
 import org.apache.avro.generic.GenericRecord;
 
-class WktWrapperConvert extends AbstractGenericRecordConvert<Object> {
+class WktWrapperFieldConvert extends AbstractGenericRecordConvert<Object> {
 
     private Descriptors.FieldDescriptor valueFieldDescriptor;
 
-    public WktWrapperConvert(Descriptors.FieldDescriptor descriptor) {
+    public WktWrapperFieldConvert(Descriptors.FieldDescriptor descriptor) {
         super(descriptor);
         this.valueFieldDescriptor = fieldDescriptor.getMessageType().findFieldByName("value");
     }

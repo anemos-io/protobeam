@@ -31,8 +31,8 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
-        return new FlattenConvert(fieldDescriptor, convert);
+    public AbstractConvert createFlattenFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert convert) {
+        return new FlattenFieldConvert(fieldDescriptor, convert);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createNullableFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
-        return new NullableConvert(fieldDescriptor, field);
+        return new NullableFieldConvert(fieldDescriptor, field);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createStringEmptryIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
+    public AbstractConvert createStringEmptyIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new StringEmptyIsNullConvert(fieldDescriptor);
     }
 
@@ -82,11 +82,11 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
 
     @Override
     public AbstractConvert createWktTimestampFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return new WktTimestampConvert(fieldDescriptor);
+        return new WktTimestampFieldConvert(fieldDescriptor);
     }
 
     @Override
     public AbstractConvert createWktWrapperFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return new WktWrapperConvert(fieldDescriptor);
+        return new WktWrapperFieldConvert(fieldDescriptor);
     }
 }

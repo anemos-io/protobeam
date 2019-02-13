@@ -4,7 +4,7 @@ import com.google.protobuf.Descriptors;
 import io.anemos.protobeam.convert.ConvertNodeFactory;
 import io.anemos.protobeam.convert.nodes.AbstractConvert;
 import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
-import io.anemos.protobeam.convert.nodes.tablerow.FlattenConvert;
+import io.anemos.protobeam.convert.nodes.tablerow.FlattenFieldConvert;
 
 import java.util.List;
 
@@ -30,8 +30,8 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createFlattenConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert field) {
-        return new FlattenConvert(fieldDescriptor, field);
+    public AbstractConvert createFlattenFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractMessageConvert field) {
+        return new FlattenFieldConvert(fieldDescriptor, field);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createStringEmptryIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
+    public AbstractConvert createStringEmptyIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new StringEmptyIsNullConvert(fieldDescriptor);
     }
 

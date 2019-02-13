@@ -7,11 +7,11 @@ import io.anemos.protobeam.convert.nodes.AbstractConvert;
 
 import java.util.Map;
 
-class NullableConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
+class NullableFieldConvert extends AbstractConvert<Object, TableRow, Map<String, Object>> {
 
     private AbstractConvert field;
 
-    public NullableConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
+    public NullableFieldConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
         super(descriptor);
         this.field = field;
     }

@@ -8,11 +8,11 @@ import io.anemos.protobeam.convert.nodes.AbstractMessageConvert;
 
 import java.util.Map;
 
-public class FlattenConvert extends AbstractMessageConvert<Object, TableRow, Map<String, Object>> {
+public class FlattenFieldConvert extends AbstractMessageConvert<Object, TableRow, Map<String, Object>> {
 
     AbstractMessageConvert convert;
 
-    FlattenConvert(Descriptors.FieldDescriptor descriptor, AbstractMessageConvert convert) {
+    public FlattenFieldConvert(Descriptors.FieldDescriptor descriptor, AbstractMessageConvert convert) {
         super(descriptor);
         this.convert = convert;
     }
