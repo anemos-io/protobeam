@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
 
 option java_package = "io.anemos.protobeam.examples";
 option java_multiple_files = true;
@@ -11,4 +13,13 @@ message ProtoBeamWktMessage {
     string test_name = 1;
     int32 test_index = 2;
     google.protobuf.Timestamp timestamp = 3;
+    google.protobuf.StringValue nullable_string = 11;
+    google.protobuf.DoubleValue nullable_double = 12;
+    google.protobuf.FloatValue nullable_float = 13;
+    google.protobuf.Int32Value nullable_int32 = 14;
+    google.protobuf.Int64Value nullable_int64 = 15;
+    google.protobuf.UInt32Value nullable_uint32 = 16;
+    google.protobuf.UInt64Value nullable_uint64 = 17;
+    google.protobuf.BoolValue nullable_bool = 18;
+    google.protobuf.BytesValue nullable_bytes = 19;
 }

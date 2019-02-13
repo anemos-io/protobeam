@@ -3,9 +3,9 @@ package io.anemos.protobeam.convert;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.InvalidProtocolBufferException;
-import io.anemos.protobeam.examples.ProtoBeamBasicNullablePrimitive;
 import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
 import io.anemos.protobeam.examples.ProtoBeamBasicSpecial;
+import io.anemos.protobeam.examples.ProtoBeamWktMessage;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -29,30 +29,30 @@ public class AssumptionTest {
      */
     @Test
     public void testWrapper() throws InvalidProtocolBufferException {
-        ProtoBeamBasicNullablePrimitive empty = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage empty = ProtoBeamWktMessage.newBuilder()
                 .build();
         assertFalse(empty.hasNullableInt32());
         assertEquals(0, empty.getNullableInt32().getValue());
-        empty = ProtoBeamBasicNullablePrimitive.parseFrom(empty.toByteString());
+        empty = ProtoBeamWktMessage.parseFrom(empty.toByteString());
         assertFalse(empty.hasNullableInt32());
         assertEquals(0, empty.getNullableInt32().getValue());
-        ProtoBeamBasicNullablePrimitive primitive = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage primitive = ProtoBeamWktMessage.newBuilder()
                 .setNullableInt32(Int32Value.newBuilder()
                         .build())
                 .build();
         assertTrue(primitive.hasNullableInt32());
         assertEquals(0, primitive.getNullableInt32().getValue());
-        primitive = ProtoBeamBasicNullablePrimitive.parseFrom(primitive.toByteString());
+        primitive = ProtoBeamWktMessage.parseFrom(primitive.toByteString());
         assertTrue(primitive.hasNullableInt32());
         assertEquals(0, primitive.getNullableInt32().getValue());
-        ProtoBeamBasicNullablePrimitive pv = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage pv = ProtoBeamWktMessage.newBuilder()
                 .setNullableInt32(Int32Value.newBuilder()
                         .setValue(0)
                         .build())
                 .build();
         assertTrue(pv.hasNullableInt32());
         assertEquals(0, pv.getNullableInt32().getValue());
-        pv = ProtoBeamBasicNullablePrimitive.parseFrom(pv.toByteString());
+        pv = ProtoBeamWktMessage.parseFrom(pv.toByteString());
         assertTrue(pv.hasNullableInt32());
         assertEquals(0, pv.getNullableInt32().getValue());
     }
