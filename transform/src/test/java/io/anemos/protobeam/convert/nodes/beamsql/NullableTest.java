@@ -1,15 +1,13 @@
 package io.anemos.protobeam.convert.nodes.beamsql;
 
 
-import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.google.protobuf.StringValue;
 import io.anemos.protobeam.convert.ProtoBeamSqlExecutionPlan;
 import io.anemos.protobeam.convert.SchemaProtoToBeamSQL;
-import io.anemos.protobeam.examples.ProtoBeamBasicNullablePrimitive;
-import io.anemos.protobeam.examples.ProtoBeamBasicRepeatPrimitive;
+import io.anemos.protobeam.examples.ProtoBeamWktMessage;
 import org.apache.beam.sdk.values.Row;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +21,7 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
 
     @Before
     public void setup() {
-        ProtoBeamBasicNullablePrimitive x = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage x = ProtoBeamWktMessage.newBuilder()
                 .build();
         plan = new ProtoBeamSqlExecutionPlan(x);
 
@@ -33,10 +31,13 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
 
     @Test
     public void testSchema() {
-        ProtoBeamBasicNullablePrimitive x = ProtoBeamBasicNullablePrimitive.newBuilder().build();
+        ProtoBeamWktMessage x = ProtoBeamWktMessage.newBuilder().build();
         Descriptors.Descriptor descriptor = x.getDescriptorForType();
 
         String modelRef = "Fields:\n" +
+                "Field{name=test_name, description=, type=FieldType{typeName=STRING, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=false}\n" +
+                "Field{name=test_index, description=, type=FieldType{typeName=INT32, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=false}\n" +
+                "Field{name=timestamp, description=, type=FieldType{typeName=DATETIME, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n" +
                 "Field{name=nullable_string, description=, type=FieldType{typeName=STRING, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n" +
                 "Field{name=nullable_double, description=, type=FieldType{typeName=DOUBLE, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n" +
                 "Field{name=nullable_float, description=, type=FieldType{typeName=FLOAT, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n" +
@@ -50,7 +51,7 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
         assertEquals(modelRef, model.getSchema(descriptor).toString());
     }
 
-    private void testNullablePingPong(ProtoBeamBasicNullablePrimitive protoIn, String fieldName, Object expectedValue) {
+    private void testNullablePingPong(ProtoBeamWktMessage protoIn, String fieldName, Object expectedValue) {
         Row result = plan.convert(protoIn);
         assertEquals(expectedValue, result.getValue(fieldName));
         Message protoOut = plan.convertToProto(result);
@@ -59,7 +60,7 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
 
     @Test
     public void booleanFieldTest() {
-        ProtoBeamBasicNullablePrimitive protoIn = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage protoIn = ProtoBeamWktMessage.newBuilder()
                 .setNullableBool(BoolValue.newBuilder()
                         .setValue(true)
                         .build())
@@ -70,7 +71,7 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
 
     @Test
     public void stringFieldTest() {
-        ProtoBeamBasicNullablePrimitive protoIn = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage protoIn = ProtoBeamWktMessage.newBuilder()
                 .setNullableString(StringValue.newBuilder()
                         .setValue("fooBar1")
                         .build())
@@ -80,7 +81,7 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
 
     @Test
     public void twoNullableFieldsTest() {
-        ProtoBeamBasicNullablePrimitive protoIn = ProtoBeamBasicNullablePrimitive.newBuilder()
+        ProtoBeamWktMessage protoIn = ProtoBeamWktMessage.newBuilder()
                 .setNullableString(StringValue.newBuilder()
                         .setValue("fooBar1")
                         .build())

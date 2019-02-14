@@ -96,22 +96,28 @@ public class ProtoToBigQueryPipeline extends DemoPipelineBase {
                 .setTestName("io.anemos.protobuf.examples.ProtoToBigQueryPipeline.toBqMessage")
                 .setMessage(ProtoBeamBasicPrimitive.newBuilder()
                         .setPrimitiveString("abc")
-                        .build()
-                ).build();
+                        .build())
+                .build();
         ProtoBeamBasicMessage m2 = ProtoBeamBasicMessage.newBuilder()
                 .setTestIndex(2)
                 .setTestName("io.anemos.protobuf.examples.ProtoToBigQueryPipeline.toBqMessage")
                 .setMessage(ProtoBeamBasicPrimitive.newBuilder()
                         .setPrimitiveDouble(42.13)
-                        .build()
-                ).build();
+                        .build())
+                .build();
         ProtoBeamBasicMessage m3 = ProtoBeamBasicMessage.newBuilder()
                 .setTestIndex(3)
                 .setTestName("io.anemos.protobuf.examples.ProtoToBigQueryPipeline.toBqMessage")
                 .setMessage(ProtoBeamBasicPrimitive.newBuilder()
                         .setPrimitiveInt32(14)
-                        .build()
-                ).build();
+                        .build())
+                .addRepeatedMessage(ProtoBeamBasicPrimitive.newBuilder()
+                        .setPrimitiveString("row 3.1")
+                        .build())
+                .addRepeatedMessage(ProtoBeamBasicPrimitive.newBuilder()
+                        .setPrimitiveString("row 3.2")
+                        .build())
+                .build();
         pipeline.apply(Create.of(m1, m2, m3))
                 .apply(BigQueryWrite(ProtoBeamBasicMessage.class, ProtoBeamBasicMessage.getDescriptor(), "protobeam_message"));
     }

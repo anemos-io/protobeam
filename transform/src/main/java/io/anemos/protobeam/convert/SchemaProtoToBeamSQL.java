@@ -36,6 +36,9 @@ public class SchemaProtoToBeamSQL {
         boolean isNullable = false;
         if (context.isPrimitiveField(fieldDescriptor)) {
             fieldType = extractFieldType(fieldDescriptor);
+            if (context.isTimestamp(fieldDescriptor) || context.isDecimal(fieldDescriptor)) {
+                isNullable = true;
+            }
         } else if (context.isWrapper(fieldDescriptor)) {
             Descriptors.FieldDescriptor valueFieldDescriptor = fieldDescriptor.getMessageType().findFieldByName("value");
             fieldType = extractFieldType(valueFieldDescriptor);
