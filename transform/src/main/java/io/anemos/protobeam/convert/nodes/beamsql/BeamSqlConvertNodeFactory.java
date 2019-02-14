@@ -70,11 +70,6 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
-    public AbstractConvert createStringEmptyIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
-        return new StringEmptyIsNullConvert(fieldDescriptor);
-    }
-
-    @Override
     public AbstractConvert createStringFieldConvert(Descriptors.FieldDescriptor fieldDescriptor) {
         return new StringFieldConvert(fieldDescriptor);
     }

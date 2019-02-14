@@ -32,9 +32,6 @@ public interface ConvertNodeFactory {
 
     AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 
-    @Deprecated
-    AbstractConvert createStringEmptyIsNullFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
-
     AbstractConvert createStringFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
 
     AbstractConvert createWktTimestampFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
