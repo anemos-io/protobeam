@@ -71,6 +71,27 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
                 "Field{name=primitive_bytes, type=BYTES, mode=REQUIRED, description=null}]}";
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
+
+        String ddlRef = "CREATE TABLE `test` (\n" +
+                "\t`test_name` STRING NOT NULL,\n" +
+                "\t`test_index` INT64 NOT NULL,\n" +
+                "\t`primitive_double` FLOAT64 NOT NULL,\n" +
+                "\t`primitive_float` FLOAT64 NOT NULL,\n" +
+                "\t`primitive_int32` INT64 NOT NULL,\n" +
+                "\t`primitive_int64` INT64 NOT NULL,\n" +
+                "\t`primitive_uint32` INT64 NOT NULL,\n" +
+                "\t`primitive_uint64` INT64 NOT NULL,\n" +
+                "\t`primitive_sint32` INT64 NOT NULL,\n" +
+                "\t`primitive_sint64` INT64 NOT NULL,\n" +
+                "\t`primitive_fixed32` INT64 NOT NULL,\n" +
+                "\t`primitive_fixed64` INT64 NOT NULL,\n" +
+                "\t`primitive_sfixed32` INT64 NOT NULL,\n" +
+                "\t`primitive_sfixed64` INT64 NOT NULL,\n" +
+                "\t`primitive_bool` BOOL NOT NULL,\n" +
+                "\t`primitive_bytes` BYTES NOT NULL\n" +
+                ")\n";
+        SchemaProtoToBigQueryDDL ddl = new SchemaProtoToBigQueryDDL();
+        assertEquals(ddlRef, ddl.getSchema(descriptor).setTableName("test").toString());
     }
 
     @Test
