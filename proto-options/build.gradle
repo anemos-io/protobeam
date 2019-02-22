@@ -44,7 +44,6 @@ publishing {
 }
 
 task protoJar(type: Jar) {
-    classifier = 'proto'
     from('src/main/proto') {
         include '/**/*'
     }
