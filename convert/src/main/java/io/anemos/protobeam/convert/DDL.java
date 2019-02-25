@@ -1,12 +1,16 @@
 package io.anemos.protobeam.convert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DDL {
 
     String tableName;
     Struct struct = new Struct();
+    Map<String, String> labels = new HashMap<>();
+    private String partitionColumn;
 
     public static DDL newBuilder() {
         return new DDL();
@@ -23,6 +27,16 @@ public class DDL {
         return this;
     }
 
+    public DDL setPartitionColumn(String columnName) {
+        this.partitionColumn = columnName;
+        return this;
+    }
+
+    public DDL addLabel(String key, String value) {
+        this.labels.put(key, value);
+        return this;
+    }
+
     public Struct struct() {
         return this.struct;
     }
@@ -34,6 +48,30 @@ public class DDL {
         builder.append("` (\n");
         struct.toString(builder, true, 1);
         builder.append(")\n");
+
+        if (partitionColumn != null) {
+            builder.append("PARTITION BY DATE(`" + partitionColumn + "`)\n");
+        }
+        if (labels.size() > 0) {
+            builder.append("OPTIONS(\n");
+            builder.append("\tlabels=[\n");
+            int ix = 0;
+            for (Map.Entry<String, String> entry : labels.entrySet()) {
+                String k = entry.getKey();
+                String v = entry.getValue();
+                builder.append("\t\t(\"");
+                builder.append(k);
+                builder.append("\",\"");
+                builder.append(v);
+                builder.append("\")");
+                if (++ix < labels.size()) {
+                    builder.append(",");
+                }
+                builder.append('\n');
+            }
+            builder.append("\t]\n");
+            builder.append(")\n");
+        }
         return builder.toString();
     }
 
