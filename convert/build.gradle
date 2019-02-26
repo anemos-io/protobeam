@@ -21,7 +21,9 @@ dependencies {
 }
 
 protobuf {
-
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
+    }
 }
 
 publishing {
