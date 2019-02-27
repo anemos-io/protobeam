@@ -90,7 +90,7 @@ public class DDL {
             if (!topLevel) {
                 builder.append("STRUCT<\n");
             }
-            for (int ix = 0; ix < columnList.size() - 2; ix++) {
+            for (int ix = 0; ix < columnList.size() - 1; ix++) {
                 columnList.get(ix).toString(builder, indent);
                 builder.append(",\n");
             }
