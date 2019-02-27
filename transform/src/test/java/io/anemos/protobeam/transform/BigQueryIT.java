@@ -6,15 +6,14 @@ import com.google.api.services.bigquery.model.QueryResponse;
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.protobuf.BoolValue;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.StringValue;
+import com.google.protobuf.*;
 import com.google.protobuf.util.Timestamps;
 import io.anemos.protobeam.convert.ProtoTableRowExecutionPlan;
 import io.anemos.protobeam.convert.SchemaProtoToBigQueryModel;
+import io.anemos.protobeam.examples.Meta;
 import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
 import io.anemos.protobeam.examples.ProtoBeamWktMessage;
+import io.anemos.protobeam.examples.ToFlatten;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryOptions;
@@ -283,6 +282,66 @@ public class BigQueryIT {
                 "    \"v\" : null\n" +
                 "  }, {\n" +
                 "    \"v\" : null\n" +
+                "  } ]\n" +
+                "}";
+        Assert.assertEquals(expected, out.toPrettyString());
+    }
+
+    @Test
+    public void testFlatten2EBigQuery() throws Exception {
+        String tableName = "flatten_" + System.currentTimeMillis();
+        ToFlatten protoIn = ToFlatten.newBuilder()
+                .setTestString("fooBar1")
+                .setTestInt32(42)
+                .setMeta(
+                        Meta.newBuilder()
+                                .setM1("fooMeta")
+                                .setM2(43)
+                                .setM3(Timestamps.parse("2018-11-28T12:34:56.123456789Z")))
+                .build();
+
+        Pipeline pipeline = Pipeline.create(options);
+
+        ProtoTableRowExecutionPlan plan = new ProtoTableRowExecutionPlan(protoIn);
+        SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
+        TableSchema schema = model.getSchema(protoIn.getDescriptorForType());
+
+        //Temp
+        List<TableFieldSchema> fields = schema.getFields();
+        fields.set(4, fields.get(4).set("mode", "NULLABLE"));
+        schema.set("fields", fields);
+
+        TableRow in = plan.convert(protoIn);
+        ArrayList<TableRow> rows = new ArrayList<>();
+        rows.add(in);
+
+        pipeline.apply(Create.of(rows))
+                .apply(BigQueryIO.writeTableRows()
+                        .to(String.format("%s.%s", datasetName, tableName))
+                        .withSchema(schema)
+                        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_IF_NEEDED)
+                        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_TRUNCATE));
+
+        pipeline.run().waitUntilFinish();
+
+        bqClient = BigqueryClient.getNewBigquerryClient(options.getAppName());
+
+        String query = String.format("SELECT * FROM `%s.%s`", datasetName, tableName);
+        QueryRequest queryRequest = new QueryRequest().setQuery(query).setUseLegacySql(false);
+        QueryResponse queryResponse = bqClient.jobs().query(options.getProject(), queryRequest).execute();
+
+        TableRow out = queryResponse.getRows().get(0);
+        String expected = "{\n" +
+                "  \"f\" : [ {\n" +
+                "    \"v\" : \"fooBar1\"\n" +
+                "  }, {\n" +
+                "    \"v\" : \"42\"\n" +
+                "  }, {\n" +
+                "    \"v\" : \"fooMeta\"\n" +
+                "  }, {\n" +
+                "    \"v\" : \"43\"\n" +
+                "  }, {\n" +
+                "    \"v\" : \"1.543408496123456E9\"\n" +
                 "  } ]\n" +
                 "}";
         Assert.assertEquals(expected, out.toPrettyString());
