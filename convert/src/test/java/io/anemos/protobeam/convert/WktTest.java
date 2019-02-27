@@ -2,11 +2,7 @@ package io.anemos.protobeam.convert;
 
 
 import com.google.api.services.bigquery.model.TableRow;
-import com.google.protobuf.BoolValue;
-import com.google.protobuf.Descriptors;
-import com.google.protobuf.Int32Value;
-import com.google.protobuf.Message;
-import com.google.protobuf.StringValue;
+import com.google.protobuf.*;
 import com.google.protobuf.util.Timestamps;
 import io.anemos.protobeam.examples.ProtoBeamWktMessage;
 import org.junit.Before;
@@ -33,10 +29,12 @@ public class WktTest extends AbstractProtoBigQueryTest {
 
     @Test
     public void timestampFieldTest() throws ParseException {
+        Timestamp timestamp = Timestamps.parse("2018-11-28T12:34:56.123456789Z");
         ProtoBeamWktMessage protoIn = ProtoBeamWktMessage.newBuilder()
-                .setTimestamp(Timestamps.parse("2018-11-28T12:34:56.123456789Z"))
+                .setTimestamp(timestamp)
                 .build();
         testPingPong(plan, protoIn);
+        testWrapperPingPong(protoIn, "timestamp", timestamp.toString());
     }
 
     private void testWrapperPingPong(ProtoBeamWktMessage protoIn, String fieldName, Object expectedValue) {

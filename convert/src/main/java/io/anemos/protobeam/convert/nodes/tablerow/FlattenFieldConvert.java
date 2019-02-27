@@ -1,5 +1,6 @@
 package io.anemos.protobeam.convert.nodes.tablerow;
 
+import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
@@ -25,11 +26,14 @@ public class FlattenFieldConvert extends AbstractMessageConvert<Object, TableRow
 
     @Override
     public void fromProto(Message message, TableRow row) {
+        TableRow tmp = new TableRow();
+
         Message field = (Message) message.getField(fieldDescriptor);
-        fieldDescriptor.getMessageType().getFields().forEach( subfieldDescriptor -> {
-            Object value = convert.fromProtoValue(field.getField(subfieldDescriptor));
-            row.set(subfieldDescriptor.getName(), value);
-        });
+        convert.fromProto(field, tmp);
+
+        for (String key : tmp.keySet()) {
+            row.set(key, tmp.get(key));
+        }
     }
 
     @Override

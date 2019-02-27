@@ -3,6 +3,7 @@ syntax = "proto3";
 option java_package = "io.anemos.protobeam.examples";
 option java_multiple_files = true;
 
+import "google/protobuf/timestamp.proto";
 import "anemos/options.proto";
 
 package anemos.protobeam.examples;
@@ -19,4 +20,5 @@ message ToFlatten {
 message Meta {
     string m1 = 1;
     int32 m2 = 2;
+    google.protobuf.Timestamp m3 = 3;
 }
