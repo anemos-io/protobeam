@@ -47,13 +47,15 @@ public class SchemaProtoToBigQueryModel {
         String bigQueryType = extractFieldType(fieldDescriptor);
         fieldSchema.setMode(mode);
         if ("STRUCT".equals(bigQueryType)) {
+            fieldSchema.setMode("NULLABLE");
             if (context.isWrapper(fieldDescriptor)) {
-                fieldSchema.setMode("NULLABLE");
                 Descriptors.FieldDescriptor primitiveFieldDescriptor = fieldDescriptor.getMessageType().getFields().get(0);
                 bigQueryType = extractFieldType(primitiveFieldDescriptor);
             } else {
                 fieldSchema.setFields(convertSchema(fieldDescriptor.getMessageType()));
             }
+        } else if ("TIMESTAMP".equals(bigQueryType)) {
+            fieldSchema.setMode("NULLABLE");
         }
 
         fieldSchema.setType(bigQueryType);

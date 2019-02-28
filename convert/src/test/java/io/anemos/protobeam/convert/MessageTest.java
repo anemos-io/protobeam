@@ -22,17 +22,58 @@ public class MessageTest extends AbstractProtoBigQueryTest {
         plan = (ProtoTableRowExecutionPlan) SerializeTest.deserializeFromByteArray(so, "");
     }
 
-    //    @Test
-//    @Ignore
+    @Test
     public void testSchema() {
         ProtoBeamBasicMessage x = ProtoBeamBasicMessage.newBuilder().build();
         Descriptors.Descriptor descriptor = x.getDescriptorForType();
 
-        String modelRef = "{fields=[{name=payload, type=BYTES}, {fields=[{name=foo, type=STRING}], name=test_one, type=STRUCT}, {fields=[{name=bar, type=STRING}], mode=REPEATED, name=test_repeater, type=STRUCT}]}";
+        String modelRef =
+                "{fields=[" +
+                    "{mode=REQUIRED, name=test_name, type=STRING}, " +
+                    "{mode=REQUIRED, name=test_index, type=INT64}, " +
+                    "{fields=[" +
+                        "{mode=REQUIRED, name=test_name, type=STRING}, " +
+                        "{mode=REQUIRED, name=test_index, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_double, type=FLOAT64}, " +
+                        "{mode=REQUIRED, name=primitive_float, type=FLOAT64}, " +
+                        "{mode=REQUIRED, name=primitive_int32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_int64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_uint32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_uint64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sint32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sint64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_fixed32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_fixed64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sfixed32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sfixed64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_bool, type=BOOL}, " +
+                        "{mode=REQUIRED, name=primitive_string, type=STRING}, " +
+                        "{mode=REQUIRED, name=primitive_bytes, type=BYTES}" +
+                    "], mode=NULLABLE, name=message, type=STRUCT}, " +
+                    "{fields=[" +
+                        "{mode=REQUIRED, name=test_name, type=STRING}, " +
+                        "{mode=REQUIRED, name=test_index, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_double, type=FLOAT64}, " +
+                        "{mode=REQUIRED, name=primitive_float, type=FLOAT64}, " +
+                        "{mode=REQUIRED, name=primitive_int32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_int64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_uint32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_uint64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sint32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sint64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_fixed32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_fixed64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sfixed32, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_sfixed64, type=INT64}, " +
+                        "{mode=REQUIRED, name=primitive_bool, type=BOOL}, " +
+                        "{mode=REQUIRED, name=primitive_string, type=STRING}, " +
+                        "{mode=REQUIRED, name=primitive_bytes, type=BYTES}" +
+                    "], mode=REPEATED, name=repeated_message, type=STRUCT}" +
+                "]}";
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         assertEquals(modelRef, model.getSchema(descriptor).toString());
 
-        String apiRef = "Schema{fields=[Field{name=payload, value=Type{value=BYTES, fields=null}, mode=null, description=null}, Field{name=test_one, value=Type{value=RECORD, fields=[Field{name=foo, value=Type{value=STRING, fields=null}, mode=null, description=null}]}, mode=null, description=null}, Field{name=test_repeater, value=Type{value=RECORD, fields=[Field{name=bar, value=Type{value=STRING, fields=null}, mode=null, description=null}]}, mode=REPEATED, description=null}]}";
+        String apiRef = "Schema{fields=[Field{name=test_name, type=STRING, mode=REQUIRED, description=null}, Field{name=test_index, type=INTEGER, mode=REQUIRED, description=null}, Field{name=message, type=RECORD, mode=NULLABLE, description=null}, Field{name=repeated_message, type=RECORD, mode=REPEATED, description=null}]}";
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
     }

@@ -29,7 +29,66 @@ public class SpecialTest extends AbstractProtoBigQueryTest {
         ProtoBeamBasicSpecial x = ProtoBeamBasicSpecial.newBuilder().build();
         Descriptors.Descriptor descriptor = x.getDescriptorForType();
 
-        String modelRef = "{fields=[{mode=REQUIRED, name=test_name, type=STRING}, {mode=REQUIRED, name=test_index, type=INT64}, {mode=REQUIRED, name=special_enum, type=STRING}, {mode=REPEATED, name=repeated_enum, type=STRING}, {mode=NULLABLE, name=oneof_int32, type=INT64}, {mode=NULLABLE, name=oneof_bool, type=BOOL}, {mode=NULLABLE, name=oneof_string, type=STRING}, {fields=[{mode=REQUIRED, name=test_name, type=STRING}, {mode=REQUIRED, name=test_index, type=INT64}, {mode=REQUIRED, name=primitive_double, type=FLOAT64}, {mode=REQUIRED, name=primitive_float, type=FLOAT64}, {mode=REQUIRED, name=primitive_int32, type=INT64}, {mode=REQUIRED, name=primitive_int64, type=INT64}, {mode=REQUIRED, name=primitive_uint32, type=INT64}, {mode=REQUIRED, name=primitive_uint64, type=INT64}, {mode=REQUIRED, name=primitive_sint32, type=INT64}, {mode=REQUIRED, name=primitive_sint64, type=INT64}, {mode=REQUIRED, name=primitive_fixed32, type=INT64}, {mode=REQUIRED, name=primitive_fixed64, type=INT64}, {mode=REQUIRED, name=primitive_sfixed32, type=INT64}, {mode=REQUIRED, name=primitive_sfixed64, type=INT64}, {mode=REQUIRED, name=primitive_bool, type=BOOL}, {mode=REQUIRED, name=primitive_string, type=STRING}, {mode=REQUIRED, name=primitive_bytes, type=BYTES}], mode=NULLABLE, name=oneof_primitive, type=STRUCT}, {fields=[{mode=REQUIRED, name=key, type=STRING}, {mode=REQUIRED, name=value, type=INT64}], mode=REPEATED, name=x, type=STRUCT}, {fields=[{mode=REQUIRED, name=key, type=STRING}, {mode=REQUIRED, name=value, type=STRING}], mode=REPEATED, name=y, type=STRUCT}, {fields=[{mode=REQUIRED, name=key, type=STRING}, {fields=[{mode=REQUIRED, name=test_name, type=STRING}, {mode=REQUIRED, name=test_index, type=INT64}, {mode=REQUIRED, name=primitive_double, type=FLOAT64}, {mode=REQUIRED, name=primitive_float, type=FLOAT64}, {mode=REQUIRED, name=primitive_int32, type=INT64}, {mode=REQUIRED, name=primitive_int64, type=INT64}, {mode=REQUIRED, name=primitive_uint32, type=INT64}, {mode=REQUIRED, name=primitive_uint64, type=INT64}, {mode=REQUIRED, name=primitive_sint32, type=INT64}, {mode=REQUIRED, name=primitive_sint64, type=INT64}, {mode=REQUIRED, name=primitive_fixed32, type=INT64}, {mode=REQUIRED, name=primitive_fixed64, type=INT64}, {mode=REQUIRED, name=primitive_sfixed32, type=INT64}, {mode=REQUIRED, name=primitive_sfixed64, type=INT64}, {mode=REQUIRED, name=primitive_bool, type=BOOL}, {mode=REQUIRED, name=primitive_string, type=STRING}, {mode=REQUIRED, name=primitive_bytes, type=BYTES}], mode=REQUIRED, name=value, type=STRUCT}], mode=REPEATED, name=z, type=STRUCT}, {mode=NULLABLE, name=oneof_int64, type=INT64}, {mode=NULLABLE, name=oneof_double, type=FLOAT64}]}";
+        String modelRef = "{fields=[" +
+                                "{mode=REQUIRED, name=test_name, type=STRING}, " +
+                                "{mode=REQUIRED, name=test_index, type=INT64}, " +
+                                "{mode=REQUIRED, name=special_enum, type=STRING}, " +
+                                "{mode=REPEATED, name=repeated_enum, type=STRING}, " +
+                                "{mode=NULLABLE, name=oneof_int32, type=INT64}, " +
+                                "{mode=NULLABLE, name=oneof_bool, type=BOOL}, " +
+                                "{mode=NULLABLE, name=oneof_string, type=STRING}, " +
+                                "{fields=[" +
+                                    "{mode=REQUIRED, name=test_name, type=STRING}, " +
+                                    "{mode=REQUIRED, name=test_index, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_double, type=FLOAT64}, " +
+                                    "{mode=REQUIRED, name=primitive_float, type=FLOAT64}, " +
+                                    "{mode=REQUIRED, name=primitive_int32, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_int64, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_uint32, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_uint64, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_sint32, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_sint64, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_fixed32, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_fixed64, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_sfixed32, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_sfixed64, type=INT64}, " +
+                                    "{mode=REQUIRED, name=primitive_bool, type=BOOL}, " +
+                                    "{mode=REQUIRED, name=primitive_string, type=STRING}, " +
+                                    "{mode=REQUIRED, name=primitive_bytes, type=BYTES}" +
+                                "], mode=NULLABLE, name=oneof_primitive, type=STRUCT}, " +
+                                "{fields=[" +
+                                    "{mode=REQUIRED, name=key, type=STRING}, " +
+                                    "{mode=REQUIRED, name=value, type=INT64}" +
+                                "], mode=REPEATED, name=x, type=STRUCT}, " +
+                                "{fields=[" +
+                                    "{mode=REQUIRED, name=key, type=STRING}, " +
+                                    "{mode=REQUIRED, name=value, type=STRING}], " +
+                                "mode=REPEATED, name=y, type=STRUCT}, " +
+                                "{fields=[" +
+                                    "{mode=REQUIRED, name=key, type=STRING}, " +
+                                    "{fields=[" +
+                                        "{mode=REQUIRED, name=test_name, type=STRING}, " +
+                                        "{mode=REQUIRED, name=test_index, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_double, type=FLOAT64}, " +
+                                        "{mode=REQUIRED, name=primitive_float, type=FLOAT64}, " +
+                                        "{mode=REQUIRED, name=primitive_int32, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_int64, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_uint32, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_uint64, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_sint32, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_sint64, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_fixed32, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_fixed64, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_sfixed32, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_sfixed64, type=INT64}, " +
+                                        "{mode=REQUIRED, name=primitive_bool, type=BOOL}, " +
+                                        "{mode=REQUIRED, name=primitive_string, type=STRING}, " +
+                                        "{mode=REQUIRED, name=primitive_bytes, type=BYTES}" +
+                                    "], mode=NULLABLE, name=value, type=STRUCT}" +
+                                "], mode=REPEATED, name=z, type=STRUCT}, " +
+                                "{mode=NULLABLE, name=oneof_int64, type=INT64}, " +
+                                "{mode=NULLABLE, name=oneof_double, type=FLOAT64}" +
+                            "]}";
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         assertEquals(modelRef, model.getSchema(descriptor).toString());
 
@@ -92,7 +151,7 @@ public class SpecialTest extends AbstractProtoBigQueryTest {
                 "\t\t\t\t`primitive_sfixed64` INT64 NOT NULL,\n" +
                 "\t\t\t\t`primitive_bool` BOOL NOT NULL,\n" +
                 "\t\t\t\t`primitive_bytes` BYTES NOT NULL\n" +
-                "\t\t\t> NOT NULL\n" +
+                "\t\t\t>\n" +
                 "\t\t>\n" +
                 "\t>,\n" +
                 "\t`oneof_double` FLOAT64\n" +
