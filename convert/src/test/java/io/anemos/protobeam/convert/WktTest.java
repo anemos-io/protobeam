@@ -85,7 +85,7 @@ public class WktTest extends AbstractProtoBigQueryTest {
         String modelRef = "{fields=[" +
                 "{mode=REQUIRED, name=test_name, type=STRING}, " +
                 "{mode=REQUIRED, name=test_index, type=INT64}, " +
-                "{mode=REQUIRED, name=timestamp, type=TIMESTAMP}, " +
+                "{mode=NULLABLE, name=timestamp, type=TIMESTAMP}, " +
                 "{mode=NULLABLE, name=nullable_string, type=STRING}, " +
                 "{mode=NULLABLE, name=nullable_double, type=FLOAT64}, " +
                 "{mode=NULLABLE, name=nullable_float, type=FLOAT64}, " +
@@ -101,7 +101,7 @@ public class WktTest extends AbstractProtoBigQueryTest {
         String apiRef = "Schema{fields=[" +
                 "Field{name=test_name, type=STRING, mode=REQUIRED, description=null}, " +
                 "Field{name=test_index, type=INTEGER, mode=REQUIRED, description=null}, " +
-                "Field{name=timestamp, type=TIMESTAMP, mode=REQUIRED, description=null}, " +
+                "Field{name=timestamp, type=TIMESTAMP, mode=NULLABLE, description=null}, " +
                 "Field{name=nullable_string, type=STRING, mode=NULLABLE, description=null}, " +
                 "Field{name=nullable_double, type=FLOAT, mode=NULLABLE, description=null}, " +
                 "Field{name=nullable_float, type=FLOAT, mode=NULLABLE, description=null}, " +
