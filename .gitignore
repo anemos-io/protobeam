@@ -26,3 +26,5 @@ hs_err_pid*
 
 # private ignore
 convert/src/main/java/io/anemos/protobeam/convert/MessageToTableRow.java
+
+gradle/gradle.properties
