@@ -4,6 +4,7 @@ import com.google.api.services.bigquery.model.TableRow;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Message;
 import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.Timestamps;
 import io.anemos.protobeam.examples.Meta;
 import io.anemos.protobeam.examples.ToFlatten;
 import org.junit.Before;
@@ -28,7 +29,7 @@ public class FlattenTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void flattenMessageFieldTest() {
+    public void flattenMessageFieldTest() throws Exception {
         ToFlatten toFlatten = ToFlatten.newBuilder()
                 .setTestString("fooBar1")
                 .setTestInt32(42)
@@ -36,18 +37,18 @@ public class FlattenTest extends AbstractProtoBigQueryTest {
                     Meta.newBuilder()
                         .setM1("fooMeta")
                         .setM2(43)
-                        .setM3(Timestamp.getDefaultInstance()))
+                        .setM3(Timestamps.parse("2018-11-28T12:34:56.123456789Z")))
                 .build();
         testFlattenPingPong(toFlatten);
     }
 
-    public void testFlattenPingPong(ToFlatten protoIn) {
+    public void testFlattenPingPong(ToFlatten protoIn) throws Exception {
         TableRow result = plan.convert(protoIn);
         assertEquals("fooBar1", result.get("test_string"));
 //      assertEquals(42, result.get("test_int32"));
         assertEquals("fooMeta", result.get("m1"));
-//        assertEquals(43, result.get("m2"));
-        assertEquals(Timestamp.getDefaultInstance(), result.get("m3"));
+        assertEquals("43", result.get("m2"));
+        assertEquals("2018-11-28T12:34:56.123456789Z", result.get("m3"));
         Message protoOut = plan.convertToProto(result);
         assertEquals(protoIn, protoOut);
     }
@@ -61,7 +62,7 @@ public class FlattenTest extends AbstractProtoBigQueryTest {
                 "{mode=REQUIRED, name=test_int32, type=INT64}, " +
                 "{mode=REQUIRED, name=m1, type=STRING}, " +
                 "{mode=REQUIRED, name=m2, type=INT64}, " +
-                "{mode=REQUIRED, name=m3, type=TIMESTAMP}]}";
+                "{mode=NULLABLE, name=m3, type=TIMESTAMP}]}";
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         assertEquals(modelRef, model.getSchema(descriptor).toString());
 
@@ -70,7 +71,7 @@ public class FlattenTest extends AbstractProtoBigQueryTest {
                 "Field{name=test_int32, type=INTEGER, mode=REQUIRED, description=null}, " +
                 "Field{name=m1, type=STRING, mode=REQUIRED, description=null}, " +
                 "Field{name=m2, type=INTEGER, mode=REQUIRED, description=null}, " +
-                "Field{name=m3, type=TIMESTAMP, mode=REQUIRED, description=null}]}";
+                "Field{name=m3, type=TIMESTAMP, mode=NULLABLE, description=null}]}";
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
     }
