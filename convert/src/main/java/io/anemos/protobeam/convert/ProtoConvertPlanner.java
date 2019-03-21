@@ -82,6 +82,10 @@ class ProtoConvertPlanner implements Serializable {
                 list.add(planField(fd));
             }
         });
+
+        if (context.hasNonDefaultTimePartitioningTruncate(fields.parentDescriptor)) {
+            return nodeFactory.createPartitionColumnConvert(fields.parentDescriptor, nodeFactory.createMessageConvert(null, list));
+        }
         return nodeFactory.createMessageConvert(null, list);
     }
 

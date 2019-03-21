@@ -5,6 +5,8 @@ import com.google.cloud.bigquery.Field;
 import com.google.cloud.bigquery.FieldList;
 import com.google.cloud.bigquery.LegacySQLTypeName;
 import com.google.cloud.bigquery.Schema;
+import com.google.cloud.bigquery.StandardTableDefinition;
+import com.google.cloud.bigquery.TimePartitioning;
 import com.google.protobuf.Descriptors;
 
 import java.util.ArrayList;
@@ -16,6 +18,13 @@ public class SchemaProtoToBigQueryApi {
 
     public Schema getSchema(Descriptors.Descriptor descriptor) {
         return Schema.of(convertFieldList(modelConvert.getSchema(descriptor).getFields()));
+    }
+
+    public TimePartitioning getTimePartitioning(Descriptors.Descriptor descriptor) {
+        com.google.api.services.bigquery.model.TimePartitioning timePartitioning = modelConvert.getTimePartitioning(descriptor);
+        return TimePartitioning.newBuilder(TimePartitioning.Type.DAY)
+                            .setField(timePartitioning.getField())
+                            .build();
     }
 
     private List<Field> convertFieldList(List<TableFieldSchema> tableFields) {
@@ -57,6 +66,8 @@ public class SchemaProtoToBigQueryApi {
                 return LegacySQLTypeName.BYTES;
             case "TIMESTAMP":
                 return LegacySQLTypeName.TIMESTAMP;
+            case "DATE":
+                return LegacySQLTypeName.DATE;
             case "STRUCT":
                 return LegacySQLTypeName.RECORD;
             default:

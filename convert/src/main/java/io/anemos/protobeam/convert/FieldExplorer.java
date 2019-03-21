@@ -13,8 +13,10 @@ class FieldExplorer {
     private Map<Integer, Descriptors.OneofDescriptor> oneofmap;
     private List<Descriptors.FieldDescriptor> fields;
     private List<OrderedField> orderedFields;
+    public Descriptors.Descriptor parentDescriptor;
 
     FieldExplorer(Descriptors.Descriptor descriptor) {
+        this.parentDescriptor = descriptor;
         oneofmap = new HashMap<>();
         for (Descriptors.OneofDescriptor oneof : descriptor.getOneofs()) {
             oneofmap.put(oneof.getField(0).getIndex(), oneof);

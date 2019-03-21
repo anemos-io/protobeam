@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package anemos;
+
+option java_package = "io.anemos";
+
+message BigQueryMessageOptions {
+    string time_partitioning_field = 1;
+
+    enum AddTimePartitioningTruncateColumn {
+        NO_TRUNCATE = 0;
+        DAY = 1;
+        MONTH = 2;
+        YEAR = 3;
+    }
+    AddTimePartitioningTruncateColumn add_time_partitioning_truncate_column = 2;
+    string time_partitioning_truncate_column_name = 3;
+}
+
+

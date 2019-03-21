@@ -10,4 +10,5 @@ message MessageRewriteRule {
 
 message FieldRewriteRule {
     bool flatten = 1;
+    string rename_to = 2;
 }

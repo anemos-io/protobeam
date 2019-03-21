@@ -2,6 +2,7 @@ package io.anemos.protobeam.convert;
 
 import com.google.api.services.bigquery.model.TableFieldSchema;
 import com.google.api.services.bigquery.model.TableSchema;
+import com.google.api.services.bigquery.model.TimePartitioning;
 import com.google.protobuf.Descriptors;
 import io.anemos.Meta;
 
@@ -18,8 +19,24 @@ public class SchemaProtoToBigQueryModel {
         return new TableSchema().setFields(fieldSchemas);
     }
 
+    public TimePartitioning getTimePartitioning(Descriptors.Descriptor descriptor) {
+        TimePartitioning timePartitioning = new TimePartitioning();
+        timePartitioning.setField(context.getTimePartitionColumnName(descriptor));
+        timePartitioning.setType("DAY");
+        return timePartitioning;
+    }
+
     private List<TableFieldSchema> convertSchema(Descriptors.Descriptor descriptor) {
         List<TableFieldSchema> fieldSchemas = new ArrayList<>();
+
+        if (context.hasBqTimePartitioningField(descriptor) && context.hasNonDefaultTimePartitioningTruncate(descriptor)) {
+            TableFieldSchema partitionColumn = new TableFieldSchema();
+            partitionColumn.setName(context.getTimePartitionColumnName(descriptor));
+            partitionColumn.setType("DATE");
+            partitionColumn.setMode("REQUIRED");
+            fieldSchemas.add(partitionColumn);
+        }
+
         FieldExplorer fieldExplorer = new FieldExplorer(descriptor);
         fieldExplorer.forEach(field -> {
             Descriptors.FieldDescriptor fieldDescriptor = field.fieldDescriptor;
