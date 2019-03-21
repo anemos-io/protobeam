@@ -34,7 +34,7 @@ public class WktTest extends AbstractProtoBigQueryTest {
                 .setTimestamp(timestamp)
                 .build();
         testPingPong(plan, protoIn);
-        testWrapperPingPong(protoIn, "timestamp", timestamp.toString());
+        testWrapperPingPong(protoIn, "timestamp", Timestamps.toString(timestamp));
     }
 
     private void testWrapperPingPong(ProtoBeamWktMessage protoIn, String fieldName, Object expectedValue) {

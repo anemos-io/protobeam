@@ -39,10 +39,7 @@ public class FlattenFieldConvert extends AbstractMessageConvert<Object, TableRow
     @Override
     public void toProto(Map row, Message.Builder builder) {
         DynamicMessage.Builder dynamicMessageBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
-        fieldDescriptor.getMessageType().getFields().forEach(subFieldDescriptor -> {
-            Object value = row.get(subFieldDescriptor.getName());
-            dynamicMessageBuilder.setField(subFieldDescriptor, value);
-        });
+        convert.toProto(row, dynamicMessageBuilder);
         builder.setField(fieldDescriptor, dynamicMessageBuilder.build());
     }
 }
