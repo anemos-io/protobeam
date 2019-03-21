@@ -65,6 +65,11 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
+    public AbstractMessageConvert createPartitionColumnConvert(Descriptors.Descriptor messageDescriptor, AbstractMessageConvert convert) {
+        return null;
+    }
+
+    @Override
     public AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
         return new RepeatedConvert(fieldDescriptor, field);
     }

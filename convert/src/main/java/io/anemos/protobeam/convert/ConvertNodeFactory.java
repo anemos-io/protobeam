@@ -30,6 +30,8 @@ public interface ConvertNodeFactory {
 
     AbstractConvert createNullableFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 
+    AbstractMessageConvert createPartitionColumnConvert(Descriptors.Descriptor messageDescriptor, AbstractMessageConvert convert);
+
     AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 
     AbstractConvert createStringFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);

@@ -1,7 +1,12 @@
 package io.anemos.protobeam.convert;
 
 
+import com.google.cloud.bigquery.StandardTableDefinition;
+import com.google.cloud.bigquery.TimePartitioning;
 import com.google.protobuf.Descriptors;
+import io.anemos.protobeam.examples.BigQueryOptionMessage;
+import io.anemos.protobeam.examples.BigQueryOptionMessageTruncateMonth;
+import io.anemos.protobeam.examples.BigQueryOptionMessageTruncateMonthCustomColumnName;
 import io.anemos.protobeam.examples.ProtoBeamOptionMessage;
 import org.junit.Test;
 
@@ -31,5 +36,34 @@ public class SchemaProtoToBigQueryTest extends AbstractProtoBigQueryTest {
     }
 
 
+    @Test
+    public void testTableDefinitionWithTimePartitioning() {
+        BigQueryOptionMessage message = BigQueryOptionMessage.getDefaultInstance();
+        Descriptors.Descriptor descriptor = message.getDescriptorForType();
+
+        SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
+        TimePartitioning timePartitioning =  api.getTimePartitioning(descriptor);
+        assertEquals("timestamp", timePartitioning.getField());
+    }
+
+    @Test
+    public void testTableDefinitionWithTimePartitioningAndTruncate() {
+        BigQueryOptionMessageTruncateMonth message = BigQueryOptionMessageTruncateMonth.getDefaultInstance();
+        Descriptors.Descriptor descriptor = message.getDescriptorForType();
+
+        SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
+        TimePartitioning timePartitioning =  api.getTimePartitioning(descriptor);
+        assertEquals("partition_month", timePartitioning.getField());
+    }
+
+    @Test
+    public void testTableDefinitionWithTimePartitioningAndTruncateCustumColumnName() {
+        BigQueryOptionMessageTruncateMonthCustomColumnName message = BigQueryOptionMessageTruncateMonthCustomColumnName.getDefaultInstance();
+        Descriptors.Descriptor descriptor = message.getDescriptorForType();
+
+        SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
+        TimePartitioning timePartitioning =  api.getTimePartitioning(descriptor);
+        assertEquals("CreatedMonth", timePartitioning.getField());
+    }
 
 }

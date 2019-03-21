@@ -4,6 +4,7 @@ package anemos;
 
 import "anemos/rewrite.proto";
 import "anemos/meta.proto";
+import "anemos/bigquery.proto";
 import "google/protobuf/descriptor.proto";
 
 option java_package = "io.anemos";
@@ -14,6 +15,7 @@ option java_package = "io.anemos";
 extend google.protobuf.MessageOptions {
     MessageRewriteRule message_rewrite = 66666666;
     MessageMeta message_meta = 66666667;
+    BigQueryMessageOptions message_bigquery = 66666668;
 }
 
 extend google.protobuf.FieldOptions {

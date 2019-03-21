@@ -3,13 +3,19 @@ package io.anemos.protobeam.transform;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.QueryRequest;
 import com.google.api.services.bigquery.model.QueryResponse;
-import com.google.api.services.bigquery.model.TableFieldSchema;
+import com.google.api.services.bigquery.model.Table;
+import com.google.api.services.bigquery.model.TableReference;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.api.services.bigquery.model.TableSchema;
-import com.google.protobuf.*;
+import com.google.protobuf.BoolValue;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.Int32Value;
+import com.google.protobuf.StringValue;
 import com.google.protobuf.util.Timestamps;
 import io.anemos.protobeam.convert.ProtoTableRowExecutionPlan;
 import io.anemos.protobeam.convert.SchemaProtoToBigQueryModel;
+import io.anemos.protobeam.examples.BigQueryOptionMessage;
+import io.anemos.protobeam.examples.BigQueryOptionMessageTruncateMonth;
 import io.anemos.protobeam.examples.Meta;
 import io.anemos.protobeam.examples.ProtoBeamBasicPrimitive;
 import io.anemos.protobeam.examples.ProtoBeamWktMessage;
@@ -30,7 +36,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(JUnit4.class)
 public class BigQueryIT {
@@ -231,10 +236,6 @@ public class BigQueryIT {
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         TableSchema schema = model.getSchema(protoIn.getDescriptorForType());
 
-        //Temp
-        List<TableFieldSchema> fields = schema.getFields();
-        fields.set(2, fields.get(2).set("mode", "NULLABLE"));
-        schema.set("fields", fields);
 
         TableRow in = plan.convert(protoIn);
         ArrayList<TableRow> rows = new ArrayList<>();
@@ -288,7 +289,7 @@ public class BigQueryIT {
     }
 
     @Test
-    public void testFlatten2EBigQuery() throws Exception {
+    public void testFlattenE2EBigQuery() throws Exception {
         String tableName = "flatten_" + System.currentTimeMillis();
         ToFlatten protoIn = ToFlatten.newBuilder()
                 .setTestString("fooBar1")
@@ -305,11 +306,6 @@ public class BigQueryIT {
         ProtoTableRowExecutionPlan plan = new ProtoTableRowExecutionPlan(protoIn);
         SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
         TableSchema schema = model.getSchema(protoIn.getDescriptorForType());
-
-        //Temp
-        List<TableFieldSchema> fields = schema.getFields();
-        fields.set(4, fields.get(4).set("mode", "NULLABLE"));
-        schema.set("fields", fields);
 
         TableRow in = plan.convert(protoIn);
         ArrayList<TableRow> rows = new ArrayList<>();
@@ -346,5 +342,116 @@ public class BigQueryIT {
                 "}";
         Assert.assertEquals(expected, out.toPrettyString());
     }
+
+    @Test
+    public void testPartitionedE2EBigQuery() throws Exception {
+        String tableName = "partitioned_" + System.currentTimeMillis();
+        BigQueryOptionMessage protoIn = BigQueryOptionMessage.newBuilder()
+                .setTimestamp(Timestamps.parse("2018-11-28T12:34:56.123456789Z"))
+                .build();
+
+        Pipeline pipeline = Pipeline.create(options);
+
+        ProtoTableRowExecutionPlan plan = new ProtoTableRowExecutionPlan(protoIn);
+        SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
+        TableSchema schema = model.getSchema(protoIn.getDescriptorForType());
+
+
+        bqClient = BigqueryClient.getNewBigquerryClient(options.getAppName());
+        Table table = new Table();
+        table.setId(tableName);
+        table.setLocation("EU");
+        table.setSchema(schema);
+        TableReference tableReference = new TableReference();
+        tableReference.setDatasetId(datasetName);
+        tableReference.setProjectId(options.getProject());
+        tableReference.setTableId(tableName);
+        table.setTableReference(tableReference);
+        table.setTimePartitioning(model.getTimePartitioning(protoIn.getDescriptorForType()));
+        bqClient.tables().insert(options.getProject(), datasetName, table).execute();
+
+        TableRow in = plan.convert(protoIn);
+        ArrayList<TableRow> rows = new ArrayList<>();
+        rows.add(in);
+
+        pipeline.apply(Create.of(rows))
+                .apply(BigQueryIO.writeTableRows()
+                        .to(String.format("%s.%s", datasetName, tableName))
+                        .withSchema(schema)
+                        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_NEVER)
+                        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_TRUNCATE));
+
+        pipeline.run().waitUntilFinish();
+
+
+        String query = String.format("SELECT * FROM `%s.%s`", datasetName, tableName);
+        QueryRequest queryRequest = new QueryRequest().setQuery(query).setUseLegacySql(false);
+        QueryResponse queryResponse = bqClient.jobs().query(options.getProject(), queryRequest).execute();
+
+        TableRow out = queryResponse.getRows().get(0);
+        String expected = "{\n" +
+                "  \"f\" : [ {\n" +
+                "    \"v\" : \"1.543408496123456E9\"\n" +
+                "  } ]\n" +
+                "}";
+        Assert.assertEquals(expected, out.toPrettyString());
+    }
+
+    @Test
+    public void testPartitionedTruncatedMonthE2EBigQuery() throws Exception {
+        String tableName = "partitionedTruncatedMonth_" + System.currentTimeMillis();
+        BigQueryOptionMessageTruncateMonth protoIn = BigQueryOptionMessageTruncateMonth.newBuilder()
+                .setTimestamp(Timestamps.parse("2018-11-28T12:34:56.123456789Z"))
+                .build();
+
+        Pipeline pipeline = Pipeline.create(options);
+
+        ProtoTableRowExecutionPlan plan = new ProtoTableRowExecutionPlan(protoIn);
+        SchemaProtoToBigQueryModel model = new SchemaProtoToBigQueryModel();
+        TableSchema schema = model.getSchema(protoIn.getDescriptorForType());
+
+
+        bqClient = BigqueryClient.getNewBigquerryClient(options.getAppName());
+        Table table = new Table();
+        table.setId(tableName);
+        table.setLocation("EU");
+        table.setSchema(schema);
+        TableReference tableReference = new TableReference();
+        tableReference.setDatasetId(datasetName);
+        tableReference.setProjectId(options.getProject());
+        tableReference.setTableId(tableName);
+        table.setTableReference(tableReference);
+        table.setTimePartitioning(model.getTimePartitioning(protoIn.getDescriptorForType()));
+        bqClient.tables().insert(options.getProject(), datasetName, table).execute();
+
+        TableRow in = plan.convert(protoIn);
+        ArrayList<TableRow> rows = new ArrayList<>();
+        rows.add(in);
+
+        pipeline.apply(Create.of(rows))
+                .apply(BigQueryIO.writeTableRows()
+                        .to(String.format("%s.%s", datasetName, tableName))
+                        .withSchema(schema)
+                        .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_NEVER)
+                        .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_TRUNCATE));
+
+        pipeline.run().waitUntilFinish();
+
+
+        String query = String.format("SELECT * FROM `%s.%s`", datasetName, tableName);
+        QueryRequest queryRequest = new QueryRequest().setQuery(query).setUseLegacySql(false);
+        QueryResponse queryResponse = bqClient.jobs().query(options.getProject(), queryRequest).execute();
+
+        TableRow out = queryResponse.getRows().get(0);
+        String expected = "{\n" +
+                "  \"f\" : [ {\n" +
+                "    \"v\" : \"2018-11-01\"\n" +
+                "  }, {\n" +
+                "    \"v\" : \"1.543408496123456E9\"\n" +
+                "  } ]\n" +
+                "}";
+        Assert.assertEquals(expected, out.toPrettyString());
+    }
+
 
 }
