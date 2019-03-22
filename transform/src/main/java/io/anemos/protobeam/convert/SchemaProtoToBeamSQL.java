@@ -53,7 +53,12 @@ public class SchemaProtoToBeamSQL {
         if (fieldType == null) {
             throw new RuntimeException();
         }
-        return Schema.Field.of(fieldDescriptor.getName(), fieldType).withNullable(isNullable);
+
+        String fieldName = fieldDescriptor.getName();
+        if (context.hasRenameTo(fieldDescriptor)) {
+            fieldName = context.getRenameTo(fieldDescriptor);
+        }
+        return Schema.Field.of(fieldName, fieldType).withNullable(isNullable);
     }
 
     private Schema.FieldType extractFieldType(Descriptors.FieldDescriptor fieldDescriptor) {

@@ -40,8 +40,8 @@ public class BeamSqlPipelineTest {
                                         .build(),
                                 ProtoBeamBasicPrimitive.newBuilder()
                                         .setPrimitiveInt32(2)
-                                        .build()
-                                , ProtoBeamBasicPrimitive.newBuilder()
+                                        .build(),
+                                ProtoBeamBasicPrimitive.newBuilder()
                                         .setPrimitiveInt32(3)
                                         .build()
                         )).apply(

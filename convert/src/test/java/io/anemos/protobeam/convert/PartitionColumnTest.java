@@ -60,7 +60,7 @@ public class PartitionColumnTest extends AbstractProtoBigQueryTest {
     }
 
     @Test
-    public void partitionColumnTruncateMonthColumnNameTest() throws Exception {
+    public void partitionColumnTruncateMonthCustomNameTest() throws Exception {
         BigQueryOptionMessageTruncateMonthCustomColumnName optionMessageTruncated = BigQueryOptionMessageTruncateMonthCustomColumnName.newBuilder()
                 .setTimestamp(Timestamps.parse("2018-11-28T12:34:56.123456789Z"))
                 .build();
