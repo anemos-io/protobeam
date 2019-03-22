@@ -27,47 +27,67 @@ class ProtoConvertPlanner implements Serializable {
     }
 
     private AbstractConvert planField(Descriptors.FieldDescriptor fieldDescriptor) {
+
+        AbstractConvert nextConvert;
         Descriptors.FieldDescriptor.Type fieldType = fieldDescriptor.getType();
         switch (fieldType) {
             case BOOL:
-                return nodeFactory.createBooleanFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createBooleanFieldConvert(fieldDescriptor);
+                break;
             case INT64:
             case UINT64:
             case FIXED64:
             case SFIXED64:
             case SINT64:
-                return nodeFactory.createLongFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createLongFieldConvert(fieldDescriptor);
+                break;
             case INT32:
             case UINT32:
             case SFIXED32:
             case FIXED32:
             case SINT32:
-                return nodeFactory.createIntegerFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createIntegerFieldConvert(fieldDescriptor);
+                break;
             case DOUBLE:
-                return nodeFactory.createDoubleFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createDoubleFieldConvert(fieldDescriptor);
+                break;
             case FLOAT:
-                return nodeFactory.createFloatFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createFloatFieldConvert(fieldDescriptor);
+                break;
             case BYTES:
-                return nodeFactory.createBytesFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createBytesFieldConvert(fieldDescriptor);
+                break;
             case STRING:
-                return nodeFactory.createStringFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createStringFieldConvert(fieldDescriptor);
+                break;
             case ENUM:
-                return nodeFactory.createEnumFieldConvert(fieldDescriptor);
+                nextConvert = nodeFactory.createEnumFieldConvert(fieldDescriptor);
+                break;
             case MESSAGE:
-                return planMessageField(fieldDescriptor);
+                nextConvert = planMessageField(fieldDescriptor);
+                break;
+            default:
+                throw new RuntimeException("Field type " + fieldType.toString() + " not supported");
         }
-        throw new RuntimeException(fieldType.toString() + " is unsupported.");
+        if (context.hasRenameTo(fieldDescriptor)) {
+            String newName = context.getRenameTo(fieldDescriptor);
+            return nodeFactory.createRenameFieldConvert(newName, fieldDescriptor, nextConvert);
+        }
+        return nextConvert;
     }
 
     private AbstractConvert planMessageField(Descriptors.FieldDescriptor fieldDescriptor) {
+        AbstractConvert nextConvert;
         if (context.isTimestamp(fieldDescriptor)) {
-            return nodeFactory.createWktTimestampFieldConvert(fieldDescriptor);
+            nextConvert = nodeFactory.createWktTimestampFieldConvert(fieldDescriptor);
         } else if (context.flatten(fieldDescriptor)) {
-            return nodeFactory.createFlattenFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, FieldExplorer.of(fieldDescriptor.getMessageType())));
+            nextConvert = nodeFactory.createFlattenFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, FieldExplorer.of(fieldDescriptor.getMessageType())));
         } else if (context.isWrapper(fieldDescriptor)) {
-            return nodeFactory.createWktWrapperFieldConvert(fieldDescriptor);
+            nextConvert = nodeFactory.createWktWrapperFieldConvert(fieldDescriptor);
+        } else {
+            nextConvert = nodeFactory.createMessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, FieldExplorer.of(fieldDescriptor.getMessageType())));
         }
-        return nodeFactory.createMessageFieldConvert(fieldDescriptor, planMessage(fieldDescriptor, FieldExplorer.of(fieldDescriptor.getMessageType())));
+        return nextConvert;
     }
 
     private AbstractMessageConvert planMessage(Descriptors.FieldDescriptor fieldDescriptor, FieldExplorer fields) {

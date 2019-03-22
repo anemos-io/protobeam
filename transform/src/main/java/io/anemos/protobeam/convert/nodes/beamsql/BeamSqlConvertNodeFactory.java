@@ -70,6 +70,11 @@ public class BeamSqlConvertNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
+    public AbstractConvert createRenameFieldConvert(String renameTo, Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
+        return new RenameFieldConvert(renameTo, fieldDescriptor, field);
+    }
+
+    @Override
     public AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
         return new RepeatedConvert(fieldDescriptor, field);
     }

@@ -56,6 +56,18 @@ public class SchemaProtoContext {
         return false;
     }
 
+    public boolean hasRenameTo(Descriptors.FieldDescriptor fieldDescriptor) {
+        if (fieldDescriptor.getOptions().hasExtension(Options.fieldRewrite)) {
+            Descriptors.FieldDescriptor toRenameDescriptor = Rewrite.FieldRewriteRule.getDescriptor().findFieldByName("rename_to");
+            return fieldDescriptor.getOptions().getExtension(Options.fieldRewrite).hasField(toRenameDescriptor);
+        }
+        return false;
+    }
+
+    public String getRenameTo(Descriptors.FieldDescriptor fieldDescriptor) {
+        return fieldDescriptor.getOptions().getExtension(Options.fieldRewrite).getRenameTo();
+    }
+
     public boolean hasBqTimePartitioningField(Descriptors.Descriptor messageDescriptor) {
         if (messageDescriptor.getOptions().hasExtension(Options.messageBigquery)) {
             Bigquery.BigQueryMessageOptions bigQueryMessageOptions =  messageDescriptor.getOptions().getExtension(Options.messageBigquery);
@@ -87,14 +99,22 @@ public class SchemaProtoContext {
 
     public String getTimePartitionColumnName(Descriptors.Descriptor messageDescriptor) {
         Bigquery.BigQueryMessageOptions bigQueryMessageOptions = messageDescriptor.getOptions().getExtension(Options.messageBigquery);
+
+        String timePartitioningName;
+        Descriptors.FieldDescriptor sourceFieldDescriptor = messageDescriptor.findFieldByName(getBqTimePartitioningField(messageDescriptor));
+
         if (bigQueryMessageOptions.hasField(bigQueryMessageOptions.getDescriptorForType().findFieldByName("time_partitioning_truncate_column_name"))) {
             return bigQueryMessageOptions.getTimePartitioningTruncateColumnName();
+        } else if (hasRenameTo(sourceFieldDescriptor)) {
+            timePartitioningName = getRenameTo(sourceFieldDescriptor);
+        } else {
+            timePartitioningName = getBqTimePartitioningField(messageDescriptor);
         }
 
         Bigquery.BigQueryMessageOptions.AddTimePartitioningTruncateColumn truncateField = bigQueryMessageOptions.getAddTimePartitioningTruncateColumn();
         switch (truncateField) {
             case NO_TRUNCATE:
-                return getBqTimePartitioningField(messageDescriptor);
+                return timePartitioningName;
             case DAY:
                 return "partition_day";
             case MONTH:

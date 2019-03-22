@@ -19,10 +19,18 @@ message ProtoBeamOptionMessage {
     }];
 }
 
+message RenameFieldMessage {
+    string renameField = 1 [(anemos.field_rewrite).rename_to = "renamedField"];
+}
+
 message BigQueryOptionMessage {
     option (anemos.message_bigquery).time_partitioning_field =  "timestamp";
 
     google.protobuf.Timestamp timestamp = 3;
+}
+
+message BigQueryRenameColumnMessage {
+    google.protobuf.Timestamp timestamp = 3 [(anemos.field_rewrite).rename_to = "CreationTime"];
 }
 
 message BigQueryOptionMessageTruncateDay {
@@ -37,6 +45,13 @@ message BigQueryOptionMessageTruncateMonth {
     option (anemos.message_bigquery).add_time_partitioning_truncate_column =  MONTH;
 
     google.protobuf.Timestamp timestamp = 3;
+}
+
+message BigQueryOptionMessageTruncateMonthColumnRename {
+    option (anemos.message_bigquery).time_partitioning_field =  "timestamp";
+    option (anemos.message_bigquery).add_time_partitioning_truncate_column =  MONTH;
+
+    google.protobuf.Timestamp timestamp = 3 [(anemos.field_rewrite).rename_to = "CreationTime"];
 }
 
 message BigQueryOptionMessageTruncateYear {

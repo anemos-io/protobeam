@@ -71,6 +71,11 @@ public class BigQueryTableRowNodeFactory implements ConvertNodeFactory {
     }
 
     @Override
+    public AbstractConvert createRenameFieldConvert(String renameTo, Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert convert) {
+        return new RenameFieldConvert(renameTo, fieldDescriptor, convert);
+    }
+
+    @Override
     public AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field) {
         return new RepeatedConvert(fieldDescriptor, field);
     }

@@ -32,6 +32,8 @@ public interface ConvertNodeFactory {
 
     AbstractMessageConvert createPartitionColumnConvert(Descriptors.Descriptor messageDescriptor, AbstractMessageConvert convert);
 
+    AbstractConvert createRenameFieldConvert(String newName, Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
+
     AbstractConvert createRepeatedFieldConvert(Descriptors.FieldDescriptor fieldDescriptor, AbstractConvert field);
 
     AbstractConvert createStringFieldConvert(Descriptors.FieldDescriptor fieldDescriptor);
