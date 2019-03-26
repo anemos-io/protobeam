@@ -88,6 +88,7 @@ public class PrimitiveTest extends AbstractProtoBigQueryTest {
                 "\t`primitive_sfixed32` INT64 NOT NULL,\n" +
                 "\t`primitive_sfixed64` INT64 NOT NULL,\n" +
                 "\t`primitive_bool` BOOL NOT NULL,\n" +
+                "\t`primitive_string` STRING NOT NULL,\n" +
                 "\t`primitive_bytes` BYTES NOT NULL\n" +
                 ")\n";
         SchemaProtoToBigQueryDDL ddl = new SchemaProtoToBigQueryDDL();

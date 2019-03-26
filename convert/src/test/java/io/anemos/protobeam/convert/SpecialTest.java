@@ -120,20 +120,24 @@ public class SpecialTest extends AbstractProtoBigQueryTest {
                 "\t\t`primitive_sfixed32` INT64 NOT NULL,\n" +
                 "\t\t`primitive_sfixed64` INT64 NOT NULL,\n" +
                 "\t\t`primitive_bool` BOOL NOT NULL,\n" +
+                "\t\t`primitive_string` STRING NOT NULL,\n" +
                 "\t\t`primitive_bytes` BYTES NOT NULL\n" +
                 "\t>,\n" +
                 "\t`x` ARRAY<\n" +
                 "\t\tSTRUCT<\n" +
+                "\t\t\t`key` STRING NOT NULL,\n" +
                 "\t\t\t`value` INT64 NOT NULL\n" +
                 "\t\t>\n" +
                 "\t>,\n" +
                 "\t`y` ARRAY<\n" +
                 "\t\tSTRUCT<\n" +
+                "\t\t\t`key` STRING NOT NULL,\n" +
                 "\t\t\t`value` STRING NOT NULL\n" +
                 "\t\t>\n" +
                 "\t>,\n" +
                 "\t`z` ARRAY<\n" +
                 "\t\tSTRUCT<\n" +
+                "\t\t\t`key` STRING NOT NULL,\n" +
                 "\t\t\t`value` STRUCT<\n" +
                 "\t\t\t\t`test_name` STRING NOT NULL,\n" +
                 "\t\t\t\t`test_index` INT64 NOT NULL,\n" +
@@ -150,10 +154,12 @@ public class SpecialTest extends AbstractProtoBigQueryTest {
                 "\t\t\t\t`primitive_sfixed32` INT64 NOT NULL,\n" +
                 "\t\t\t\t`primitive_sfixed64` INT64 NOT NULL,\n" +
                 "\t\t\t\t`primitive_bool` BOOL NOT NULL,\n" +
+                "\t\t\t\t`primitive_string` STRING NOT NULL,\n" +
                 "\t\t\t\t`primitive_bytes` BYTES NOT NULL\n" +
                 "\t\t\t>\n" +
                 "\t\t>\n" +
                 "\t>,\n" +
+                "\t`oneof_int64` INT64,\n" +
                 "\t`oneof_double` FLOAT64\n" +
                 ")\n";
         SchemaProtoToBigQueryDDL ddl = new SchemaProtoToBigQueryDDL();

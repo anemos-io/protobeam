@@ -52,6 +52,7 @@ public class RepeatedTest extends AbstractProtoBigQueryTest {
                 "\t`repeated_sfixed32` ARRAY<INT64>,\n" +
                 "\t`repeated_sfixed64` ARRAY<INT64>,\n" +
                 "\t`repeated_bool` ARRAY<BOOL>,\n" +
+                "\t`repeated_string` ARRAY<STRING>,\n" +
                 "\t`repeated_bytes` ARRAY<BYTES>\n" +
                 ")\n";
         SchemaProtoToBigQueryDDL ddl = new SchemaProtoToBigQueryDDL();
