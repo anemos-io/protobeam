@@ -8,6 +8,7 @@ import io.anemos.protobeam.examples.BigQueryOptionMessage;
 import io.anemos.protobeam.examples.BigQueryOptionMessageTruncateMonth;
 import io.anemos.protobeam.examples.BigQueryOptionMessageTruncateMonthCustomColumnName;
 import io.anemos.protobeam.examples.ProtoBeamOptionMessage;
+import io.anemos.protobeam.examples.RenameFieldMessage;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -64,6 +65,16 @@ public class SchemaProtoToBigQueryTest extends AbstractProtoBigQueryTest {
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         TimePartitioning timePartitioning =  api.getTimePartitioning(descriptor);
         assertEquals("CreatedMonth", timePartitioning.getField());
+    }
+
+    @Test
+    public void testRenameTo() {
+        RenameFieldMessage renameFieldMessage = RenameFieldMessage.newBuilder().build();
+        Descriptors.Descriptor descriptor = renameFieldMessage.getDescriptorForType();
+
+        SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
+        String expected = "Schema{fields=[Field{name=renamedField, type=STRING, mode=REQUIRED, description=null}]}";
+        assertEquals(expected, api.getSchema(descriptor).toString());
     }
 
 }
