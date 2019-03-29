@@ -58,9 +58,13 @@ public class SchemaProtoToBigQueryModel {
     }
 
     private TableFieldSchema convertField(Descriptors.FieldDescriptor fieldDescriptor, String mode) {
-        TableFieldSchema fieldSchema =
-                new TableFieldSchema()
-                        .setName(fieldDescriptor.getName());
+        TableFieldSchema fieldSchema = new TableFieldSchema();
+
+        if (context.hasRenameTo(fieldDescriptor)) {
+            fieldSchema.setName(context.getRenameTo(fieldDescriptor));
+        } else {
+            fieldSchema.setName(fieldDescriptor.getName());
+        }
         String bigQueryType = extractFieldType(fieldDescriptor);
         fieldSchema.setMode(mode);
         if ("STRUCT".equals(bigQueryType)) {
