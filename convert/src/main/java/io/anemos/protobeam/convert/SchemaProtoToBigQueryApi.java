@@ -22,9 +22,12 @@ public class SchemaProtoToBigQueryApi {
 
     public TimePartitioning getTimePartitioning(Descriptors.Descriptor descriptor) {
         com.google.api.services.bigquery.model.TimePartitioning timePartitioning = modelConvert.getTimePartitioning(descriptor);
-        return TimePartitioning.newBuilder(TimePartitioning.Type.DAY)
-                            .setField(timePartitioning.getField())
-                            .build();
+        if (timePartitioning != null) {
+            return TimePartitioning.newBuilder(TimePartitioning.Type.DAY)
+                    .setField(timePartitioning.getField())
+                    .build();
+        }
+        return null;
     }
 
     private List<Field> convertFieldList(List<TableFieldSchema> tableFields) {
