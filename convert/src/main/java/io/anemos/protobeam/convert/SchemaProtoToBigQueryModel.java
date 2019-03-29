@@ -21,8 +21,12 @@ public class SchemaProtoToBigQueryModel {
 
     public TimePartitioning getTimePartitioning(Descriptors.Descriptor descriptor) {
         TimePartitioning timePartitioning = new TimePartitioning();
-        timePartitioning.setField(context.getTimePartitionColumnName(descriptor));
-        timePartitioning.setType("DAY");
+        if (context.hasBqTimePartitioningField(descriptor)) {
+            timePartitioning.setField(context.getTimePartitionColumnName(descriptor));
+            timePartitioning.setType("DAY");
+        } else {
+            return null;
+        }
         return timePartitioning;
     }
 

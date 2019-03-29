@@ -12,6 +12,7 @@ import io.anemos.protobeam.examples.RenameFieldMessage;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SchemaProtoToBigQueryTest extends AbstractProtoBigQueryTest {
 
@@ -34,8 +35,8 @@ public class SchemaProtoToBigQueryTest extends AbstractProtoBigQueryTest {
                 "Field{name=option_description, type=STRING, mode=REQUIRED, description=A very detailed description}]}";
         SchemaProtoToBigQueryApi api = new SchemaProtoToBigQueryApi();
         assertEquals(apiRef, api.getSchema(descriptor).toString());
+        assertNull(api.getTimePartitioning(descriptor));
     }
-
 
     @Test
     public void testTableDefinitionWithTimePartitioning() {
