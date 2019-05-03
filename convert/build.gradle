@@ -1,10 +1,12 @@
 plugins {
-    id("net.ltgt.apt") version "0.20"
-    id("com.google.protobuf") version "0.8.8"
-    id 'java-library'
-    id 'maven-publish'
-    id 'idea'
+    id "net.ltgt.apt" version "0.20"
+    id "com.diffplug.gradle.spotless" version "3.23.0"
+    id "com.google.protobuf" version "0.8.8"
+    id "java-library"
+    id "maven-publish"
+    id "idea"
 }
+
 
 dependencies {
     api("org.apache.commons:commons-math3:3.6.1")
@@ -26,11 +28,20 @@ protobuf {
     }
 }
 
+spotless {
+    java {
+        googleJavaFormat('1.7')
+        target project.fileTree(project.projectDir) {
+            include '**/*.java'
+        }
+    }
+}
+
 publishing {
     repositories {
         maven {
             // change to point to your repo, e.g. http://my.org/repo
-            if(project.version.endsWith('-SNAPSHOT')) {
+            if (project.version.endsWith('-SNAPSHOT')) {
                 url = uri(snapshotRepoUrl)
             } else {
                 url = uri(repoUrl)

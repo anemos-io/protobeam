@@ -6,7 +6,7 @@ pluginManagement {
         }
     }
 }
-rootProject.name = "proto-beam"
+rootProject.name = "protobeam"
 
 include ':convert'
 include ':transform'

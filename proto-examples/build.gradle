@@ -1,9 +1,9 @@
 plugins {
-    id("net.ltgt.apt") version "0.20"
-    id("com.google.protobuf") version "0.8.8"
-    id 'java-library'
-    id 'maven-publish'
-    id 'idea'
+    id "net.ltgt.apt" version "0.20"
+    id "com.google.protobuf" version "0.8.8"
+    id "java-library"
+    id "maven-publish"
+    id "idea"
 }
 
 dependencies {
@@ -20,11 +20,17 @@ protobuf {
     }
 }
 
+task protoJar(type: Jar) {
+    from('src/main/proto') {
+        include '/**/*'
+    }
+}
+
 publishing {
     repositories {
         maven {
             // change to point to your repo, e.g. http://my.org/repo
-            if(project.version.endsWith('-SNAPSHOT')) {
+            if (project.version.endsWith('-SNAPSHOT')) {
                 url = uri(snapshotRepoUrl)
             } else {
                 url = uri(repoUrl)
@@ -46,8 +52,3 @@ publishing {
     }
 }
 
-task protoJar(type: Jar) {
-    from('src/main/proto') {
-        include '/**/*'
-    }
-}

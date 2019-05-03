@@ -1,6 +1,6 @@
 plugins {
-    id("net.ltgt.apt") version "0.20"
-    id("com.google.protobuf") version "0.8.8"
+    id "net.ltgt.apt" version "0.20"
+    id "com.google.protobuf" version "0.8.8"
     id 'java-library'
     id 'maven-publish'
     id 'idea'
@@ -19,34 +19,37 @@ protobuf {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            // change to point to your repo, e.g. http://my.org/repo
-            if(project.version.endsWith('-SNAPSHOT')) {
-                url = uri(snapshotRepoUrl)
-            } else {
-                url = uri(repoUrl)
-            }
-            if (project.hasProperty('repoUser') && project.hasProperty('repoPass')) {
-                credentials {
-                    username repoUser
-                    password repoPass
-                }
-            }
-        }
-    }
-    publications {
-        maven(MavenPublication) {
-            groupId 'io.anemos'
-            artifactId 'protobeam-options-proto'
-            artifact protoJar
-        }
+task protoJaxr(type: Jar) {
+    from('src/main/proto') {
+        include '/**/*'
     }
 }
 
-task protoJar(type: Jar) {
-    from('src/main/proto') {
-        include '/**/*'
+project.afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                // change to point to your repo, e.g. http://my.org/repo
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url = uri(snapshotRepoUrl)
+                } else {
+                    url = uri(repoUrl)
+                }
+                if (project.hasProperty('repoUser') && project.hasProperty('repoPass')) {
+                    credentials {
+                        username repoUser
+                        password repoPass
+                    }
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                groupId 'io.anemos'
+                artifactId 'protobeam-options-proto'
+
+                artifact protoJaxr
+            }
+        }
     }
 }
