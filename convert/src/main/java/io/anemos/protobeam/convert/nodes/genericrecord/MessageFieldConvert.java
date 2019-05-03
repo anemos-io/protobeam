@@ -8,20 +8,22 @@ import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 
 class MessageFieldConvert extends AbstractGenericRecordConvert<Object> {
-    AbstractMessageConvert convert;
+  AbstractMessageConvert convert;
 
-    public MessageFieldConvert(Descriptors.FieldDescriptor descriptor, AbstractMessageConvert convert) {
-        super(descriptor);
-        this.convert = convert;
-    }
+  public MessageFieldConvert(
+      Descriptors.FieldDescriptor descriptor, AbstractMessageConvert convert) {
+    super(descriptor);
+    this.convert = convert;
+  }
 
-    @Override
-    public void toProto(GenericRecord row, Message.Builder builder) {
-        GenericData.Record nested = (GenericData.Record) row.get(fieldDescriptor.getName());
-        if (nested != null) {
-            DynamicMessage.Builder fieldBuilder = DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
-            convert.toProto(nested, fieldBuilder);
-            builder.setField(fieldDescriptor, fieldBuilder.build());
-        }
+  @Override
+  public void toProto(GenericRecord row, Message.Builder builder) {
+    GenericData.Record nested = (GenericData.Record) row.get(fieldDescriptor.getName());
+    if (nested != null) {
+      DynamicMessage.Builder fieldBuilder =
+          DynamicMessage.newBuilder(fieldDescriptor.getMessageType());
+      convert.toProto(nested, fieldBuilder);
+      builder.setField(fieldDescriptor, fieldBuilder.build());
     }
+  }
 }

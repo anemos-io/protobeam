@@ -7,18 +7,18 @@ import org.apache.beam.sdk.values.Row;
 
 class EnumConvert extends AbstractBeamSqlConvert<Object> {
 
-    public EnumConvert(Descriptors.FieldDescriptor descriptor) {
-        super(descriptor);
-    }
+  public EnumConvert(Descriptors.FieldDescriptor descriptor) {
+    super(descriptor);
+  }
 
-    @Override
-    public Object toProtoValue(Object in) {
-        Descriptors.EnumDescriptor enumType = fieldDescriptor.getEnumType();
-        return enumType.findValueByName(((Utf8) in).toString());
-    }
+  @Override
+  public Object toProtoValue(Object in) {
+    Descriptors.EnumDescriptor enumType = fieldDescriptor.getEnumType();
+    return enumType.findValueByName(((Utf8) in).toString());
+  }
 
-    @Override
-    public void toProto(Row row, Message.Builder builder) {
-        builder.setField(fieldDescriptor, toProtoValue(row.getString(fieldDescriptor.getName())));
-    }
+  @Override
+  public void toProto(Row row, Message.Builder builder) {
+    builder.setField(fieldDescriptor, toProtoValue(row.getString(fieldDescriptor.getName())));
+  }
 }

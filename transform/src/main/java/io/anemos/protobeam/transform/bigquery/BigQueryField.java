@@ -4,12 +4,8 @@ import java.util.List;
 
 public class BigQueryField {
 
-    private String name;
-    private String alias;
+  private String name;
+  private String alias;
 
-    private List<BigQueryField> fields;
-
-
-
-
+  private List<BigQueryField> fields;
 }

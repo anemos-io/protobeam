@@ -6,18 +6,17 @@ import com.google.protobuf.util.Timestamps;
 import org.apache.avro.generic.GenericRecord;
 
 class WktTimestampFieldConvert extends AbstractGenericRecordConvert<Object> {
-    public WktTimestampFieldConvert(Descriptors.FieldDescriptor descriptor) {
-        super(descriptor);
-    }
+  public WktTimestampFieldConvert(Descriptors.FieldDescriptor descriptor) {
+    super(descriptor);
+  }
 
-    @Override
-    public Object toProtoValue(Object in) {
-        return Timestamps.fromMicros((Long) in);
-    }
+  @Override
+  public Object toProtoValue(Object in) {
+    return Timestamps.fromMicros((Long) in);
+  }
 
-    @Override
-    public void toProto(GenericRecord row, Message.Builder builder) {
-        builder.setField(fieldDescriptor, toProtoValue(row.get(fieldDescriptor.getName())));
-    }
-
+  @Override
+  public void toProto(GenericRecord row, Message.Builder builder) {
+    builder.setField(fieldDescriptor, toProtoValue(row.get(fieldDescriptor.getName())));
+  }
 }

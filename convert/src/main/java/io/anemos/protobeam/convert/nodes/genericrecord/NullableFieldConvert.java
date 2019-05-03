@@ -7,18 +7,18 @@ import org.apache.avro.generic.GenericRecord;
 
 class NullableFieldConvert extends AbstractGenericRecordConvert<Object> {
 
-    private AbstractConvert field;
+  private AbstractConvert field;
 
-    public NullableFieldConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
-        super(descriptor);
-        this.field = field;
-    }
+  public NullableFieldConvert(Descriptors.FieldDescriptor descriptor, AbstractConvert field) {
+    super(descriptor);
+    this.field = field;
+  }
 
-    @Override
-    public void toProto(GenericRecord row, Message.Builder builder) {
-        Object cell = row.get(fieldDescriptor.getName());
-        if (cell != null) {
-            field.toProto(row, builder);
-        }
+  @Override
+  public void toProto(GenericRecord row, Message.Builder builder) {
+    Object cell = row.get(fieldDescriptor.getName());
+    if (cell != null) {
+      field.toProto(row, builder);
     }
+  }
 }

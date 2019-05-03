@@ -7,14 +7,14 @@ import org.apache.beam.sdk.values.Row;
 
 public class ProtoToRowDoFn<T extends Message> extends DoFn<T, Row> {
 
-    private ProtoBeamSqlExecutionPlan plan;
+  private ProtoBeamSqlExecutionPlan plan;
 
-    public ProtoToRowDoFn(Class<T> messageClass) {
-        plan = new ProtoBeamSqlExecutionPlan(messageClass);
-    }
+  public ProtoToRowDoFn(Class<T> messageClass) {
+    plan = new ProtoBeamSqlExecutionPlan(messageClass);
+  }
 
-    @ProcessElement
-    public void processElement(ProcessContext c) {
-        c.output(plan.convert(c.element()));
-    }
+  @ProcessElement
+  public void processElement(ProcessContext c) {
+    c.output(plan.convert(c.element()));
+  }
 }

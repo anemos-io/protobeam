@@ -7,25 +7,23 @@ import org.apache.beam.sdk.schemas.SchemaRegistry;
 
 public class ProtoBeamSqlSchema {
 
-    private SchemaRegistry schemaRegistry;
+  private SchemaRegistry schemaRegistry;
 
-    private ProtoBeamSqlSchema(SchemaRegistry schemaRegistry) {
-        this.schemaRegistry = schemaRegistry;
-    }
+  private ProtoBeamSqlSchema(SchemaRegistry schemaRegistry) {
+    this.schemaRegistry = schemaRegistry;
+  }
 
-    public static ProtoBeamSqlSchema registerIn(Pipeline pipeline) {
-        return new ProtoBeamSqlSchema(pipeline.getSchemaRegistry());
-    }
+  public static ProtoBeamSqlSchema registerIn(Pipeline pipeline) {
+    return new ProtoBeamSqlSchema(pipeline.getSchemaRegistry());
+  }
 
+  public <T extends Message> ProtoBeamSqlSchema message(Class<T> messageClass) {
+    schemaRegistry.registerSchemaForClass(
+        messageClass,
+        new SchemaProtoToBeamSQL().getSchema(messageClass),
+        new ProtoBeamSqlToRowFunction<>(messageClass),
+        new ProtoBeamSqlFromRowFunction<>(messageClass));
 
-    public <T extends Message> ProtoBeamSqlSchema message(Class<T> messageClass) {
-        schemaRegistry
-                .registerSchemaForClass(messageClass,
-                        new SchemaProtoToBeamSQL().getSchema(messageClass),
-                        new ProtoBeamSqlToRowFunction<>(messageClass),
-                        new ProtoBeamSqlFromRowFunction<>(messageClass)
-                );
-
-        return this;
-    }
+    return this;
+  }
 }

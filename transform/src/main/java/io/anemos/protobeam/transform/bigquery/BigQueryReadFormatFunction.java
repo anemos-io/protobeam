@@ -5,16 +5,17 @@ import io.anemos.protobeam.convert.ProtoGenericRecordExecutionPlan;
 import org.apache.beam.sdk.io.gcp.bigquery.SchemaAndRecord;
 import org.apache.beam.sdk.transforms.SerializableFunction;
 
-public class BigQueryReadFormatFunction<T extends Message> implements SerializableFunction<SchemaAndRecord, T> {
+public class BigQueryReadFormatFunction<T extends Message>
+    implements SerializableFunction<SchemaAndRecord, T> {
 
-    private ProtoGenericRecordExecutionPlan plan;
+  private ProtoGenericRecordExecutionPlan plan;
 
-    public BigQueryReadFormatFunction(Class<T> messageClass) {
-        plan = new ProtoGenericRecordExecutionPlan(messageClass);
-    }
+  public BigQueryReadFormatFunction(Class<T> messageClass) {
+    plan = new ProtoGenericRecordExecutionPlan(messageClass);
+  }
 
-    @Override
-    public T apply(SchemaAndRecord input) {
-        return (T) plan.convertToProto(input.getRecord());
-    }
+  @Override
+  public T apply(SchemaAndRecord input) {
+    return (T) plan.convertToProto(input.getRecord());
+  }
 }

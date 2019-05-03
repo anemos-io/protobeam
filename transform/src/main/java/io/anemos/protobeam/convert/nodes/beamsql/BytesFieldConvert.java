@@ -6,20 +6,20 @@ import com.google.protobuf.Message;
 import org.apache.beam.sdk.values.Row;
 
 class BytesFieldConvert extends AbstractBeamSqlConvert<Object> {
-    public BytesFieldConvert(Descriptors.FieldDescriptor descriptor) {
-        super(descriptor);
-    }
+  public BytesFieldConvert(Descriptors.FieldDescriptor descriptor) {
+    super(descriptor);
+  }
 
-    @Override
-    public Object fromProtoValue(Object in) {
-        return ((ByteString) in).toByteArray();
-    }
+  @Override
+  public Object fromProtoValue(Object in) {
+    return ((ByteString) in).toByteArray();
+  }
 
-    @Override
-    public void toProto(Row row, Message.Builder builder) {
-        byte[] bytes = row.getBytes(fieldDescriptor.getName());
-        if (bytes.length > 0) {
-            builder.setField(fieldDescriptor, bytes);
-        }
+  @Override
+  public void toProto(Row row, Message.Builder builder) {
+    byte[] bytes = row.getBytes(fieldDescriptor.getName());
+    if (bytes.length > 0) {
+      builder.setField(fieldDescriptor, bytes);
     }
+  }
 }
