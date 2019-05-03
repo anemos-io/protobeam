@@ -7,6 +7,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.StringValue;
 import com.google.protobuf.util.Timestamps;
+import io.anemos.protobeam.GoogleCloudRunner;
 import io.anemos.protobeam.convert.ProtoTableRowExecutionPlan;
 import io.anemos.protobeam.convert.SchemaProtoToBigQueryModel;
 import io.anemos.protobeam.examples.*;
@@ -24,9 +25,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
+@RunWith(GoogleCloudRunner.class)
 public class BigQueryIT {
 
   private Bigquery bqClient;

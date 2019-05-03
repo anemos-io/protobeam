@@ -35,7 +35,8 @@ spotless {
     java {
         googleJavaFormat('1.7')
         target project.fileTree(project.projectDir) {
-            include '**/*.java'
+            include "**/*.java"
+            exclude "build/**/*.java"
         }
     }
 }

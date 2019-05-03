@@ -33,18 +33,18 @@ public class NullableTest extends AbstractProtoBeamSqlTest {
 
     String modelRef =
         "Fields:\n"
-            + "Field{name=test_name, description=, type=FieldType{typeName=STRING, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=false}\n"
-            + "Field{name=test_index, description=, type=FieldType{typeName=INT32, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=false}\n"
-            + "Field{name=timestamp, description=, type=FieldType{typeName=DATETIME, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_string, description=, type=FieldType{typeName=STRING, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_double, description=, type=FieldType{typeName=DOUBLE, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_float, description=, type=FieldType{typeName=FLOAT, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_int32, description=, type=FieldType{typeName=INT32, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_int64, description=, type=FieldType{typeName=INT64, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_uint32, description=, type=FieldType{typeName=INT32, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_uint64, description=, type=FieldType{typeName=INT64, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_bool, description=, type=FieldType{typeName=BOOLEAN, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n"
-            + "Field{name=nullable_bytes, description=, type=FieldType{typeName=BYTES, collectionElementType=null, collectionElementTypeNullable=null, mapKeyType=null, mapValueType=null, mapValueTypeNullable=null, rowSchema=null, metadata=null}, nullable=true}\n";
+            + "Field{name=test_name, description=, type=FieldType{typeName=STRING, nullable=false, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=test_index, description=, type=FieldType{typeName=INT32, nullable=false, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=timestamp, description=, type=FieldType{typeName=DATETIME, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_string, description=, type=FieldType{typeName=STRING, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_double, description=, type=FieldType{typeName=DOUBLE, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_float, description=, type=FieldType{typeName=FLOAT, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_int32, description=, type=FieldType{typeName=INT32, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_int64, description=, type=FieldType{typeName=INT64, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_uint32, description=, type=FieldType{typeName=INT32, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_uint64, description=, type=FieldType{typeName=INT64, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_bool, description=, type=FieldType{typeName=BOOLEAN, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n"
+            + "Field{name=nullable_bytes, description=, type=FieldType{typeName=BYTES, nullable=true, logicalType=null, collectionElementType=null, mapKeyType=null, mapValueType=null, rowSchema=null, metadata={}}}\n";
     SchemaProtoToBeamSQL model = new SchemaProtoToBeamSQL();
     assertEquals(modelRef, model.getSchema(descriptor).toString());
   }

@@ -2,12 +2,12 @@ plugins {
     id 'base'
 }
 
-ext.beamVersion = "2.9.0"
+ext.beamVersion = "2.12.0"
 ext.protobufVersion = "3.6.1"
 
 allprojects {
     group = "io.anemos"
-    version = "0.0.3-SNAPSHOT"
+    version = "0.0.5-SNAPSHOT"
 
     repositories {
         mavenLocal()
